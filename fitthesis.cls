@@ -72,7 +72,6 @@
 \def\@dep@EN{Department of}
 \def\@abstract@CS{Abstrakt}
 \def\@abstract@EN{Abstract}
-\def\@extendedabstract{Rozšířený abstrakt}
 \def\@keywords@CS{Klíčová slova}
 \def\@keywords@EN{Keywords}
 \def\@cite@CS{Citace}
@@ -154,7 +153,6 @@ Práce je chráněna autorským zákonem a její užití bez udělení oprávně
 \define@key{projinfo}{keywords.en}{\def\@tkeywords@EN{#1}}
 \define@key{projinfo}{abstract.cs}{\def\@tabstract@CS{#1}}
 \define@key{projinfo}{abstract.en}{\def\@tabstract@EN{#1}}
-\define@key{projinfo}{extendedabstract}{\def\@textendedabstract{#1}}
 \define@key{projinfo}{declaration}{\def\@declaration{#1}}
 \define@key{projinfo}{acknowledgment}{\def\@acknowledgment{#1}}
 
@@ -163,7 +161,6 @@ Práce je chráněna autorským zákonem a její užití bez udělení oprávně
   title.cs={Název práce (česky)},title.en={Název práce(anglicky)}, 
   date=\today, project=BP, department=UIFS, declaration=, 
   abstract.cs=, abstract.en=, keywords.cs=, keywords.en=,
-  extendedabstract=,
   author=Tomáš Hykel, supervisor=Marcel Marek
 }%
 
@@ -185,11 +182,6 @@ Práce je chráněna autorským zákonem a její užití bez udělení oprávně
 \newcommand{\keywords}[2][cs]{%
  \ifEqString{#1}{cs}{#2}{\@tkeywords@CS}%
  \ifEqString{#1}{en}{#2}{\@tkeywords@EN}%
-}
-
-%Klicova slova
-\newcommand{\extendedabstract}[1]{%
- \def\@textendedabstract{#1}%
 }
 
 \newlength{\mkspc}
@@ -265,18 +257,8 @@ Práce je chráněna autorským zákonem a její užití bez udělení oprávně
 \vfill
 
 \mktxt@b{16}{\@cite@CS}
-\noindent\@author: Modelling New Network Architectures in OMNeT++, \MakeLowercase{\@projecttype@CS}, Brno, FIT VUT v~Brně, \@year
+\noindent\@author: \@title, \MakeLowercase{\@projecttype@CS}, Brno, FIT VUT v~Brně, \@year
 %===================================================
-\newpage
-
-{\noindent
-    \interlinepenalty\@M
-    \Huge\bfseries  \@extendedabstract \par\nobreak
-    \vskip 40\p@}
-
-\@textendedabstract
-
-\vfill
 \newpage
 }
 
@@ -285,7 +267,7 @@ Práce je chráněna autorským zákonem a její užití bez udělení oprávně
 %-----------------------------------------------------------------------------
 \newcommand\makedeclaration{
 \thispagestyle{empty}%
-\mktxt@b{18}{Modelling New Network Architectures in OMNeT++}
+\mktxt@b{18}{\@title}
 
 \vspace{10mm}
 \mktxt@b{16}{\@tdecl@CS}
