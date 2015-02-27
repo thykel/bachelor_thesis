@@ -2,8 +2,6 @@
 \chapter{Introduction}
     (\textasciitilde2 ns)
 
-    During the past two decades, there has been an increasing amount of new network architectures being proposed and researched. Why should we need them and what's the current state of the art in the field of network architecture?
-
     \section{Goals}
         The theoretical part of this thesis aims to describe alternatives to the currently prevalent network architectures. Since the Internet is by far the largest and most important example of an internetwork, its underlying architecture shall be used as a base for comparison. This is only fitting since nearly all of the network architecture research is directed towards improving the building blocks of the Internet.
 
@@ -19,38 +17,59 @@
 
         Part Five takes a closer look at Recursive InterNetwork Architecture, an IPC-based network architecture. It contains description of the architecture and its advantages.
 
-        Part Six describes implementation of Relaying and Multiplexing Task RINA in OMNeT++.
+        Part Six describes implementation of RINA's Relaying and Multiplexing Task in OMNeT++.
 
         Part Seven presents evaluation of the implementation in form of test outputs.
 
         Part Eight wraps it all up. ;=)
 
-\chapter{Current State of The Internet}
+\chapter{Problems of the current Internet}
     (\textasciitilde5 ns)
+
     The Internet could be, with no doubt, considered one of the most important technological achievements of the 20th century. It has brought a previously unimaginable degree of interconnection and information access to the whole world and its importance keeps growing even decades after its inception.
 
-    Nevertheless,
+    Nevertheless, the very basic core of its technology was constructed over three decades ago, back when the the demands on internetworking capabilities were nowhere compared to the present situation. During the Internet's growth, whenever there has been a problem that required a solution (e.g. bla bla), it's been usually dealt with in a non-intrusive evolutionary fashion by applying a new principle on top of the underlying technology. In another words, problems have been mostly solved by adding a new protocol to the TCP/IP protocol stack (e.g. RSVP for QoS guarantee).
 
-    \section{A Brief History}
-        (?? there probably won't be any space left for this)
+    This way of improving the Internet's base technology is only logical since each paradigm shift in foundations of the Internet can require a long and expensive transfer of existing network configrations to the new technology. The most notable example of this is the internet layer protocol IPv6 requiring hardware support from active network components. The problem of IPv4 space exhaustion has been known of since 1992, IPv6 specification arose in 1996 and the first IPv6 routers emerged in 2001 -- and yet, as of 2015, two years after the IPv4 exhaustion, IPv6 still represents only 10 \% of global Internet communication and the transition isn't getting faster.
 
-    \section{Current Shortcomings and Weaknesses}
+    As such, some of the Internet's problems are inherent because of the base design and it's usually difficult, if not impossible, to solve them incrementally. The following sections illustrate several of those problems.
 
-        \subsection{Router table size growth}
+    \section{Node naming}
 
-        \subsection{Node naming}
+        TODO: explain Saltzer's proposal and why it isn't used
 
-            Thus, MAC addresses and IP addresses effectively name the same thing, which is the host interface.
+        Thus, both MAC addresses and IP addresses serve as point-of-attachment addresses and effectively locate the same thing, which is a host interface. This implies that the Internet effectively forwards PDUs on interface addresses, which has a great impact on difficulty of mobility and multihoming (both described in another sections). Borrowing a comparison from John Day's Patterns in Network Architecture, the lack of implicit logical addressing in the Internet \"feels like accessing memory with DOS instead of Unix\".
 
-        \subsection{Multihoming}
+    \section{Lack of Multihoming}
 
-            Since the IP addresses serve as point-of-attachment addresses (i.e. one per each computing system interface), there isn't any implicit mechanism for distinguishing whether multiple IP addresses belong to a single node.
+        Since the IP addresses serve as point-of-attachment addresses (i.e. one per each computing system interface), there isn't any implicit mechanism for distinguishing whether multiple IP addresses belong to a single node.
 
-        \subsection{Mobility}
+        TODO: check out the IPv6's pseudo multihoming thing and mention Tinker Air Force Base
 
-        \subsection{Lack of implicit security}
+    \section{Lack of Mobility}
 
-        \subsection{Renumbering}
+        Since a host location is determined by its IP address and IP addressing is geographically dependent, mobility is essentialy non-existent.
+
+        TODO: just a placeholder, re-read the relevant chapter of Patterns
+
+    \section{Lack of Multicast}
+
+        TODO: better get well informed on this one first
+
+    \section{Weak security}
+        The specifications of the fundamental protocols of TCP/IP stack -- IP, TCP and DHCP -- were originally finished at the beginning of 1980s. Computer internetworking in pre-Internet era was still a matter of closed research exercised in small scientific communities, so most of the design effort was given to making things work and network security wasn't the main aim. However, the Internet has since then turned into a massive world-wide internetwork connecting people of different types and agendas. Naturally, once the Internet began to be used for transferring sensitive data (especially by companies), cyber crime started to emerge as well and some attention was turned to security aspects of Internet protocol (or lack thereof).
+
+        Over the decades, a large amount of security flaws has been discovered and continually exploited. Some examples of these are Denial-of-service attacks (ICMP flood, SYN flood, CAM flood), Man-in-the-Middle attacks, IP address spoofing, DHCP spoofing, ARP spoofing and ARP cache poisoning. The requirement of every secure network is to carefully mitigate all of them.
+
+    \section{Router Table Size Growth}
+        Default-free zone (DFZ) is the collection of all Internet autonomous systems (AS) that do not require a default route to route a packet to any destination. Since they comprise the root of the Internet's routing infrastructure, their database must be complete.
+
+        With the increasing number of hosts connected to the Internet, the DFZ routing table sizes grow as well. While the exponential growth observed during the 1990s was mitigated in 2001 by mass deployment of CIDR and route aggregation, the number of items is still increasing linearly and the high-end router hardware needs to keep up, especially with increasing use of IPv6 and BGP-based multihoming. This can sometimes lead to scalability problems, as in August of 2014 where reaching the 512k entry limit of multiple routers caused world-wide outages.
+
+        As of year 2015, the Internet routing table is consisted of over 560k entries, which requires at least TODO MB in a router's memory. It is commonly believed that Moore's law will ensure that the technology of high-end routers will keep scaling along with the increased demands, but recent research proves otherwise.
+
+        TODO: revise the exact data
+
 
 \chapter{Overview of Alternative Architectures}
     (\textasciitilde4 ns)
@@ -66,31 +85,20 @@
             \item clean slate design: designing completely new standalone architectures that aren't constrained by Internet technology's limitations (e.g. RINA, NDN)
         \end{itemize}
 
-        Considering the scope of this thesis, the focus will be given exclusively to "clean-slate design" architectures.
+        Considering the scope of this thesis, the focus will be given exclusively to \"clean-slate design\" architectures.
 
     \section{Research Initiatives}
-
-        As designing a clean-slate architecture is an expensive and time-consuming projects, most of the research has been ...
-
-        During the last two decades, several such initiatives have emerged, all with the same purpose: find a new technological direction for the Internet.
-
-        Nevertheless, there are examples of lone initiatives as well.
-
-        Projects: Named Data Networking, MobilityFirst, NEBULA, eXpressive Network Architecture, ChoiceNet
 
         \subsection{NewArch Project}
 
             DARPA-funded, nada.
 
+        \subsection{Future Internet Architecture}
+
+            In 2010, National Science Foundation funded five projects as a part of this program: Named Data Networking, MobilityFirst, NEBULA, eXpressive Network Architecture and ChoiceNet.
+
         \subsection{FIRE}
-
-            projects in 2008, 2011
-
         \subsection{FIBRE}
-
-        \subsection{FIA}
-
-            Funded by National Science Foundation.
 
     \section{Information-centric networking}
 
