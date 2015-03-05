@@ -1,0 +1,7 @@
+*.gz
+*.xml
+*.aux
+*.bib
+*.out
+*.bbl
+*.toc

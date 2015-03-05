@@ -2,6 +2,9 @@
 \chapter{Introduction}
     (\textasciitilde2 ns)
 
+    The field of network architecture has been
+    This thesis
+
     \section{Goals}
         The theoretical part of this thesis aims to describe alternatives to the currently prevalent network architectures. Since the Internet is by far the largest and most important example of an internetwork, its underlying architecture shall be used as a base for comparison. This is only fitting since nearly all of the network architecture research is directed towards improving the building blocks of the Internet.
 
@@ -28,9 +31,9 @@
 
     The Internet could be, with no doubt, considered one of the most important technological achievements of the 20th century. It has brought a previously unimaginable degree of interconnection and information access to the whole world and its importance keeps growing even decades after its inception.
 
-    Nevertheless, the very basic core of its technology was constructed over three decades ago, back when the the demands on internetworking capabilities were nowhere compared to the present situation. During the Internet's growth, whenever there has been a problem that required a solution (e.g. bla bla), it's been usually dealt with in a non-intrusive evolutionary fashion by applying a new principle on top of the underlying technology. In another words, problems have been mostly solved by adding a new protocol to the TCP/IP protocol stack (e.g. RSVP for QoS guarantee).
+    Nevertheless, the very basic core of its technology was constructed over three decades ago, back when the the demands on internetworking capabilities were nowhere compared to the present situation. During the Internet's growth, whenever there has been a problem that required a solution (e.g. IPv4 address depletion), it's been usually dealt with in a non-intrusive evolutionary fashion by applying a new principle on top of the underlying technology. In another words, problems have been mostly solved by adding a new protocol to the TCP/IP protocol stack (e.g. RSVP for QoS guarantee).
 
-    This way of improving the Internet's base technology is only logical since each paradigm shift in foundations of the Internet can require a long and expensive transfer of existing network configrations to the new technology. The most notable example of this is the internet layer protocol IPv6 requiring hardware support from active network components. The problem of IPv4 space exhaustion has been known of since 1992, IPv6 specification arose in 1996 and the first IPv6 routers emerged in 2001 -- and yet, as of 2015, two years after the IPv4 exhaustion, IPv6 still represents only 10 \% of global Internet communication and the transition isn't getting faster.
+    This way of improving the Internet's base technology is only logical since each paradigm shift in foundations of the Internet can require a long and expensive transfer of existing network configrations to the new technology. The most notable example of this is the internet layer protocol IPv6 requiring explicit firwmare support from active network components. The problem of IPv4 space exhaustion has been known of since the beginning of 1990s, first formal IPv6 specification arose in 1996 (RFC 2460) and the first IPv6 routers emerged in 2004 -- and yet, as of 2015, two years after the top-level IPv4 pool exhaustion, IPv6 still represents only a miniscule fraction of total traffic on the Internet. For example, Google IPv6 adoption statistics indicate around 6\% coverage amongst the users of its services.
 
     As such, some of the Internet's problems are inherent because of the base design and it's usually difficult, if not impossible, to solve them incrementally. The following sections illustrate several of those problems.
 
@@ -42,13 +45,22 @@
 
     \section{Lack of Multihoming}
 
-        Since the IP addresses serve as point-of-attachment addresses (i.e. one per each computing system interface), there isn't any implicit mechanism for distinguishing whether multiple IP addresses belong to a single node.
+        Since the IP addresses serve as point-of-attachment addresses (i.e. one per each computing system interface) and routing is done exclusively on IP's layer, there isn't any implicit mechanism for distinguishing whether multiple IP addresses belong to a single node. The insufficient base for multihoming support is also one of the oldest recognized problems of the Internet: it has become apparent back in 1972, when Tinker Air Force Base joined ARPANET and voiced a request for redundant connections to a single node to ensure reliability. In spite of this, a switch to a new protocol suite that happened 11 years later (on \"flag day\") didn't bring any solution to this problem.
 
-        TODO: check out the IPv6's pseudo multihoming thing and mention Tinker Air Force Base
+        Since then, some attemps were made to implement multihoming on top of the current architecture.
+
+        \subsection{SCTP}
+        Message-oriented transport protocol SCTP provides a partial support. Two hosts communicating with each other via SCTP are able to provide each other with lists of alternate IP addresses that can be used as fallback points of attachment of the same application in case of failure of the primary address. During such session, each SCTP host needs to continually check other host's endpoints by heartbeat packets to make sure they are accessible via other sessions. However, thus far, multiple reasons have been preventing SCTP from becoming a widely known and used solution; the biggest disadvantage lies in the fact that due to TCP/IP not having a distinct session layer on top of the network layer (such as in ISO/OSI stack), the transport protocol must be explicitly specified by the application using sockets API. Therefore, SCTP adoption would require a rewrite of network-aware applications themselves. Other SCTP adoption issues include operating system support (Microsoft Windows requires a third-party kernel driver) and weak awareness of its existence outside networking community.
+
+        \subsection{BGP Multihoming}
+        Another implementation of multihoming capabilities can be seen in Border Gateway Protocol, which provides means for load-balancing and fallback over multiple links. To make use of such multihoming over the Internet, a public IP address range and an Autonomous System number are required. BGP Multihoming is one of the most significant causes contributing to the growth of Internet routing table.
+
+        \subsection{Multipath TCP}
+        The most recent TCP/IP multihoming initiative is a TCP extension Multipath TCP (MPTCP) which is currently in its experimental phase, although a large scale commercial deployment was already made by Apple for its Siri network application in mobile operating system iOS 7.
 
     \section{Lack of Mobility}
 
-        Since a host location is determined by its IP address and IP addressing is geographically dependent, mobility is essentialy non-existent.
+        Since a host location is determined by its IP address and IP addressing is geographically dependent, mobility with re-locatable addresses is essentialy non-existent.
 
         TODO: just a placeholder, re-read the relevant chapter of Patterns
 
@@ -64,12 +76,13 @@
     \section{Router Table Size Growth}
         Default-free zone (DFZ) is the collection of all Internet autonomous systems (AS) that do not require a default route to route a packet to any destination. Since they comprise the root of the Internet's routing infrastructure, their database must be complete.
 
-        With the increasing number of hosts connected to the Internet, the DFZ routing table sizes grow as well. While the exponential growth observed during the 1990s was mitigated in 2001 by mass deployment of CIDR and route aggregation, the number of items is still increasing linearly and the high-end router hardware needs to keep up, especially with increasing use of IPv6 and BGP-based multihoming. This can sometimes lead to scalability problems, as in August of 2014 where reaching the 512k entry limit of multiple routers caused world-wide outages.
+        With the increasing number of hosts connected to the Internet, the DFZ routing table sizes grow as well.
 
-        As of year 2015, the Internet routing table is consisted of over 560k entries, which requires at least TODO MB in a router's memory. It is commonly believed that Moore's law will ensure that the technology of high-end routers will keep scaling along with the increased demands, but recent research proves otherwise.
+        \begin{center}\includegraphics[width=0.6\textwidth]{media/bgp-active.png}\end{center}
 
-        TODO: revise the exact data
+        While the exponential growth observed during the 1990s was later mitigated by mass deployment of CIDR and route aggregation, the number of items is still increasing superlinearly and the high-end router hardware needs to keep up, especially with increasing use of BGP-based multihoming and IPv6. This can sometimes lead to scalability problems, as in August of 2014 where reaching the 512k entry limit of multiple routers caused globally observable outages.
 
+        As of year 2015, the Internet routing table is consisted of over 560k entries, which requires over 0.5 GB of router memory. It is commonly believed that Moore's law will ensure that the technology of high-end routers will keep scaling along with the increased demands, but recent research proves otherwise.
 
 \chapter{Overview of Alternative Architectures}
     (\textasciitilde4 ns)
@@ -180,6 +193,8 @@
 
     \section{Current State of Implementation}
 
+    \section{Evaluation}
+
 \chapter{Recursive InterNetwork Architecture}
     (\textasciitilde8 ns)
     \section{Premise}
@@ -196,6 +211,7 @@
         \subsection{Relaying and Multiplexing Task}
     \section{Implications}
     \section{Current State of Implementation}
+    \section{Evaluation}
 
 \chapter{Implementation of Relaying and Multiplexing Task}
     (\textasciitilde10 ns)
@@ -206,6 +222,9 @@
 
     \section{RINASim}
         RINASim, developed by networking research group at Faculty of Information Technology of Brno University of technology, is an OMNeT++ library developed for project PRISTINE. The purpose of the library is to provide a framework for building RINA networks. RINASim is used primarily by other PRISTINE researchers to experiment with the architecture and efficiently evaluate their working theories.
+
+    \section{Process of development}
+        Since RINA is still an emerging architecture, some of its parts (e.g. SDU Protection) are still being actively worked on and the current implementations aren't yet fit for production purposes. Because of this, most of development was driven by PRISTINE researchers' feature requests and frequent mutual feedback regarding architectural or implementational issues.
 
     \section{Implementation Design}
 
@@ -226,7 +245,7 @@
 
             (the nasty guts of RelayAndMux.png)
 
-            RMTModule consists of multiple simple modules of various types, some of which are instantiated only dynamically at runtime.
+            RelayAndMUx consists of multiple simple modules of various types, some of which are instantiated only dynamically at runtime.
 
             Static modules:
             \begin{itemize}
@@ -241,7 +260,11 @@
             \begin{itemize}
                 \item RMTPort, a representation of one endpoint of an (N-1)-flow.
                 \item RMTQueue, a representation of either input or output queue. The number of RMTQueues per RMTPort is determined by Resource Allocator policies.
+                \item RMTPortWrapper, a compound module encapsulating an (N-1)-port and its queues.
             \end{itemize}
+
+        \subsection{Module parameters}
+            Some of the modules contain user-configurable parameters that can be used to alter the modules' behavior. The whole list of parameters can be found in attachment A2.
 
 
 
