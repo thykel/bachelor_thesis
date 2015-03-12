@@ -1,10 +1,6 @@
 
 \chapter{Introduction}
     (\textasciitilde2 ns)
-
-    The field of network architecture has been
-    This thesis
-
     \section{Goals}
         The theoretical part of this thesis aims to describe alternatives to the currently prevalent network architectures. Since the Internet is by far the largest and most important example of an internetwork, its underlying architecture shall be used as a base for comparison. This is only fitting since nearly all of the network architecture research is directed towards improving the building blocks of the Internet.
 
@@ -16,13 +12,11 @@
 
         Part Three presents an outline of current research directions in field of network architecture and a brief overview of related research projects.
 
-        Part Four takes a closer look at Named Data Networking, an information-centric network architecture. It contains description of the architecture and its advantages.
+        Part Four takes a closer look at Recursive InterNetwork Architecture, an IPC-based network architecture. It contains description of the architecture and its advantages.
 
-        Part Five takes a closer look at Recursive InterNetwork Architecture, an IPC-based network architecture. It contains description of the architecture and its advantages.
+        Part Five describes implementation of RINA's Relaying and Multiplexing Task in OMNeT++.
 
-        Part Six describes implementation of RINA's Relaying and Multiplexing Task in OMNeT++.
-
-        Part Seven presents evaluation of the implementation in form of test outputs.
+        Part Six presents evaluation of the implementation in form of test outputs.
 
         Part Eight wraps it all up. ;=)
 
@@ -41,16 +35,16 @@
 
         TODO: explain Saltzer's proposal and why it isn't used
 
-        Thus, both MAC addresses and IP addresses serve as point-of-attachment addresses and effectively locate the same thing, which is a host interface. This implies that the Internet effectively forwards PDUs on interface addresses, which has a great impact on difficulty of mobility and multihoming (both described in another sections). Borrowing a comparison from John Day's Patterns in Network Architecture, the lack of implicit logical addressing in the Internet \"feels like accessing memory with DOS instead of Unix\".
+        Thus, both MAC addresses and IP addresses serve as point-of-attachment addresses and effectively locate the same thing, which is a host interface. This implies that the Internet effectively forwards PDUs on interface addresses, which has a great impact on difficulty of mobility and multihoming (both described in another sections). Borrowing a comparison from John Day's Patterns in Network Architecture, the lack of implicit logical addressing in the Internet ``feels like accessing memory with DOS instead of Unix''.
 
     \section{Lack of Multihoming}
 
-        Since the IP addresses serve as point-of-attachment addresses (i.e. one per each computing system interface) and routing is done exclusively on IP's layer, there isn't any implicit mechanism for distinguishing whether multiple IP addresses belong to a single node. The insufficient base for multihoming support is also one of the oldest recognized problems of the Internet: it has become apparent back in 1972, when Tinker Air Force Base joined ARPANET and voiced a request for redundant connections to a single node to ensure reliability. In spite of this, a switch to a new protocol suite that happened 11 years later (on \"flag day\") didn't bring any solution to this problem.
+        Since IP addresses serve as point-of-attachment addresses (i.e. one per each computing system interface) and routing is done exclusively on IP's layer, there isn't any implicit mechanism for distinguishing whether multiple IP addresses belong to a single node. The insufficient base for multihoming support is also one of the oldest recognized problems of the Internet: it has become apparent back in 1972, when Tinker Air Force Base joined ARPANET and voiced a request for redundant connections to a single node to ensure reliability. In spite of this, a switch to a new protocol suite that happened 11 years later (on ``flag day'') didn't bring any solution to this problem.
 
         Since then, some attemps were made to implement multihoming on top of the current architecture.
 
         \subsection{SCTP}
-        Message-oriented transport protocol SCTP provides a partial support. Two hosts communicating with each other via SCTP are able to provide each other with lists of alternate IP addresses that can be used as fallback points of attachment of the same application in case of failure of the primary address. During such session, each SCTP host needs to continually check other host's endpoints by heartbeat packets to make sure they are accessible via other sessions. However, thus far, multiple reasons have been preventing SCTP from becoming a widely known and used solution; the biggest disadvantage lies in the fact that due to TCP/IP not having a distinct session layer on top of the network layer (such as in ISO/OSI stack), the transport protocol must be explicitly specified by the application using sockets API. Therefore, SCTP adoption would require a rewrite of network-aware applications themselves. Other SCTP adoption issues include operating system support (Microsoft Windows requires a third-party kernel driver) and weak awareness of its existence outside networking community.
+        Message-oriented transport protocol SCTP provides a partial support. Two SCTP hosts are able to provide each other with lists of alternate IP addresses that can be used as fallback points of attachment of the same application in case of failure of the primary address. During such session, each SCTP host needs to continually check other host's endpoints by heartbeat packets to make sure they are accessible via other sessions. However, thus far, multiple reasons have been preventing SCTP from becoming a widely known and used solution; the biggest disadvantage lies in the fact that due to TCP/IP not having a distinct session layer on top of the network layer (such as in ISO/OSI stack), the transport protocol must be explicitly specified by the application using sockets API. Therefore, SCTP adoption would require a rewrite of network-aware applications themselves. Other SCTP adoption issues include operating system support (Microsoft Windows requires a third-party kernel driver) and weak awareness of its existence outside networking community.
 
         \subsection{BGP Multihoming}
         Another implementation of multihoming capabilities can be seen in Border Gateway Protocol, which provides means for load-balancing and fallback over multiple links. To make use of such multihoming over the Internet, a public IP address range and an Autonomous System number are required. BGP Multihoming is one of the most significant causes contributing to the growth of Internet routing table.
@@ -82,10 +76,10 @@
 
         While the exponential growth observed during the 1990s was later mitigated by mass deployment of CIDR and route aggregation, the number of items is still increasing superlinearly and the high-end router hardware needs to keep up, especially with increasing use of BGP-based multihoming and IPv6. This can sometimes lead to scalability problems, as in August of 2014 where reaching the 512k entry limit of multiple routers caused globally observable outages.
 
-        As of year 2015, the Internet routing table is consisted of over 560k entries, which requires over 0.5 GB of router memory. It is commonly believed that Moore's law will ensure that the technology of high-end routers will keep scaling along with the increased demands, but recent research proves otherwise.
+        As of year 2015, the Internet routing table is consisted of over 560k entries, which requires over 0.5 GB of memory on each router. It's been commonly believed that Moore's law will ensure that the technology of high-end routers will keep scaling along with the increased demands, but recent research proves otherwise.
 
 \chapter{Overview of Alternative Architectures}
-    (\textasciitilde4 ns)
+    (\textasciitilde12 ns)
 
     This section gives an overview of paths that were pursued in the field of network architecture research.
 
@@ -94,119 +88,118 @@
         Over the past several years, the networking research community has exhibited many attempts of moving the field forward. The undertaken research directions are often classified into one of two groups:
 
         \begin{itemize}
-            \item evolutionary design: backward-compatible solutions that are incrementally deployable on top of the current Internet (e.g. DiffServ, IntServ, LISP), or
+            \item evolutionary design: backward-compatible solutions that are incrementally deployable on top of the current Internet (e.g. SDN, LISP, DiffServ, IntServ), or
             \item clean slate design: designing completely new standalone architectures that aren't constrained by Internet technology's limitations (e.g. RINA, NDN)
         \end{itemize}
 
-        Considering the scope of this thesis, the focus will be given exclusively to \"clean-slate design\" architectures.
+        Considering the scope of this thesis, the focus will be given exclusively to ``clean-slate design'' architectures.
 
     \section{Research Initiatives}
 
         \subsection{NewArch Project}
-
-            DARPA-funded, nada.
-
-        \subsection{Future Internet Architecture}
-
-            In 2010, National Science Foundation funded five projects as a part of this program: Named Data Networking, MobilityFirst, NEBULA, eXpressive Network Architecture and ChoiceNet.
-
         \subsection{FIRE}
         \subsection{FIBRE}
+        \subsection{Future Internet Architecture}
+            In 2010, National Science Foundation funded five projects as a part of this program: Named Data Networking, MobilityFirst, NEBULA, eXpressive Network Architecture and ChoiceNet.
 
-    \section{Information-centric networking}
+    \section{Named Data Networking}
+        (\textasciitilde8 ns)
+        \subsection{Premise}
+            As described in section 2.1, the current Internet has its roots in telecommunication technology as this was the only area from which any inspiration could be taken. Because of this, technology of the Internet has been built on the paradigm of host-to-host communication. This can be visually presented on a ``hourglass model'', which indicates that while there's a wide array of technologies in use in the lower and higher layers, the hourglass's thin waist of end-to-end communication is the key static part binding different networks together.
 
-        \subsection{CCN}
-        \subsection{NDN}
-        \subsection{GreenICN}
+            \begin{center}\includegraphics[width=0.2\textwidth]{media/ndn_hourglass1.jpg}\end{center}
 
-    \section{Recursive Architectures}
-        \subsection{RNA}
-        \subsection{RINA}
+            Building the Internet as a communication network was an obvious choice, especially since most of communication of the early ARPANET consisted of connecting terminals to mainframes and executing remote procedures on them.
 
-\chapter{Named Data Networking}
-    (\textasciitilde8 ns)
-    \section{Premise}
-        As described in section 2.1, the current Internet has its roots in telecommunication technology as this was the only area from which any inspiration could be taken. Because of this, technology of the Internet has been built on the paradigm of host-to-host communication. This can be visually presented on a "hourglass model", which indicates that while there's a wide array of technologies in use in the lower and higher layers, the hourglass's thin waist of end-to-end communication is the key static part binding different networks together.
+            However, while the basic paradigm of host-to-host communication hasn't changed, the way we use the Internet has gone in an entirely different direction: the Internet has become mostly a content distribution network. Since the mechanism of communication over the Internet is based on creating and maintaining end-to-end connections, this creates an enormous amount of data redundancy.
 
-        \begin{center}\includegraphics[width=0.2\textwidth]{media/ndn_hourglass1.jpg}\end{center}
+            Named Data Networking proposes a solution for the problem: instead of working with the source/destination node identifiers, the ``thin waist'' of the Internet should work with names of data chunks.
 
-        Building the Internet as a communication network was an obvious choice, especially since most of communication of the early ARPANET consisted of connecting terminals to mainframes and executing remote procedures on them.
+            \begin{center}\includegraphics[width=0.6\textwidth]{media/ndn_hourglass2.png}\end{center}
 
-        However, while the basic paradigm of host-to-host communication hasn't changed, the way we use the Internet has gone in an entirely different direction: the Internet has become mostly a content distribution network. Since the mechanism of communication over the Internet is based on creating and maintaining end-to-end connections, this creates an enormous amount of data redundancy.
-
-        Named Data Networking proposes a solution for the problem: instead of working with the source/destination node identifiers, the "thin waist" of the Internet should work with names of data chunks.
-
-        \begin{center}\includegraphics[width=0.6\textwidth]{media/ndn_hourglass2.png}\end{center}
-
-    \section{Concepts}
-        \subsection{The Building Blocks}
-            The NDN architecture specifies:
-                \begin{itemize}
-                    \item two types of packets: an interest packet (containing the name of desired data) and a data packet (containing the requested data)
-                \begin{center}\includegraphics[width=0.6\textwidth]{media/ndn_packets1.png}\end{center}
-                    \item two types of hosts: a consumer (data requester) and a producer (data provider)
-                    \item a router maintaining three fundamental data structures:
+        \subsection{Concepts}
+            \subsubsection{The Building Blocks}
+                The NDN architecture specifies:
                     \begin{itemize}
-                        \item Forwarding Information Base (forwarding table)
-                        \item Pending Interest Table (maintaining currently active requests)
-                        \item Content Store (data cache)
-                    \end{itemize}
-                    \begin{center}\includegraphics[width=0.6\textwidth]{media/ndn_router1.png}\end{center}
+                        \item two types of packets: an interest packet (containing the name of desired data) and a data packet (containing the requested data)
+                    \begin{center}\includegraphics[width=0.6\textwidth]{media/ndn_packets1.png}\end{center}
+                        \item two types of hosts: a consumer (data requester) and a producer (data provider)
+                        \item a router maintaining three fundamental data structures:
+                        \begin{itemize}
+                            \item Forwarding Information Base (forwarding table)
+                            \item Pending Interest Table (maintaining currently active requests)
+                            \item Content Store (data cache)
+                        \end{itemize}
+                        \begin{center}\includegraphics[width=0.6\textwidth]{media/ndn_router1.png}\end{center}
 
+                    \end{itemize}
+
+                \subsubsection{The Communication Model}
+
+                Communication in NDN is driven by the data receiver, i.e. consumer.
+
+                \begin{enumerate}
+                    \item The consumer sends out an ``interest packet'' containing the name of the desired data.
+                    \item When a router receives the interest packet, it first consults its Content Store for requested data.
+                        \begin{itemize}
+                            \item If the data requested by the interest packet are present, they are returned in the direction of the requesting interface.
+                            \item Otherwise, it'll look up the Pending Interest Table.
+                            \begin{itemize}
+                                \item If there's an entry present for the named data request, the entry is updated by adding the originating interface into the list of requesting interfaces, thus aggregating the new request together with an existing one.
+                                \item Otherwise, a new entry is inserted, a FIB lookup is made and the interest packet is forwarded to interface(s) returned by the FIB.
+                            \end{itemize}
+                        \end{itemize}
+                    \item A data packet is returned to the router by either the producer or another router with cached data. The router finds a matching PIT entry and forwards the data to all interfaces listed in the PIT entry. The PIT entry is then removed and data are cached into the Content Store.
+                \end{enumerate}
+
+        \subsection{Implications}
+            \subsubsection{Data Caching}
+                The most significant feature of NDN is its native support for caching all sorts of data inside the network itself. While this should be beneficial mostly for static data such as web pages and images, dynamic content could take advantage of this as welll in case of multicasting or packet retransmission on packet loss.
+
+            \subsubsection{Routing and Forwarding}
+                NDN routes and forwards packets on names, which eliminates four problems caused by address forwarding in the IP architecture: address space exhaustion, NAT traversal, mobility, and address management.
+                \begin{itemize}
+                    \item There is no address exhaustion problem since the namespace is unbounded.
+                    \item There is no NAT traversal problem since a host does not need to expose its address in order to offer content.
+                    \item Mobility, which requires changing addresses in IP, no longer breaks communication since data names remain the same.
+                    \item Finally, address assignment and management is no longer required in local networks, which is especially empowering for embedded sensor networks.
                 \end{itemize}
 
-            \subsection{The Communication Model}
+                Since the forwarding mechanism otherwise bears a strong resemblance to the forwarding mechanism in IP networks, lot of the existing research on IP routing could be applied to NDN as well: protocols like BGP, IS-IS or OSPF can be, for the most part, reused with minor modifications (e.g. routers would announce name prefixes instead of IP prefixes).
 
-            Communication in NDN is driven by the data receiver, i.e. consumer.
+            \subsubsection{Security}
+                While TCP/IP with its end-to-end communication paradigm relies on setting up a secure channel between two hosts and transmitting data through it, NDN requires each data chunk to be signed together with its name. Thus, since security is built into the data itself, there's no need for a direct host-to-host secure channel to be created.
 
-            \begin{enumerate}
-                \item The consumer sends out an "interest packet" containing the name of the desired data.
-                \item When a router receives the interest packet, it first consults its Content Store for requested data.
-                    \begin{itemize}
-                        \item If the data requested by the interest packet are present, they are returned in the direction of the requesting interface.
-                        \item Otherwise, it'll look up the Pending Interest Table.
-                        \begin{itemize}
-                            \item If there's an entry present for the named data request, the entry is updated by adding the originating interface into the list of requesting interfaces, thus aggregating the new request together with an existing one.
-                            \item Otherwise, a new entry is inserted, a FIB lookup is made and the interest packet is forwarded to interface(s) returned by the FIB.
-                        \end{itemize}
-                    \end{itemize}
-                \item A data packet is returned to the router by either the producer or another router with cached data. The router finds a matching PIT entry and forwards the data to all interfaces listed in the PIT entry. The PIT entry is then removed and data are cached into the Content Store.
-            \end{enumerate}
+        \subsection{Current State of Implementation}
 
-    \section{Implications}
-        \subsection{Data Caching}
-            The most significant feature of NDN is its native support for caching all sorts of data inside the network itself. While this should be beneficial mostly for static data such as web pages and images, dynamic content could take advantage of this as welll in case of multicasting or packet retransmission on packet loss.
+    \section{NFN}
+        NFN's founders present it as ``a companion project to Named Data Networking''. While CCN (and, in turn, NDN) is based on the idea of resolving names to content, NFN decides to take an even more general approach: resolving names to computations.
 
-        \subsection{Routing and Forwarding}
-            NDN routes and forwards packets on names, which eliminates four problems caused by address forwarding in the IP architecture: address space exhaustion, NAT traversal, mobility, and address management.
-            \begin{itemize}
-                \item There is no address exhaustion problem since the namespace is unbounded.
-                \item There is no NAT traversal problem since a host does not need to expose its address in order to offer content.
-                \item Mobility, which requires changing addresses in IP, no longer breaks communication since data names remain the same.
-                \item Finally, address assignment and management is no longer required in local networks, which is especially empowering for embedded sensor networks.
-            \end{itemize}
+    \section{eXpressive Network Architecture}
+        As presented in the previous sections, some of the future architecture research is centered around the idea of replacing Internet's narrow waist of end-to-end communication with a different principal (e.g. NDN and its named content). XNA takes this approach one step further and builds on one basic premise: the narrow waist should provide support for multiple principals and the ability to evolve its functionality to accomodate new principals over time.
 
-            Since the forwarding mechanism otherwise bears a strong resemblance to the forwarding mechanism in IP networks, lot of the existing research on IP routing could be applied to NDN as well: protocols like BGP, IS-IS or OSPF can be, for the most part, reused with minor modifications (e.g. routers would announce name prefixes instead of IP prefixes).
+    \section{NovaGenesis}
+    \section{NEBULA}
+    \section{MobilityFirst}
+    \section{ChoiceNet}
+    \section{Comparison \& Evaluation}
+        some nice tables + a paragraph or two
 
-        \subsection{Security}
-            While TCP/IP with its end-to-end communication paradigm relies on setting up a secure channel between two hosts and transmitting data through it, NDN requires each data chunk to be signed together with its name. Thus, since security is built into the data itself, there's no need for a direct host-to-host secure channel to be created.
-
-    \section{Current State of Implementation}
-
-    \section{Evaluation}
 
 \chapter{Recursive InterNetwork Architecture}
     (\textasciitilde8 ns)
+    In 2008, computer scientist John D. Day has published a book that marked the culmination of his long-time goal of rediscovering the way we think about computer networks. The book was called Patterns in Network Architecture and in it, Day singlehandedly proposed a clean-slate approach to computer architecture that aims to get rid of most of TCP/IP's drawbacks.
+
+    The book can be roughly divided into two separate parts: in the first part, Day attempts to decompose mechanisms used in TCP/IP to their basic parts and put them into historical and socio-economical context. He eventually discovers that the currently prevalent layered approach to network architecture is needlesly complex, because each layer consists of the same mechanisms acting on a different scope.
+
+    The second part takes into account all of the facts discovered in the first part and uses them as foundations to build an entirely new concept of network architecture from scratch: the recursive IPC model (originally Network IPC Architecture, NIPCA).
+
+    RINA (Recursive InterNetwork Architecture) is a currently researched network architecture based on fundamental principles described by Day.
+
     \section{Premise}
-        In 2008, computer scientist John D. Day has published a book that marked the culmination of his long-time goal of rediscovering the way we think about computer networks. The book was called Patterns in Network Architecture and in it, Day singlehandedly proposed a clean-slate approach to computer architecture that aims to get rid of most of TCP/IP's drawbacks.
-
-        The book can be roughly divided into two separate parts: in the first part, Day attempts to decompose mechanisms used in TCP/IP to their basic parts and put them into historical and socio-economical context. He eventually discovers that the currently prevalent layered approach to network architecture is needlesly complex, because each layer consists of the same mechanisms acting on a different scope.
-
-        The second part takes into account all of the facts discovered in the first part and uses them as foundations to build an entirely new concept of network architecture from scratch: the recursive IPC model (originally Network IPC Architecture, NIPCA).
-
-        RINA (Recursive InterNetwork Architecture) is a currently researched network architecture based on fundamental principles described by Day.
 
     \section{Concepts}
+        \subsection{Distributed Application}
         \subsection{Error And Flow Control Protocol}
         \subsection{Relaying and Multiplexing Task}
     \section{Implications}
@@ -216,7 +209,7 @@
 \chapter{Implementation of Relaying and Multiplexing Task}
     (\textasciitilde10 ns)
     \section{OMNeT++}
-        OMNeT++ is an open-source discrete simulation framework used primarily in the field of network simulation. In this context, the term "network" refers to the more general meaning of the word, which means the framework can be used not only for simulation of TCP/IP networks (especially in conjecture with the INET library), but it also provides means for simulating other networked systems such as on-chip networks or queuing networks. As we're implementing a clean-slate architecture from the ground up, this is an ideal approach.
+        OMNeT++ is an open-source discrete simulation framework used primarily in the field of network simulation. In this context, the term ``network'' refers to the more general meaning of the word, which means the framework can be used not only for simulation of TCP/IP networks (especially in conjecture with the INET library), but it also provides means for simulating other networked systems such as on-chip networks or queuing networks. As we're implementing a clean-slate architecture from the ground up, this is an ideal approach.
 
         OMNeT++ provides a component architecture for models. Components (modules) are programmed in C++, then assembled into larger components and models using the high-level language NED. In theory, there are no limits for networks modelled by NED and the only constraint is given by a computing platform processing power.
 
@@ -228,7 +221,7 @@
 
     \section{Implementation Design}
 
-        In RINASim, all functionality of RMT including a policy architecture is encompassed in a single compound module named "RelayAndMux" which is present in every IPC process. The module serves for (de)multiplexing, relaying and aggregating PDUs of data flows traversing the IPC processes.
+        In RINASim, all functionality of RMT including a policy architecture is encompassed in a single compound module named ``RelayAndMux'' which is present in every IPC process. The module serves for (de)multiplexing, relaying and aggregating PDUs of data flows traversing the IPC processes.
 
         \subsection{Separation of mechanism and policy}
             Some aspects of RMT functionality such as queue scheduling and performance monitoring are, by their nature, suited for separation of mechanism and policy. In another words, we need to take into account that architecture implementators will probably want to specify custom behavior for some of the logic present in RMT.
@@ -245,7 +238,7 @@
 
             (the nasty guts of RelayAndMux.png)
 
-            RelayAndMUx consists of multiple simple modules of various types, some of which are instantiated only dynamically at runtime.
+            RelayAndMux consists of multiple simple modules of various types, some of which are instantiated only dynamically at runtime.
 
             Static modules:
             \begin{itemize}
@@ -266,7 +259,21 @@
         \subsection{Module parameters}
             Some of the modules contain user-configurable parameters that can be used to alter the modules' behavior. The whole list of parameters can be found in attachment A2.
 
+        \subsection{Module workflow}
+            diagrams, descriptions, pie charts etc.
 
+        \subsection{Module management}
+            RMT's purpose in an IPC process is fairly straightforward: providing a stateless function for relaying PDUs to their predetermined destinations and multiplexing PDUs of multiple data flows onto a common predetermined medium. The entire management of the RMT is decoupled and exercised by some of the functions of the Resource Allocator. This includes tasks such as:
+
+            \begin{itemize}
+                \item Initial setup of RMT mode of function. When a RMT instance is located inside a bottommost IPC process that doesn't work with any further (N-1)-IPC processes, the RMT is switched to an ``onWire'' mode that functions over a simple medium instead of an IPC connection.
+                \item Forwarding table management. The content of the PDU forwarding table is generated by the PDU Forwarding Table Generator module which generally exchanges routing information with other IPC processes by some sort of routing protocol.
+                \item Queue allocation. PDUs traversing an (N-1)-port may be momentarily buffered in input or output queues; the number of input and output queues per (N-1)-port and assignment of traffic classes to queues (e.g. all-in-one or fair queuing) is determined by Resource Allocator policies.
+                \item (N-1)-port creation \& removal. Since Resource Allocator manages (N-1)-flows with other IPC processes, it also provides (N-1)-ports (or handles) for RMT.
+                \item (N-1)-port data rate control. In some scenarios, it may be required for an (N-1)-port to cease/slow down sending or providing more data because of congestion. Resource Allocator can momentarily disable or slow down data rate on distinct ports if this is required by EFCP instances.
+            \end{itemize}
+
+    \section{}
 
 
 \chapter{Testing and Evaluation}
