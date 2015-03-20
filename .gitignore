@@ -4,4 +4,6 @@
 *.bib
 *.out
 *.bbl
+*.blg
+*.log
 *.toc

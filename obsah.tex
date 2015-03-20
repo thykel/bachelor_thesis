@@ -1,35 +1,38 @@
 
 \chapter{Introduction}
     (\textasciitilde2 ns)
-    \section{Goals}
-        The theoretical part of this thesis aims to describe alternatives to the currently prevalent network architectures. Since the Internet is by far the largest and most important example of an internetwork, its underlying architecture shall be used as a base for comparison. This is only fitting since nearly all of the network architecture research is directed towards improving the building blocks of the Internet.
 
-        The technical report describes design and implementation of a significant part of an OMNeT++ simulation model of one of the presented architectures, RINA.
+
+
+    \section{Goals}
+        The theoretical part of this thesis aims to describe alternatives to the currently prevalent network architectures. Since the Internet is by far the largest and most important example of an internetwork, its underlying architecture shall be used as a base for comparison. This is only fitting since nearly all of the recent network architecture research is directed towards improving the building blocks of the Internet.
+
+        The technical report describes design and implementation of a significant part of one of the presented architectures, RINA. The OMNeT++ discrete simulation framework was chosen as a target platform.
 
     \section{Thesis Structure}
 
-        Part Two describes the historical events that led to the current state of the Internet and hints on the shortcomings and weak parts of current technology which create the need for an alternative architecture research.
+        Part Two describes the shortcomings and weak parts of current Internet technology which create the need for alternative architecture research.
 
-        Part Three presents an outline of current research directions in field of network architecture and a brief overview of related research projects.
+        Part Three presents an outline of current research directions and active projects in field of network architecture.
 
         Part Four takes a closer look at Recursive InterNetwork Architecture, an IPC-based network architecture. It contains description of the architecture and its advantages.
 
         Part Five describes implementation of RINA's Relaying and Multiplexing Task in OMNeT++.
 
-        Part Six presents evaluation of the implementation in form of test outputs.
+        Part Six presents evaluation of the implementation in form of construction of test scenarios and their outputs.
 
-        Part Eight wraps it all up. ;=)
+        Part Seven wraps it all up. ;=)
 
 \chapter{Problems of the current Internet}
     (\textasciitilde5 ns)
 
     The Internet could be, with no doubt, considered one of the most important technological achievements of the 20th century. It has brought a previously unimaginable degree of interconnection and information access to the whole world and its importance keeps growing even decades after its inception.
 
-    Nevertheless, the very basic core of its technology was constructed over three decades ago, back when the the demands on internetworking capabilities were nowhere compared to the present situation. During the Internet's growth, whenever there has been a problem that required a solution (e.g. IPv4 address depletion), it's been usually dealt with in a non-intrusive evolutionary fashion by applying a new principle on top of the underlying technology. In another words, problems have been mostly solved by adding a new protocol to the TCP/IP protocol stack (e.g. RSVP for QoS guarantee).
+    Nevertheless, the very basic core of its technology was constructed over three decades ago, back when the the demands on internetworking capabilities were nowhere compared to the present situation. During the Internet's growth, whenever there has been a problem that required a solution (e.g. IPv4 address depletion), it's been usually dealt with in a non-intrusive evolutionary fashion by applying a new principle on top of the underlying technology. In another words, problems have been mostly solved by adding a new protocol to the TCP/IP protocol stack.
 
-    This way of improving the Internet's base technology is only logical since each paradigm shift in foundations of the Internet can require a long and expensive transfer of existing network configrations to the new technology. The most notable example of this is the internet layer protocol IPv6 requiring explicit firwmare support from active network components. The problem of IPv4 space exhaustion has been known of since the beginning of 1990s, first formal IPv6 specification arose in 1996 (RFC 2460) and the first IPv6 routers emerged in 2004 -- and yet, as of 2015, two years after the top-level IPv4 pool exhaustion, IPv6 still represents only a miniscule fraction of total traffic on the Internet. For example, Google IPv6 adoption statistics indicate around 6\% coverage amongst the users of its services.
+    This way of improving the Internet's base technology is only logical since each paradigm shift in foundations of the Internet can require a long and expensive transfer of existing network configrations to the new technology. The most notable example of this is the internet layer protocol IPv6 requiring explicit firmware support from active network components. The problem of IPv4 space exhaustion has been known of since the beginning of 1990s, the first formal IPv6 specification arose in 1996 (RFC 2460) and the first IPv6 routers emerged in 2004 -- and yet, as of 2015, two years after the top-level IPv4 pool exhaustion, IPv6 still represents only a miniscule fraction of the total traffic on the Internet. For example, Google IPv6 adoption statistics indicate around 6\% coverage amongst the users of its services.
 
-    As such, some of the Internet's problems are inherent because of the base design and it's usually difficult, if not impossible, to solve them incrementally. The following sections illustrate several of those problems.
+    As such, some of the Internet's problems are inherent because of the base design foundations and it's usually difficult, if not impossible, to solve them incrementally. The following sections illustrate several of those problems.
 
     \section{Node naming}
 
@@ -44,13 +47,13 @@
         Since then, some attemps were made to implement multihoming on top of the current architecture.
 
         \subsection{SCTP}
-        Message-oriented transport protocol SCTP provides a partial support. Two SCTP hosts are able to provide each other with lists of alternate IP addresses that can be used as fallback points of attachment of the same application in case of failure of the primary address. During such session, each SCTP host needs to continually check other host's endpoints by heartbeat packets to make sure they are accessible via other sessions. However, thus far, multiple reasons have been preventing SCTP from becoming a widely known and used solution; the biggest disadvantage lies in the fact that due to TCP/IP not having a distinct session layer on top of the network layer (such as in ISO/OSI stack), the transport protocol must be explicitly specified by the application using sockets API. Therefore, SCTP adoption would require a rewrite of network-aware applications themselves. Other SCTP adoption issues include operating system support (Microsoft Windows requires a third-party kernel driver) and weak awareness of its existence outside networking community.
+        Message-oriented transport protocol SCTP provides a partial support. Two SCTP hosts are able to provide each other with lists of alternate IP addresses that can be used as fallback points of attachment of the same application in case of failure of the primary address. During such session, each SCTP host needs to continually check other host's endpoints by heartbeat packets to make sure they are accessible via other sessions. However, thus far, multiple reasons have been preventing SCTP from becoming a widely known and used solution; the biggest disadvantage lies in the fact that due to TCP/IP not having a distinct session layer on top of its transport layer (such as in ISO/OSI stack), the transport protocol must be explicitly specified by the application using sockets API. Therefore, SCTP adoption would require a rewrite of network-aware applications themselves. Other SCTP adoption issues include unsatisfactory operating system support (Microsoft Windows systems require a third-party kernel driver) and weak awareness of its existence outside the networking community.
 
         \subsection{BGP Multihoming}
-        Another implementation of multihoming capabilities can be seen in Border Gateway Protocol, which provides means for load-balancing and fallback over multiple links. To make use of such multihoming over the Internet, a public IP address range and an Autonomous System number are required. BGP Multihoming is one of the most significant causes contributing to the growth of Internet routing table.
+        Another implementation of multihoming capabilities can be seen in Border Gateway Protocol, which provides means for load-balancing and fallback over multiple links on T1 networks. To make use of such multihoming over the Internet, a public IP address range and an Autonomous System number are required. BGP Multihoming is one of the most significant causes contributing to the growth of Internet routing table.
 
         \subsection{Multipath TCP}
-        The most recent TCP/IP multihoming initiative is a TCP extension Multipath TCP (MPTCP) which is currently in its experimental phase, although a large scale commercial deployment was already made by Apple for its Siri network application in mobile operating system iOS 7.
+        The most recent TCP/IP multihoming initiative is the TCP extension Multipath TCP (MPTCP) which is currently in its experimental phase, although a large scale commercial deployment has been already made by Apple for its Siri network application in mobile operating system iOS 7.
 
     \section{Lack of Mobility}
 
@@ -60,7 +63,7 @@
 
     \section{Lack of Multicast}
 
-        TODO: better get well informed on this one first
+        TODO: better get well informed on this one first -- remove?
 
     \section{Weak security}
         The specifications of the fundamental protocols of TCP/IP stack -- IP, TCP and DHCP -- were originally finished at the beginning of 1980s. Computer internetworking in pre-Internet era was still a matter of closed research exercised in small scientific communities, so most of the design effort was given to making things work and network security wasn't the main aim. However, the Internet has since then turned into a massive world-wide internetwork connecting people of different types and agendas. Naturally, once the Internet began to be used for transferring sensitive data (especially by companies), cyber crime started to emerge as well and some attention was turned to security aspects of Internet protocol (or lack thereof).
@@ -83,6 +86,8 @@
 
     This section gives an overview of paths that were pursued in the field of network architecture research.
 
+    Considering the limited scope of this thesis, only a representative subset of currently researched network architectures will be described more thoroughly and evaluated.
+
     \section{Design Approaches}
 
         Over the past several years, the networking research community has exhibited many attempts of moving the field forward. The undertaken research directions are often classified into one of two groups:
@@ -95,17 +100,17 @@
         Considering the scope of this thesis, the focus will be given exclusively to ``clean-slate design'' architectures.
 
     \section{Research Initiatives}
-
         \subsection{NewArch Project}
         \subsection{FIRE}
         \subsection{FIBRE}
         \subsection{Future Internet Architecture}
             In 2010, National Science Foundation funded five projects as a part of this program: Named Data Networking, MobilityFirst, NEBULA, eXpressive Network Architecture and ChoiceNet.
 
+
     \section{Named Data Networking}
         (\textasciitilde8 ns)
         \subsection{Premise}
-            As described in section 2.1, the current Internet has its roots in telecommunication technology as this was the only area from which any inspiration could be taken. Because of this, technology of the Internet has been built on the paradigm of host-to-host communication. This can be visually presented on a ``hourglass model'', which indicates that while there's a wide array of technologies in use in the lower and higher layers, the hourglass's thin waist of end-to-end communication is the key static part binding different networks together.
+            As described in section 2.1, the current Internet has its roots in telecommunication technology as this was the only area from which any inspiration could be taken. Because of this, technology of the Internet has been built on the paradigm of host-to-host communication. This can be visually presented on an ``hourglass model'', which indicates that while there's a wide array of technologies in use in the lower and higher layers, the hourglass's thin waist of end-to-end communication exercised by the IP protocol is the key static part binding different networks together.
 
             \begin{center}\includegraphics[width=0.2\textwidth]{media/ndn_hourglass1.jpg}\end{center}
 
@@ -173,12 +178,13 @@
         \subsection{Current State of Implementation}
 
     \section{NFN}
+        TODO: probably purge this one
+
         NFN's founders present it as ``a companion project to Named Data Networking''. While CCN (and, in turn, NDN) is based on the idea of resolving names to content, NFN decides to take an even more general approach: resolving names to computations.
 
     \section{eXpressive Network Architecture}
         As presented in the previous sections, some of the future architecture research is centered around the idea of replacing Internet's narrow waist of end-to-end communication with a different principal (e.g. NDN and its named content). XNA takes this approach one step further and builds on one basic premise: the narrow waist should provide support for multiple principals and the ability to evolve its functionality to accomodate new principals over time.
 
-    \section{NovaGenesis}
     \section{NEBULA}
     \section{MobilityFirst}
     \section{ChoiceNet}
@@ -188,53 +194,106 @@
 
 \chapter{Recursive InterNetwork Architecture}
     (\textasciitilde8 ns)
-    In 2008, computer scientist John D. Day has published a book that marked the culmination of his long-time goal of rediscovering the way we think about computer networks. The book was called Patterns in Network Architecture and in it, Day singlehandedly proposed a clean-slate approach to computer architecture that aims to get rid of most of TCP/IP's drawbacks.
+    In 2008, computer scientist John D. Day has published a book that marked the culmination of his long-time goal of rediscovering the way we think about computer networks. The book is called Patterns in Network Architecture and in it, Day proposes a clean-slate approach to computer architecture that aims to get rid of most of TCP/IP's drawbacks.
 
-    The book can be roughly divided into two separate parts: in the first part, Day attempts to decompose mechanisms used in TCP/IP to their basic parts and put them into historical and socio-economical context. He eventually discovers that the currently prevalent layered approach to network architecture is needlesly complex, because each layer consists of the same mechanisms acting on a different scope.
+    The book can be roughly divided into two parts: in the first part, Day attempts to decompose mechanisms used in TCP/IP to their basic parts and put them into historical and socio-economical context. The second part takes into account all of the fundamentals discovered in the first part and uses them as foundations to build an entirely new concept of network architecture from scratch: the recursive IPC model (originally Network IPC Architecture, NIPCA).
 
-    The second part takes into account all of the facts discovered in the first part and uses them as foundations to build an entirely new concept of network architecture from scratch: the recursive IPC model (originally Network IPC Architecture, NIPCA).
+    Recursive InterNetwork Architecture (RINA) is a currently researched network architecture based on fundamental principles described by Day.
 
-    RINA (Recursive InterNetwork Architecture) is a currently researched network architecture based on fundamental principles described by Day.
+    This chapter describes the motivation behind RINA and its basic principles. Special attention will be given to its Relaying and Multiplexing Task as the technical report part of this thesis deals with its implementation.
 
     \section{Premise}
+        The very basic principle of RINA could be summed up in one sentence: Networking is a recursively scalable set of distributed applications specialized to do inter-process communication.
 
-    \section{Concepts}
-        \subsection{Distributed Application}
-        \subsection{Error And Flow Control Protocol}
-        \subsection{Relaying and Multiplexing Task}
+    \section{Building blocks}
+        The basic principles of RINA are documented in form of a mental exercise. In the beginning of the second part of his book, Day begins to construct a new networking paradigm by starting at the simplest possible scenario of communication between two applications (IPC inside a system) and then gradually increasing scenario complexity to the point where it can be used as a complete internetworking paradigm.
+
+        Simple IPC communication requires
+
+        Then, Day moves to the next scenario: two applications in two distinct systems commmunicating with each other. This brings the need for multiple new features:
+
+        \begin{itemize}
+        \item Name space management is no longer under the control of a single system, hence there's a need for a protocol to carry application names and access control information, IAP.
+        \item Since there's a possibility of data getting lost or corrupted on transit, there's a need for a transfer protocol to handle it: EFCP.
+        \end{itemize}
+
+        Since the days of single-application hosts are long gone, the next scenario specifies a case of simultaneous communication between two systems.
+
+        \begin{itemize}
+        \item EFCP instances now require means to distinguish one flow from another, so source and destination ports are included in the IAP protocol header.
+        \item Since EFCP instances need to concurrently use a single resource ((N-1)-flow or a physical layer protocol), a multiplexing application is defined.
+        \item Applications can run in multiple instances, an Application Instance name is included.
+        \end{itemize}
+
+        The next step is making a host to be able to communicate with more then one system. The simplest approach is a full mesh where each host in a network is directly connected to every other host in a network
+
+        \begin{itemize}
+        \item Since different media may require different management, each of them will be put in a separate (N)-DIF and there will be another (N+1)-DIF on top of them to manage (N-1)-flows and provide a media-independent facility to the applications.
+        \item We need to locate which applications are reachable via which interfaces -- hence, a directory maintaing mappings of application names to IPC addresses is needed.
+        \end{itemize}
+
+        While communication with multiple host is now feasible, the brute-force approach of N:N connections is expensive and doesn't scale. Hence, we should dedicate certain systems to relay PDUs between destinations.
+
+        \begin{itemize}
+        \item Since different media may require different management, each of them will be put in a separate (N)-DIF and there will be another (N+1)-DIF on top of them to manage (N-1)-flows and provide a media-independent facility to the applications.
+        \item We need to locate which applications are reachable via which interfaces -- hence, a directory maintaing mappings of application names to IPC addresses is needed.
+        \end{itemize}
+
+        At this point, all building blocks are in place to construct networks based on distributed IPC.
+
+    \section{Design Principles}
+        Day's architecture is based on a set of principles justified in the first part of his book.
+
+        \subsection{Connection-less vs. Connection-oriented}
+            function of IPC, not part of application API, bla bla
+
+        \subsection{Delta-T}
+
+        \subsection{Separation of mechanism and policy}
+
+    \section{Relaying and Multiplexing Task}
+
+        \subsection{Formal description}
+
+        \subsection{Policies}
+            Even though Relaying and Multiplexing Task serves as a low-overhead component similar to the traditional view of router data plane, several policies are defined for modifying its behavior.
+
+            \begin{itemize}
+                \item RMT scheduling policy. A scheduling algorithm (also commonly known as ``network scheduler algorithm'' or ``queuing discipline'') that determines the order input and output buffers are serviced. This policy should be invoked each time a PDU needs to be taken from a queue for processing and works for both input and output directions. Examples of possible algorithms could be FIFO, LIFO or Fair Queuing.
+                \item RMT monitoring policy. A queue monitoring algorithm that is invoked each time a PDU enters or leaves a queue. This policy should compute variables to be used in decision process of other policies. Examples of such variables could be average queue length or queue idle time, which are often used by congestion prevention mechanisms.
+                \item RMT max queue policy. An algorithm that is invoked each time the number of PDUs waiting in a queue exceeds the queue's threshold. This policy is mostly used for implementing congestion control mechanisms (e.g. by dropping or marking the last PDU in a queue).
+            \end{itemize}
+
+
     \section{Implications}
+
+
     \section{Current State of Implementation}
     \section{Evaluation}
+
+        The main drawback with adoption of RINA isn't implementation (incremental deploymend with RINA Sockets API is in progress), but in the complete paradigm shift which throws away most of the progress done in field of TCP/IP research.
+
 
 \chapter{Implementation of Relaying and Multiplexing Task}
     (\textasciitilde10 ns)
     \section{OMNeT++}
-        OMNeT++ is an open-source discrete simulation framework used primarily in the field of network simulation. In this context, the term ``network'' refers to the more general meaning of the word, which means the framework can be used not only for simulation of TCP/IP networks (especially in conjecture with the INET library), but it also provides means for simulating other networked systems such as on-chip networks or queuing networks. As we're implementing a clean-slate architecture from the ground up, this is an ideal approach.
+        OMNeT++ is an open-source discrete simulation framework used primarily in the field of network simulation. In this context, the term ``network'' refers to the more general meaning of the word, which means that apart from simulating TCP/IP networks (especially in conjecture with the INET library), it also provides means for simulating other networked systems such as on-chip networks or queuing networks. As we're implementing a clean-slate architecture from the ground up, this is an ideal approach.
 
-        OMNeT++ provides a component architecture for models. Components (modules) are programmed in C++, then assembled into larger components and models using the high-level language NED. In theory, there are no limits for networks modelled by NED and the only constraint is given by a computing platform processing power.
+        OMNeT++ provides a component architecture for models. Components (modules) are programmed in C++, then assembled into larger components and models using the high-level language NED. In theory, there are no limits for networks modelled by NED and the only constraint is given by the computing platform processing power.
 
     \section{RINASim}
-        RINASim, developed by networking research group at Faculty of Information Technology of Brno University of technology, is an OMNeT++ library developed for project PRISTINE. The purpose of the library is to provide a framework for building RINA networks. RINASim is used primarily by other PRISTINE researchers to experiment with the architecture and efficiently evaluate their working theories.
+        RINASim, developed by networking research group at Faculty of Information Technology of Brno University of technology, is an open-source OMNeT++ library developed for project PRISTINE. The purpose of the library is to provide a framework for building RINA networks. In the current stage of initial development, RINASim is used primarily by other PRISTINE researchers to experiment with the architecture and efficiently evaluate their working theories.
+
+        The library is publicly hosted by GitHub.
 
     \section{Process of development}
-        Since RINA is still an emerging architecture, some of its parts (e.g. SDU Protection) are still being actively worked on and the current implementations aren't yet fit for production purposes. Because of this, most of development was driven by PRISTINE researchers' feature requests and frequent mutual feedback regarding architectural or implementational issues.
+        Since RINA is still an emerging architecture, some of its parts (e.g. SDU Protection) are still being actively worked on and the current implementations aren't yet fit for production purposes. Because of this, most of the later phase of development was driven by PRISTINE researchers' feature requests and frequent mutual feedback regarding architectural or implementational issues.
 
     \section{Implementation Design}
 
         In RINASim, all functionality of RMT including a policy architecture is encompassed in a single compound module named ``RelayAndMux'' which is present in every IPC process. The module serves for (de)multiplexing, relaying and aggregating PDUs of data flows traversing the IPC processes.
 
-        \subsection{Separation of mechanism and policy}
-            Some aspects of RMT functionality such as queue scheduling and performance monitoring are, by their nature, suited for separation of mechanism and policy. In another words, we need to take into account that architecture implementators will probably want to specify custom behavior for some of the logic present in RMT.
-
-            For this purpose, several algorithms used by RMT are meant to be user-configurable:
-
-            \begin{itemize}
-                \item RMT scheduling policy: The scheduling algorithm that determines the order input and output buffers are serviced (e.g. by number of waiting PDUs in buffers or with fair queuing).
-                \item RMT monitoring policy: A queue monitoring algorithm that is invoked each time a PDU enters or leaves a queue. This policy should compute variables (such as average queue length) to be used in decision process of other policies.
-                \item RMT maxqueue policy: An algorithm that is invoked each time a number of PDUs waiting in a queue exceeds the queue's threshold. This policy is mostly used for congestion control mechanisms (e.g. by dropping or marking the last PDU in a queue).
-            \end{itemize}
-
-        \subsection{Module structure}
+        \subsection{Module Structure}
 
             (the nasty guts of RelayAndMux.png)
 
@@ -256,13 +315,13 @@
                 \item RMTPortWrapper, a compound module encapsulating an (N-1)-port and its queues.
             \end{itemize}
 
-        \subsection{Module parameters}
+        \subsection{Module Parameters}
             Some of the modules contain user-configurable parameters that can be used to alter the modules' behavior. The whole list of parameters can be found in attachment A2.
 
-        \subsection{Module workflow}
+        \subsection{Module Workflow}
             diagrams, descriptions, pie charts etc.
 
-        \subsection{Module management}
+        \subsection{Module Management}
             RMT's purpose in an IPC process is fairly straightforward: providing a stateless function for relaying PDUs to their predetermined destinations and multiplexing PDUs of multiple data flows onto a common predetermined medium. The entire management of the RMT is decoupled and exercised by some of the functions of the Resource Allocator. This includes tasks such as:
 
             \begin{itemize}
@@ -272,6 +331,20 @@
                 \item (N-1)-port creation \& removal. Since Resource Allocator manages (N-1)-flows with other IPC processes, it also provides (N-1)-ports (or handles) for RMT.
                 \item (N-1)-port data rate control. In some scenarios, it may be required for an (N-1)-port to cease/slow down sending or providing more data because of congestion. Resource Allocator can momentarily disable or slow down data rate on distinct ports if this is required by EFCP instances.
             \end{itemize}
+
+        \subsection{Statistics Collection}
+            OMNeT++ modules provide means for declaring scalar or vector NED variables used for statistics collection. Processing of such statistical data (e.g. generating summaries and graphs) is decoupled from the act of data collection itself, so it's up to the user to pick out which data he wants to work with.
+
+            Since the Relaying and Multiplexing Task is the shared point of data flow traversal in the IPC process, it's well-suited for monitoring data flow performance. Several statistical variables have been defined for this very purpose:
+
+            \begin{itemize}
+            \item (N-1)-port PDU traversal count. Two scalar variables for both input and output containing the number of PDUs transferred through the port in each direction.
+            \item RMT queue length. A vector variable documenting number of PDUs in a queue over time.
+            \item RMT queue drop count. A scalar variable providing the number of PDUs dropped by a queue.
+            \end{itemize}
+
+            Multiple examples of graphs generated from the variables can be seen in the next chapter.
+
 
     \section{}
 
