@@ -7,3 +7,5 @@
 *.blg
 *.log
 *.toc
+*.lof
+*.lot

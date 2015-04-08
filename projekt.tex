@@ -33,6 +33,9 @@
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{tikz}
 \usepackage{float}
+% include Visio diagrams
+\usepackage{pdfpages}
+
 \usetikzlibrary{arrows,decorations.markings,positioning,shapes.symbols,shapes.callouts,shapes.geometric,patterns,calc} 
 \tikzset{
     vertex/.style = {
@@ -130,8 +133,8 @@
   \tableofcontents
   
   % Seznam obrazku a tabulek (pokud prace obsahuje velke mnozstvi obrazku, tak se to hodi)
-  % \listoffigures
-  % \listoftables 
+  \listoffigures
+  \listoftables 
 
   % Text prace
   % ----------------------------------------------
