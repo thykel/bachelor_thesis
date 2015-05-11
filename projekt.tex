@@ -13,10 +13,10 @@
 %\documentclass[cover,print]{fitthesis} % pro tisk - na odkazy se neda klikat
 %\documentclass[english,print]{fitthesis} % pro tisk - na odkazy se neda klikat
 %      \documentclass[english]{fitthesis}
-% * Je-li prace psana v anglickem jazyce, je zapotrebi u tridy pouzit 
+% * Je-li prace psana v anglickem jazyce, je zapotrebi u tridy pouzit
 %   parametr english nasledovne:
 %      \documentclass[english]{fitthesis}
-% * Neprejete-li si vysazet na prvni strane dokumentu desky, zruste 
+% * Neprejete-li si vysazet na prvni strane dokumentu desky, zruste
 %   parametr cover
 
 % zde zvolime kodovani, ve kterem je napsan text prace
@@ -31,20 +31,27 @@
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 \usepackage{listings}
 \usepackage[backend=bibtex]{biblatex}
-\usepackage{tikz}
+%\usepackage{tikz}
 \usepackage{float}
-% include Visio diagrams
+% include PDF vector diagrams
 \usepackage{pdfpages}
+% checkmarks
+\usepackage{amssymb}
 
-\usetikzlibrary{arrows,decorations.markings,positioning,shapes.symbols,shapes.callouts,shapes.geometric,patterns,calc} 
-\tikzset{
-    vertex/.style = {
-        circle,
-        fill            = black,
-        outer sep = 2pt,
-        inner sep = 1pt,
-    }
-}
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+%\usetikzlibrary{arrows,decorations.markings,positioning,shapes.symbols,shapes.callouts,shapes.geometric,patterns,calc}
+%\tikzset{
+%    vertex/.style = {
+%        circle,
+%        fill            = black,
+%        outer sep = 2pt,
+%        inner sep = 1pt,
+%    }
+%}
 \DeclareUrlCommand\url{\def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}}
 \floatstyle{plain}
 \newfloat{listing}{thp}{lop}[chapter]
@@ -91,19 +98,20 @@
   supervisor=Marcel Marek, %jmeno prijmeni skolitele
   supervisor.title.p=Ing.,   %titul pred jmenem (nepovinne)
   %supervisor.title.a={},    %titul za jmenem (nepovinne)
-  %Klicova slova, abstrakty, prohlaseni a podekovani je mozne definovat 
+  %Klicova slova, abstrakty, prohlaseni a podekovani je mozne definovat
   %bud pomoci nasledujicich parametru nebo pomoci vyhrazenych maker (viz dale)
   %===========================================================================
   %Klicova slova
-  keywords.cs={}, %klicova slova v ceskem jazyce
-  keywords.en={}, %klicova slova v anglickem jazyce
+  keywords.cs={OMNeT++, RINA, RMT, počítačové sítě, síťové architektury}, %klicova slova v ceskem jazyce
+  keywords.en={OMNeT++, RINA, RMT, computer networks, network architectures}, %klicova slova v anglickem jazyce
   %Abstract
-  abstract.cs={}, % abstrakt v ceskem jazyce
-  abstract.en={}, % abstrakt v anglickem jazyce
+  abstract.cs={V této práci jsou popsány principy a stav implementace některých nových síťových architektur. Dále je dokumentována implementace modulu Relaying and Multiplexing Task síťové architektury RINA pro simulační framework OMNeT++. Cílem práce je doplnění funkcionality stávající simulační knihovny pro zajištění plnohodnotného modelování sítí RINA.
+  Cílem práce je umožnit modelování daných protokolů bez nutnosti budování fyzické architektury.}, % abstrakt v ceskem jazyce
+  abstract.en={This thesis describes principles and state of implementation of some new network architectures. It also documents implementation of a significant part of one of the presented architectures, RINA, for the OMNeT++ simulation framework. The main goal of this thesis is to extend functionality of an existing simulation library to provide full-fledged means of modelling RINA networks.}, % abstrakt v anglickem jazyce
   %Prohlaseni
   declaration={Prohlašuji, že jsem tuto bakalářskou práci vypracoval sám pod vedením Ing. Marcela Marka },
   %Podekovani (nepovinne)
-  acknowledgment={}, % nepovinne
+  acknowledgment={:*}, % nepovinne
 }
 
 %Abstrakt (cesky, anglicky)
@@ -131,10 +139,10 @@
   % Obsah
   % ----------------------------------------------
   \tableofcontents
-  
+
   % Seznam obrazku a tabulek (pokud prace obsahuje velke mnozstvi obrazku, tak se to hodi)
   \listoffigures
-  \listoftables 
+  \listoftables
 
   % Text prace
   % ----------------------------------------------
@@ -146,6 +154,6 @@
   \printbibliography
   \end{flushleft}
   \appendix
-  
+
   \input{prilohy} % viz. prilohy.tex
 \end{document}
