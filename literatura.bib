@@ -1,8 +1,17 @@
-@Book{Patterns,
-    author = {Day, John},
-    title = {Patterns in Network Architecture: A Return to Fundamentals},
-    publisher = {Prentice Hall Pearson Education distributor},
-    year = {2008},
+% RFCs
+
+@misc{rfc1034,
+  author="P.V. Mockapetris",
+  title="{Domain names - concepts and facilities}",
+  series="Request for Comments",
+  number="1034",
+  howpublished="RFC 1034 (INTERNET STANDARD)",
+  publisher="IETF",
+  organization="Internet Engineering Task Force",
+  year=1987,
+  month=nov,
+    note="Updated by RFCs 1101, 1183, 1348, 1876, 1982, 2065, 2181, 2308, 2535, 4033, 4034, 4035, 4343, 4035, 4592, 5936",
+  url="http://www.ietf.org/rfc/rfc1034.txt",
 }
 
 @misc{rfc1498,
@@ -18,18 +27,212 @@
     url="http://www.ietf.org/rfc/rfc1498.txt",
 }
 
+@misc{rfc2309,
+  author="B. Braden and D. Clark and J. Crowcroft and B. Davie and S. Deering and D. Estrin and S. Floyd and V. Jacobson and G. Minshall and C. Partridge and L. Peterson and K. Ramakrishnan and S. Shenker and J. Wroclawski and L. Zhang",
+  title="{Recommendations on Queue Management and Congestion Avoidance in the Internet}",
+  series="Request for Comments",
+  number="2309",
+  howpublished="RFC 2309 (Informational)",
+  publisher="IETF",
+  organization="Internet Engineering Task Force",
+  year=1998,
+  month=apr,
+    note="Updated by RFC 7141",
+  url="http://www.ietf.org/rfc/rfc2309.txt",
+}
+
+@misc{rfc4271,
+  author="Y. Rekhter and T. Li and S. Hares",
+  title="{A Border Gateway Protocol 4 (BGP-4)}",
+  series="Request for Comments",
+  number="4271",
+  howpublished="RFC 4271 (Draft Standard)",
+  publisher="IETF",
+  organization="Internet Engineering Task Force",
+  year=2006,
+  month=jan,
+    note="Updated by RFCs 6286, 6608, 6793",
+  url="http://www.ietf.org/rfc/rfc4271.txt",
+}
+
+@misc{rfc4960,
+  author="R. Stewart",
+  title="{Stream Control Transmission Protocol}",
+  series="Request for Comments",
+  number="4960",
+  howpublished="RFC 4960 (Proposed Standard)",
+  publisher="IETF",
+  organization="Internet Engineering Task Force",
+  year=2007,
+  month=sep,
+    note="Updated by RFCs 6096, 6335, 7053",
+  url="http://www.ietf.org/rfc/rfc4960.txt",
+}
+
+@misc{rfc4984,
+  author="D. Meyer and L. Zhang and K. Fall",
+  title="{Report from the IAB Workshop on Routing and Addressing}",
+  series="Request for Comments",
+  number="4984",
+  howpublished="RFC 4984 (Informational)",
+  publisher="IETF",
+  organization="Internet Engineering Task Force",
+  year=2007,
+  month=sep,
+    url="http://www.ietf.org/rfc/rfc4984.txt",
+}
+
+@misc{rfc5944,
+  author="C. Perkins",
+  title="{IP Mobility Support for IPv4, Revised}",
+  series="Request for Comments",
+  number="5944",
+  howpublished="RFC 5944 (Proposed Standard)",
+  publisher="IETF",
+  organization="Internet Engineering Task Force",
+  year=2010,
+  month=nov,
+    url="http://www.ietf.org/rfc/rfc5944.txt",
+}
+
+@misc{rfc6830,
+  author="D. Farinacci and V. Fuller and D. Meyer and D. Lewis",
+  title="{The Locator/ID Separation Protocol (LISP)}",
+  series="Request for Comments",
+  number="6830",
+  howpublished="RFC 6830 (Experimental)",
+  publisher="IETF",
+  organization="Internet Engineering Task Force",
+  year=2013,
+  month=jan,
+    url="http://www.ietf.org/rfc/rfc6830.txt",
+}
+
+
+% books
+
+@Book{Patterns,
+    author = {Day, John},
+    title = {Patterns in Network Architecture: A Return to Fundamentals},
+    publisher = {Prentice Hall Pearson Education distributor},
+    year = {2008},
+}
+
+@Book{Kurose,
+ author = {Kurose, James},
+ title = {Computer networking : a top-down approach featuring the Internet},
+ publisher = {Addison-Wesley},
+ year = {2003},
+ address = {Boston},
+ isbn = {978-0201976991}
+ }
+
+% articles
+
 @article{internet_demo,
   title={IS THE INTERNET AN UNFINISHED DEMO? MEET RINA!},
   author={Trouva, Eleni and Grasa, Eduard and Day, John and Matta, Ibrahim and Chitkushev, Lubomir T and Phelan, Patrick and de Leon, Miguel Ponce and Bunch, Steve},
   year={2010}
 }
 
+@article{ndn,
+  title={Named data networking (ndn) project},
+  author={Zhang, Lixia and Estrin, Deborah and Burke, Jeffrey and Jacobson, Van and Thornton, James D and Smetters, Diana K and Zhang, Beichuan and Tsudik, Gene and Massey, Dan and Papadopoulos, Christos and others},
+  journal={Relat{\'o}rio T{\'e}cnico NDN-0001, Xerox Palo Alto Research Center-PARC},
+  year={2010},
+  publisher={Citeseer}
+}
+
+@article{MobilityFirst,
+  title={MobilityFirst: a mobility-centric and trustworthy internet architecture},
+  author={Venkataramani, Arun and Kurose, James F and Raychaudhuri, Dipankar and Nagaraja, Kiran and Mao, Morley and Banerjee, Suman},
+  journal={ACM SIGCOMM Computer Communication Review},
+  volume={44},
+  number={3},
+  pages={74--80},
+  year={2014},
+  publisher={ACM}
+}
+
+@article{xia,
+  title={XIA: architecting a more trustworthy and evolvable internet},
+  author={Naylor, David and Mukerjee, Matthew K and Agyapong, Patrick and Grandl, Robert and Kang, Ruogu and Machado, Michel and Brown, Stephanie and Doucette, Cody and Hsiao, Hsu-Chun and Han, Dongsu and others},
+  journal={ACM SIGCOMM Computer Communication Review},
+  volume={44},
+  number={3},
+  pages={50--57},
+  year={2014},
+  publisher={ACM}
+}
+
+@article{click,
+  title={The Click modular router},
+  author={Kohler, Eddie and Morris, Robert and Chen, Benjie and Jannotti, John and Kaashoek, M Frans},
+  journal={ACM Transactions on Computer Systems (TOCS)},
+  volume={18},
+  number={3},
+  pages={263--297},
+  year={2000},
+  publisher={ACM}
+}
+
+@article{openflow,
+  title={OpenFlow: enabling innovation in campus networks},
+  author={McKeown, Nick and Anderson, Tom and Balakrishnan, Hari and Parulkar, Guru and Peterson, Larry and Rexford, Jennifer and Shenker, Scott and Turner, Jonathan},
+  journal={ACM SIGCOMM Computer Communication Review},
+  volume={38},
+  number={2},
+  pages={69--74},
+  year={2008},
+  publisher={ACM}
+}
+
+@inproceedings{deltat,
+  title={The Delta-T transport protocol: Features and experience},
+  author={Watson, Richard W},
+  booktitle={Local Computer Networks, 1989., Proceedings 14th Conference on},
+  pages={399--407},
+  year={1989},
+  organization={IEEE}
+}
+
+@inproceedings{EvoArch,
+  title={The evolution of layered protocol stacks leads to an hourglass-shaped architecture},
+  author={Akhshabi, Saamer and Dovrolis, Constantine},
+  booktitle={ACM SIGCOMM Computer Communication Review},
+  volume={41},
+  number={4},
+  pages={206--217},
+  year={2011},
+  organization={ACM}
+}
+
+@inproceedings{Cyclades,
+  title={Presentation and major design aspects of the CYCLADES Computer Network},
+  author={Pouzin, Louis},
+  booktitle={Proceedings of the third ACM symposium on Data communications and Data networks: Analysis and design},
+  pages={80--87},
+  year={1973},
+  organization={ACM}
+}
+
+@inproceedings{icn,
+  title={Information-centric networking: seeing the forest for the trees},
+  author={Ghodsi, Ali and Shenker, Scott and Koponen, Teemu and Singla, Ankit and Raghavan, Barath and Wilcox, James},
+  booktitle={Proceedings of the 10th ACM Workshop on Hot Topics in Networks},
+  pages={1},
+  year={2011},
+  organization={ACM}
+}
+
+
+% links
+
 @misc{bgpgrow,
   title = {{BGP Routing Table Analysis Reports}},
   howpublished = "\url{http://bgp.potaroo.net/}",
   note = "[Online; accessed 01-April-2015]"
 }
-
 
 @misc{ipv6stats,
   title = {{IPv6 Adoption}},
@@ -49,10 +252,26 @@
   note = "[Online; accessed 01-April-2015]"
 }
 
-@Book{x,
-    author = ,
-    title = ,
-    publisher = ,
-    year = ,
-    address = ,
+@misc{ipv4_exhaustion,
+  title = {{Available Pool of Unallocated IPv4 Internet Addresses Now Completely Emptied}},
+  howpublished = "\url{https://www.icann.org/resources/press-material/release-2011-02-03-en}",
+  note = "[Online; accessed 01-April-2015]"
+}
+
+@misc{512k_day,
+  title = {{What caused today’s Internet hiccup}},
+  howpublished = "\url{https://www.bgpmon.net/what-caused-todays-internet-hiccup/}",
+  note = "[Online; accessed 12-May-2015]"
+}
+
+@misc{Apple_MP,
+  title = {{iOS: Multipath TCP Support in iOS 7}},
+  howpublished = "\url{https://support.apple.com/en-us/HT201373}",
+  note = "[Online; accessed 12-May-2015]"
+}
+
+@misc{ns3,
+  title = {{ns-3}},
+  howpublished = "\url{https://www.nsnam.org/}",
+  note = "[Online; accessed 12-May-2015]"
 }
