@@ -54,7 +54,7 @@
 
     \section{Incomplete naming scheme}
 
-        In 1982, Jerome Saltzer in his work ``On the Naming and Binding of Network Destinations'' \cite{rfc1498} described the entities and the relationships that make a complete naming and addressing schema in networks. According to Saltzer, there are four elements that need to be identified: applications, nodes, points of attachment to the network (PoAs) and paths. The relationships between them are illustrated in figure \ref{fig:saltzer}. At the time, network architectures such as CYCLADES \cite{Cyclades}, XNS, DECNET and OSI conformed to this scheme \cite{internet_demo}.
+        In 1982, Jerome Saltzer in his work ``On the Naming and Binding of Network Destinations'' \cite{rfc1498} described the entities and the relationships that make a complete naming and addressing schema in networks. According to Saltzer, there are four elements that need to be identified: applications, nodes, points of attachment to the network (PoAs) and paths. The relationships between them are illustrated in Figure \ref{fig:saltzer}. At the time, network architectures such as CYCLADES \cite{Cyclades}, XNS, DECNET and OSI conformed to this scheme \cite{internet_demo}.
 
         \begin{figure}[H]
             \begin{center}
@@ -139,6 +139,8 @@
 
     Considering the limited scope of this thesis, only a representative subset of new network architectures will be described and evaluated more thoroughly. The subset consists of projects emerged under the Future Network Architecture (Named Data Networking [\ref{archs:ndn}], MobilityFirst [\ref{archs:mf}], XIA [\ref{archs:xia}] and NEBULA [\ref{archs:nebula}]) and the Recursive InterNetwork Architecture (\ref{archs:rina}).
 
+    Special attention will be given to RINA.
+
     \section{Design Approaches}
 
         The networking research community has exhibited many attempts of moving the field forward. The undertaken research directions are often classified into one of two groups:
@@ -171,7 +173,7 @@
 
             During its early ears, ARPANET was heavily influenced by telecommunication technology as the Public switched telephone network (PSTN) was the only example a large-scale network. Due to this, technology of the Internet has been built on the paradigm of host-to-host communication driven by hosts' addresses. However, while this base paradigm has remained constant over the decades, the way we use the Internet has considerably changed: the Internet is used primarily as a content distribution network. Since the mechanism of communication over the Internet is based on creating and maintaining end-to-end connections, this creates an enormous amount of data redundancy.
 
-            Named Data Networking proposes a solution more fitting for today's needs: instead of working with the source/destination addresses, the ``thin waist'' of the Internet should be based on working with names of data chunks (as illustrated by figure \ref{fig:ndn_waist}).
+            Named Data Networking proposes a solution more fitting for today's needs: instead of working with the source/destination addresses, the ``thin waist'' of the Internet should be based on working with names of data chunks (as illustrated by Figure \ref{fig:ndn_waist}).
 
             \begin{figure}[H]
                 \begin{center}
@@ -444,7 +446,7 @@
 
                 A computing system may be a member of $<0,n>$ DIFs and has a separate IPC process with an address for each DIF. Each (N)-DIF handling the data coming from the (N+1)-DIF in the same way as from an application.
 
-                A bare minimum for a computer internetwork requires 3 levels of DIFs and three types of devices: a host, an interior router and a border router. The internetwork is shown in figure x.
+                A bare minimum for a computer internetwork consists of 3 levels of DIFs and three types of devices: a host, an interior router and a border router. The internetwork is shown in Figure x.
 
                 \begin{figure}[H]
                     \begin{center}
@@ -460,7 +462,7 @@
 
             \subsubsection{IPC Process}
 
-                Each IPC process executes routing, transport, security/authentication and management functions. The components of an IPC process responsible for providing these functions can be categorized under three decoupled parts operating at separate timescales: IPC transfer, IPC data control and IPC management (see figure \ref{fig:rina_ipcp}). The behaviour of each part can be configured via policies.
+                Each IPC process executes routing, transport, security/authentication and management functions. The components of an IPC process responsible for providing these functions can be categorized under three decoupled parts operating at separate timescales: IPC transfer, IPC data control and IPC management (see Figure \ref{fig:rina_ipcp}). The behaviour of each part can be configured via policies.
 
                 \begin{figure}[H]
                     \begin{center}
@@ -499,6 +501,21 @@
                       \label{fig:rina_nsm}
                     \end{center}
                 \end{figure}
+
+
+            \subsubsection{The Communication Model}
+
+                Every communication in RINA needs to go through the initial process of flow allocation.
+
+                App1 requests an IPC connection to App2. This request is handled by ipcProcess1's Flow Allocator.
+                The Flow Allocator asks Directory for address of the IPC Process to which App2 is mapped. In this case, it's 2.
+                The Flow Allocator asks ipcProcess1's Resource Allocator to find a suitable (N-1)-flow to map the new flow to it. If there isn't any, RA requests an IPC connection to App2.
+                The Flow Allocator instructs RIB to send out \texttt{M\_CREATE} request to 2.
+                The 2's Flow Allocator instructs RIB to send out \texttt{M\_CREATE\_RESPONSE} request to 1.
+                2's RIB receives the \texttt{M\_CREATE\_RESPONSE}. If it's positive, the Allocate() procedure is ended sucessfully.
+
+                The applications then exchange data.
+
 
             \subsubsection{Policy Separation}
 
@@ -642,6 +659,23 @@
                 \item RMTPortWrapper, a compound module encapsulating an (N-1)-port and its queues.
             \end{itemize}
 
+            % \begin{figure}[H]
+            %     \begin{center}
+            %       \begin{tabular}{ r | l | l }
+            %         \hline
+            %         \texttt{RMT} & static & the central logic of Relaying And Multiplexing task that decides what should be done with messages passing through the module. \\
+            %         \texttt{RMTModuleAllocator} & static & a control unit providing an API for adding and deleting instances of dynamic modules (RMTQueue, RMTPort). \\
+            %         \texttt{SchedulingPolicy} & static & a scheduling policy of an RMT instance. \\
+            %         \texttt{MonitorPolicy} & static & a monitoring policy of an RMT instance. \\
+            %         \texttt{MaxQPolicy} & static & a maxqueue policy of an RMT instance. \\
+            %         \texttt{RMTPort} & static & a representation of one endpoint of an (N-1)-flow. \\
+            %         \texttt{RMTQueue} & static & a representation of either input or output queue. The number of RMTQueues per RMTPort is determined by Resource Allocator policies. \\
+            %         \texttt{RMTPortWrapper} & static & a compound module encapsulating an (N-1)-port and its queues. \\
+            %       \end{tabular}
+            %       \caption{RMT module parameters.}
+            %       \label{fig:rmt_params}
+            %     \end{center}
+            % \end{figure}
 
             \begin{figure}[H]
                 \begin{center}
@@ -652,22 +686,33 @@
             \end{figure}
 
         \subsection{Module Parameters}
-            Some of the modules contain user-configurable parameters that can be used to alter their behavior.
-            \begin{itemize}
-                \item \emph{string schedPolicyName}, name of the desired scheduling policy,
-                \item \emph{string qMonitorPolicyName}, name of the desired monitoring policy,
-                \item \emph{string maxQPolicyName}, name of the desired max queue policy,
-                \item \emph{string ForwardingPolicyName}, name of the desired forwarding policy,
-                \item \emph{int defaultMaxQLength}, default maximum length of instantiated queues,
-                \item \emph{int defaultThreshQLength}, default threshold length of instantiated queues, and
-                \item \emph{bool pduTracing}, a switch for turning on PDU tracefile generation.
-            \end{itemize}
+            The RMT module contains several user-configurable parameters that can be used to alter its behavior. These are presented in Figure \ref{fig:rmt_params}.
+
+            \begin{figure}[H]
+                \begin{center}
+                  \begin{tabular}{ r l | l }
+                    \hline
+                    \texttt{string} & \texttt{schedPolicyName} & name of the desired scheduling policy \\
+                    \texttt{string} & \texttt{qMonitorPolicyName} & name of the desired monitoring policy \\
+                    \texttt{string} & \texttt{maxQPolicyName} & name of the desired max queue policy \\
+                    \texttt{string} & \texttt{ForwardingPolicyName} & name of the desired forwarding policy \\
+                    \texttt{int} & \texttt{defaultMaxQLength} & default maximum length of instantiated queues \\
+                    \texttt{int} & \texttt{defaultThreshQLength} & default threshold length of instantiated queues \\
+                    \texttt{bool} & \texttt{pduTracing} & a switch for turning on PDU tracefile generation \\
+                    \hline
+                  \end{tabular}
+                  \caption{RMT module parameters.}
+                  \label{fig:rmt_params}
+                \end{center}
+            \end{figure}
+
+
 
         \subsection{Module Workflow}
 
             The core function of RMT is driven by two algorithms: the decision algorithm and the scheduling algorithm.
 
-            The decision algorithm decides what to do with the incoming PDU and executes appropriate policies. A state diagram representation can be seen in figure \ref{fig:rmt-fsm}. It's implemented by \texttt{handleMessage()} and methods that are subsequently called from it (\texttt{portToEFCPI()}, \texttt{portToPort()} etc.).
+            The decision algorithm decides what to do with the incoming PDU and executes appropriate policies. A state diagram representation can be seen in Figure \ref{fig:rmt-fsm}. It's implemented by \texttt{handleMessage()} and methods that are subsequently called from it (\texttt{portToEFCPI()}, \texttt{portToPort()} etc.).
 
             \begin{figure}[H]
                 \begin{center}
@@ -677,7 +722,7 @@
                 \end{center}
             \end{figure}
 
-            The scheduling algorithm ensures continuous invocation of the scheduling policy whenever there are PDUs waiting in queues. A petri net representation can be seen in figure \ref{fig:sched-petri}. The decision of what queue should be processed next is left to the policy. The algorithm is implemented by methods \texttt{onQueueArrival()}, \texttt{postQueueDeparture()}, \texttt{writeToPort()} and \texttt{readToPort()}.
+            The scheduling algorithm ensures continuous invocation of the scheduling policy whenever there are PDUs waiting in queues. A petri net representation can be seen in Figure \ref{fig:sched-petri}. The decision of what queue should be processed next is left to the policy. The algorithm is implemented by methods \texttt{onQueueArrival()}, \texttt{postQueueDeparture()}, \texttt{writeToPort()} and \texttt{readToPort()}.
 
             \begin{figure}[H]
                 \begin{center}
@@ -695,7 +740,9 @@
 
             \subsubsection{Initial RMT Mode Setup}
 
-                When a RMT instance is located inside a bottommost IPC process that doesn't work with any further (N-1)-IPC processes, the RMT is switched to an ``onWire'' mode that functions over a simple medium instead of an IPC connection. Additionally, if a RMT is located inside an IPC process that has the \texttt{relay} configuration parameter configured as \texttt{true}, the RMT's Relaying Task is enabled by calling \texttt{enableRelay()}.
+                When a RMT instance is located inside a bottommost IPC process that doesn't work with any further (N-1)-IPC processes, the RMT is switched to an \texttt{onWire} mode that functions over a single serializing medium instead of an IPC connection.
+
+                If a RMT is located inside an IPC process that has the \texttt{relay} configuration parameter configured as \texttt{true}, the RMT's Relaying Task is enabled by calling \texttt{enableRelay()}. The default value of the \texttt{relay} parameter is \texttt{true} in top layers of routers, \texttt{false} everywhere else.
 
             \subsubsection{Forwarding Table Management}
 
@@ -713,7 +760,7 @@
 
             \subsubsection{(N-1)-port creation \& removal}
 
-                Since Resource Allocator manages (N-1)-flows with other IPC processes, it also provides (N-1)-ports (or handles) for RMT.
+                Since Resource Allocator manages (N-1)-flows leading to other IPC processes, it also provides (N-1)-ports (or handles) for RMT.
 
             \subsubsection{(N-1)-port data rate control}
 
@@ -733,8 +780,6 @@
             \end{itemize}
 
             Multiple examples of graphs generated from the variables can be seen in chapter \ref{testing}.
-
-        \subsection{PDU tracing}
 
     \section{Sample policy implementations}
 
@@ -781,19 +826,82 @@
 
 \chapter{Testing and Evaluation}\label{testing}
 
-    A set of basic network simulation scenarios has been created to demonstrate the RMT implementation's features.
+    We have created a set of basic network topologies to demonstrate the RMT implementation's features. The following tests puts them into use.
+
+    Each test case contains a description of RMT-related events that happen during simulation. Each type of event is described only once, the omitted.
+
+    \section{Basic multiplexing}
+
+        \subsection{Topology}
+
+            The TwoCS topology is the most basic example of a computer network. It consists of two interconnected hosts, each with a single application and two IPC processes. More on Figure \ref{fig:examples:twocs}.
+
+            \begin{figure}[H]
+                \begin{center}
+                    \includegraphics[width=0.6\textwidth]{fig/examples-twocs.png}
+                  \caption{TwoCS simulation scenario}
+                  \label{fig:examples:twocs}
+                \end{center}
+            \end{figure}
+
+        \subsection{Scenario}
+
+            The simulation scenario is described in table
+
+            \begin{figure}[H]
+                \begin{center}
+                  \begin{tabular}{ r | l }
+                    time & event \\
+                    \hline
+                    10s & App1 begins allocation of an IPC connection to App2. \\
+                    35s & App1 begins sending 10 pings (one per second) to App2. \\
+                    200s & App1 begins deallocation of IPC connection with App2. \\
+                    \hline
+                  \end{tabular}
+                  \caption{RMT module parameters.}
+                  \label{fig:rmt_params}
+                \end{center}
+            \end{figure}
+
+        \subsection{Simulation}
+
+            What follows is a simplified description of events happening inside RMTs.
+
+            \textbf{t=10}: App1 invokes Allocate(App2). This in turn causes IPC1's Resource Allocator to invoke Allocate(IPC2).
+
+                The RIB sends out an \texttt{M\_CREATE} request to RMT. RMT acts by [ref] and stores the PDU to the port PHY's output management queue outM.
+
+                The arrival of PDU into the queues causes invocation of the current monitoring policy and maxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
+
+                The scheduling policy decides to release the PDU from outM. The PDU traverses through the port and gets sent to the other destination.
+
+            \textbf{t=12}: RMT receives the PDU on port PHY. As this is a management PDU, it's stored into the management input queue.
+
+                The arrival of PDU into the queues causes invocation of the current monitoring policy and maxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
+
+                The scheduling policy decides to release the PDU from inM. The PDU travels into the dispatcher which acts by [ref], relaying the PDU to the RIB daemon.
+
+                The RIB daemon sends out an \texttt{M\_CREATE\_RESPONSE} frame to 0.
+
+            \textbf{t=14}: The RIB daemon receives the \texttt{M\_CREATE\_RESPONSE} request and the Allocate(IPC2) procedure is sucesfully completed. The new connection is mapped to a newly instantiated RMTPort called p0 and the suspendeded Allocate(App2) procedure is triggered to carry out the same series of events, only level higher and with port p0 instead of PHY.
+
+            \textbf{t=18}: The Allocate(IPC2) procedure is sucessfully completed and App1 is now connected to App2.
+
+            \textbf{t=35}: In host1, App1 sends out the first ping. The ping traverses (N)-RMT and (N-1)-RMT and then it's sent to the medium. This is repeated nine times in the following 9 seconds.
+
+            \textbf{t=37}: In host2, IPC0's PHY receives the first ping. The ping traverses (N-1)-RMT and (N)-RMT and then it's sent to App2. This is repeated nine times in the following 9 seconds.
+
+            \textbf{t=200}: App1 invokes Deallocate(App2).
+
+            \textbf{t=202}: The connection between App1 and App2 is deallocated.
+
+        \subsection{Evaluation}
+
 
     \section{TwoCSs}
 
         Two interconnected hosts; host1 sends a series of ping requests to host2.
 
-        \begin{figure}[H]
-            \begin{center}
-                \includegraphics[width=0.6\textwidth]{fig/examples-twocs.png}
-              \caption{TwoCS simulation scenario}
-              \label{fig:examples:twocs}
-            \end{center}
-        \end{figure}
 
     \section{SimpleRelay}
 
