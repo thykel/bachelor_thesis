@@ -37,7 +37,7 @@
 
     During the Internet's growth, whenever there has been a problem that required a solution, it's been usually dealt with in a non-intrusive evolutionary fashion by applying a new principle on top of the underlying technology. In another words, problems have been mostly solved by adding a new protocol to the TCP/IP protocol stack.
 
-    The Internet's evolution can be presented on EvoArch \cite{EvoArch}, an abstract model for studying protocol stacks and their evolution. The model suggests that the Internet protocol stack resembles an hourglass (see Figure \ref{fig:inet_hourglass}). While the top and down layers are often expanded with new protocols, the usage of the Layer 4's IP protocol remains constant because it acts as a common technology for all different networks interconnected by the Internet.
+    The Internet's evolution can be presented on EvoArch \cite{EvoArch}, an abstract model for studying protocol stacks and their evolution. The model suggests that the Internet protocol stack resembles an hourglass (see Figure \ref{fig:inet_hourglass}). While the top and down layers are often expanded with new protocols, the usage of the Internet Layer's IP protocol remains constant because it acts as a common technology for all different networks interconnected by the Internet.
 
     \begin{figure}[H]
         \begin{center}
@@ -48,7 +48,7 @@
     \end{figure}
 
 
-    The evolutionary approach to improving the Internet's base technology is convenient since each paradigm shift in foundations of the Internet (i.e. replacing the hourglass's ``thin waist'') can require a long and expensive transfer of existing network configurations to the new technology. The most notable example is is the internet layer protocol IPv6 which requires explicit firmware support from active network components. The problem of IPv4 space exhaustion has been known of since the beginning of 1990s, the first formal IPv6 specification arose in 1996 (RFC 2460) and the first IPv6 routers emerged in 2004 -- and yet, as of 2015, four years after the top-level IPv4 pool exhaustion \cite{ipv4_exhaustion}, IPv6 still represents only a miniscule fraction of the total traffic on the Internet. For example, Google IPv6 adoption statistics indicate around 6\% coverage amongst the users of its services \cite{ipv6stats}.
+    The evolutionary approach to improving the Internet's base technology is convenient since each paradigm shift in foundations of the Internet (i.e. replacing the hourglass's ``thin waist'') can require a long and expensive transfer of existing network configurations to the new technology. The most notable example is is the internet layer protocol IPv6 which requires explicit firmware support from active network components. The problem of IPv4 space exhaustion has been known of since the first half of 1990s \ref{rfc1631}, the first formal IPv6 specification arose in 1998 \ref{rfc2460} and the first IPv6 routers emerged in 2004 -- and yet, as of April 2015, four years after the top-level IPv4 pool exhaustion \cite{ipv4_exhaustion}, IPv6 still represents only a miniscule fraction of the total traffic on the Internet. For example, Google IPv6 adoption statistics indicate around 6\% coverage amongst the users of its services \cite{ipv6stats}.
 
     As such, some of the Internet's widely recognized problems are inherent because of the base design and it's usually difficult, if not impossible, to solve them in a non-intrusive and backward-compatible way. The following sections illustrate such problems.
 
@@ -64,13 +64,11 @@
             \end{center}
         \end{figure}
 
-        TCP/IP doesn't follow this proposal: the layer for node naming is completely missing. While TCP/IP does work with two distinct layers with their own address scopes -- the Link Layer with physical addresses and the Internet layer with IP addresses -- both effectively identify the same: a host interface, i.e. a PoA address. This effectively means that the IP addressing is semantically overloaded to represent both identity and location. The need for an explicit identifier$\rightarrow$locator mapping was eventually recognized even in the era of ARPANET and this was solved by creating a globally available file HOSTS.TXT containing mappings of alphabetic host names to IP addresses. Later on, this method was obsoleted by the Domain Name System \cite{rfc1034}. However, both approaches move the matter of node naming into the application layer, forcing applications to work with location-dependent interface PoA addresses.
+        TCP/IP doesn't follow this proposal: the layer for node naming is completely missing. While TCP/IP does work with two distinct layers with their own address scopes -- the Link Layer with physical addresses and the Internet layer with IP addresses -- both effectively identify the same: a host interface, i.e. a PoA address. This effectively means that the IP addressing is semantically overloaded to represent both identity and location. The need for an explicit identifier$\rightarrow$locator mapping was eventually recognized even in the era of ARPANET and this was solved by creating a globally available file \texttt{HOSTS.TXT} containing mappings of alphabetic host names to IP addresses. Later on, this method was obsoleted by the Domain Name System (DNS) \cite{rfc1034}. However, both approaches move the matter of node naming into the Application Layer, forcing applications to work with location-dependent interface PoA addresses.
 
-        The fact that the Internet forwarding is location-based instead of identity-based has a great impact on difficulty of multihoming (section \ref{problems:multihoming}) and mobility (section \ref{problems:mobility}).
+        The fact that the Internet forwarding is location-based instead of identity-based has a great impact on difficulty of multihoming\footnote{Multihoming refers to a computer or device connected to more than one computer network. Such computer of device generally needs a separate interface for each network.} (section \ref{problems:multihoming}) and mobility (section \ref{problems:mobility}).
 
     \section{Lack of Multihoming}\label{problems:multihoming}
-
-        Multihoming refers to a computer or device connected to more than one computer network. Such computer of device generally needs a separate interface for each network.
 
         Since IP addresses serve as point-of-attachment addresses (i.e. an IP address identifies a system interface) and routing is done exclusively on IP's layer, there isn't any inherent mechanism for distinguishing whether multiple IP addresses identify a common node. Thus, in effect, multihoming on IP alone isn't feasible.
 
@@ -109,16 +107,16 @@
 
         The specifications of the fundamental protocols of TCP/IP stack -- IP, TCP and DHCP -- were originally finished at the beginning of 1980s. The Internet has since then turned into a massive world-wide internetwork connecting people of different types and agendas. Naturally, once the Internet began to be used for transferring sensitive data (especially by companies), cyber crime started to emerge as well and some attention was turned to security aspects of Internet protocol (or lack thereof).
 
-        As the IP protocol lacks any inherent verification mechanism, the Internet Layer is easily subjected to hijacking and spoofing. This provides opportunity for many types of exploits, most notably the Man-in-the-middle attack or IP address spoofing \cite{rfc1948}.
+        As the IP protocol lacks any inherent verification mechanism, the Internet Layer is easily subjected to hijacking and spoofing. This provides opportunity for many types of exploits, most notably the  Man-in-the-middle attack or IP address spoofing \cite{rfc1948}.
 
-        Since security isn't enforced by the architecture in any way, it's still common even for the Application Layer with its plethora of protocols to be subjected to security problems. Protocols such as TCP and are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack \cite{rfc1948} or .
+        Since security isn't enforced by the architecture in any way, it's still common even for the Application Layer with its plethora of protocols to be subjected to security problems. Protocols like TCP are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack \cite{rfc1948}.
 
 
     \section{Router Table Size Growth}
 
-        Default-free zone (DFZ) is the collection of all Internet autonomous systems (ASs) that do not need a default route to forward a packet to any destination. Since they comprise the root of the Internet's routing infrastructure, their database must be complete.
+        Default-free zone (DFZ) is the collection of all Internet autonomous systems (ASs) that do not require a default route to forward a packet to any destination. Since they comprise the root of the Internet's routing infrastructure, their database must be complete.
 
-        With the increasing number of hosts connected to the Internet, the DFZ routing table sizes grow as well.
+        With the increasing number of hosts connected to the Internet, the DFZ routing table sizes grow as well (see Figure \ref{fig:bgp-growth}).
 
         \begin{figure}[H]
             \begin{center}
@@ -128,27 +126,26 @@
             \end{center}
         \end{figure}
 
-
         While the exponential growth observed during the 1990s was later mitigated by mass deployment of Classless Inter-Domain Routing (CIDR) and BGP route aggregation, the number of items is still increasing superlinearly and the high-end router hardware needs to keep up, especially with increasing use of BGP-based multihoming and IPv6. This can sometimes lead to scalability problems, as in August of 2014 where reaching the 512k entry limit of multiple routers caused globally observable outages \cite{512k_day}.
 
-        As of year 2015, the Internet routing table is consisted of over 560k entries \cite{bgpgrow}. There are concerns about whether the technology of high-end routers will keep scaling along with Moore's law to keep route management efficient \cite{rfc4984}.
+        As of year 2015, the Internet routing table consists of over 560k entries \cite{bgpgrow}. There are concerns about whether the technology of high-end routers will keep scaling along with Moore's law to keep route management efficient \cite{rfc4984}.
 
 
 \chapter{Alternative Network Architectures}\label{archs}
 
     This chapter gives an overview of paths that were pursued in the field of network architecture research and descriptions of several architectures.
 
-    Considering the limited scope of this thesis, only a representative subset of new network architectures will be described and evaluated more thoroughly. The subset consists of projects emerged under the Future Internet Architecture - Next Phase program \cite{fia} (Named Data Networking [\ref{archs:ndn}], MobilityFirst [\ref{archs:mf}] and eXpressive Internet Architecture [\ref{archs:xia}]) and the Recursive InterNetwork Architecture (\ref{archs:rina}).
+    Considering the limited scope of this thesis, only a representative subset of new network architectures will be described and evaluated more thoroughly. The subset consists of projects funded by the Future Internet Architecture -- Next Phase program \cite{fia} (Named Data Networking [Section \ref{archs:ndn}], MobilityFirst [Section \ref{archs:mf}] and eXpressive Internet Architecture [Section \ref{archs:xia}]) and the Recursive InterNetwork Architecture (\ref{archs:rina}).
 
-    Special attention will be given to RINA.
+    Special attention will be given to Recursive InterNetwork Architecture as it's relevant to the implementation goal of this thesis.
 
     \section{Design Approaches}
 
         The networking research community has exhibited many attempts of moving the field forward. The undertaken research directions are often classified into one of two groups:
 
         \begin{itemize}
-            \item \textbf{evolutionary design}: backward-compatible solutions that are incrementally deployable on top of the current Internet (e.g. LISP, DiffServ, IntServ), or
-            \item \textbf{clean slate design}: designing completely new standalone architectures that aren't constrained by Internet technology's limitations (e.g. NDN, RINA)
+            \item \textbf{Evolutionary design.} Backward-compatible solutions that are incrementally deployable on top of the current Internet (e.g. LISP, DiffServ or IntServ).
+            \item \textbf{Clean slate design.} Completely new standalone architectures that aren't constrained by Internet technology's limitations (e.g. NDN, RINA).
         \end{itemize}
 
         Considering the scope of this thesis, the focus will be given exclusively to ``clean-slate design'' architectures.
@@ -200,11 +197,11 @@
                 Communication in NDN is driven by the data receiver, i.e. the consumer. The steps are:
 
                 \begin{enumerate}
-                    \item The consumer sends out an ``interest packet'' containing the name of the desired data.
+                    \item The consumer sends out an interest packet containing the name of the desired data.
                     \item When a router receives the interest packet, it first consults its Content Store for requested data.
                         \begin{itemize}
                             \item If the data requested by the interest packet are present, they are returned in the direction of the requesting interface.
-                            \item Otherwise, it'll look up the Pending Interest Table.
+                            \item Otherwise, it'll look up the PIT.
                             \begin{itemize}
                                 \item If there's an entry present for the named data request, the entry is updated by adding the originating interface into the list of requesting interfaces, thus aggregating the new request together with an existing one.
                                 \item Otherwise, a new entry is inserted, a FIB lookup is made and the interest packet is forwarded to interface(s) returned by the FIB.
@@ -218,7 +215,6 @@
                 NDN assumes data chunk names to be hierarchically structured. Consumers must be able to deterministically construct the name for a desired piece of data without having previously seen the name or data. This can be achieved either by a deterministic algorithm allowing both consumer and producer to construct the same name based on data available to both.
 
                 The management of such namespace isn't defined by the architecture itself and should be a subject of further research.
-
 
         \subsection{Current State of Implementation}
 
@@ -239,7 +235,7 @@
 
             \subsubsection{Loc/ID Separation}
 
-                MobilityFirst's ``narrow waist'' consists of location-independent names and a global name service for mapping them to addresses. A name is a globally unique identifier (GUID) that can be used to identify a variety of principals such as an interface, a node, a service, an end-user or content. An example of a principal is a network address (NA), a network identifier resembling today's autonomous sytems.
+                MobilityFirst's ``thin waist'' consists of location-independent names and a global name service for mapping them to addresses. A name is a globally unique identifier (GUID) that can be used to identify a variety of principals such as an interface, a node, a service, an end-user or content. An example of a principal is a network address (NA), a network identifier resembling today's autonomous sytems.
 
             \subsubsection{Intristic Security}
 
@@ -297,7 +293,7 @@
 
         \subsection{Premise}
 
-            As presented in the previous sections, some of the future architecture research is centered around the idea of replacing Internet's narrow waist of end-to-end communication with a different principal or a set of principals (e.g. NDN and its named content). eXpressive Internet Architecture (XNA) takes this approach one step further and builds on one basic premise: the narrow waist should provide support for multiple principals and the ability to evolve by accomodating new principals over time.
+            As presented in the previous sections, some of the future architecture research is centered around the idea of replacing Internet's ``thin waist'' of end-to-end communication with a different principal or a set of principals (e.g. NDN and its named content). eXpressive Internet Architecture (XNA) takes this approach one step further and builds on one basic premise: the ``thin waist'' should provide support for multiple principals and the ability to evolve by accomodating new principals over time.
 
         \subsection{Concepts}
 
@@ -339,41 +335,9 @@
                 \item a native Linux network stack implementation with attempts to port different architectures to XIA
             \end{itemize}
 
-
-    % \section{NEBULA}\label{archs:nebula}
-
-    %     \subsection{Premise}
-
-    %         The usage trends of consumer computing tend to lean towards a cloud computing-centric vision of moving majority of communication and storage to data centers away from the end user.
-
-    %         An important aspect of cloud computing is a network architecture, which needs to both interconnect data centers and connect users to their data. Such architecture needs to provide a high degree of reliability and data privacy. The needed properties are illustrated in the NEBULA papers on a concrete example of closed-loop control of blood glucose levels for an insulin-dependent diabetic:
-
-    %         \begin{quotation}
-    %             ``The cloud application would determine the current glucose level, monitor what was being eaten, monitor the exercise activity level, and make an insulin infusion recommendation. This application would have strict confidentiality requirements (it is very personal healthcare data), integrity requirements (incorrect dosages can be harmful) and availability requirements (a lack of network availability might, at the limit, cause physical harm).''
-    %         \end{quotation}
-
-    %         The current Internet isn't by nature suited for this task due to its best-effort delivery model and practically non-existent intristic security.
-
-    %         NEBULA is a network architecture that aims to provide a better solution for global cloud computing.
-
-    %     \subsection{Concepts}
-
-    %         NEBULA specifies three building blocks: a reliable routing system and data center interconnect (NCore), a data plane supporting policy enforcement (NEBULA Data Plane, NDP) and a control plane (NEBULA Virtual and Extensible Networking Techniques, NVENT)
-
-    %         TODO: find better docs for this one first
-
-    %         \subsubsection{NCore}
-
-    %         \subsubsection{NDP}
-
-    %         \subsubsection{NVENT}
-
-    %     \subsection{Current State of Implementation}
-
-
     \section{Recursive InterNetwork Architecture}\label{archs:rina}
 
-        Recursive InterNetwork Architecture (RINA) is an architecture based on a set principles described by John Day in his book Patterns in Network Architecture. \cite{Patterns}
+        Recursive InterNetwork Architecture (RINA) is an architecture based on a set principles described by John Day in his book Patterns in Network Architecture \cite{Patterns}.
 
         \subsection{Premise}
 
@@ -390,73 +354,73 @@
 
             \subsubsection{Distributed Application Facility}
 
-                Distributed Application Facility (DAF) is a collection of two or more cooperating application processes in one or more computing systems, which exchange information using IPC and maintain shared state.
+                \emph{Distributed Application Facility} (DAF) is a collection of two or more cooperating application processes in one or more computing systems, which exchange information using \emph{inter-process communication} (IPC) and maintain shared state.
 
             \subsubsection{Distributed IPC Facility}
 
-                Distributed IPC Facility (DIF) is a collection of two or more application processes cooperating to provide Inter-process Communication (IPC). A DIF's application is called an IPC process and DIF is a DAF that does IPC. The DIF provides IPC services to application processes via a set of API primitives that are used to initiate flow and exchange data with the application's peer.
+                \emph{Distributed IPC Facility} (DIF) is a collection of two or more application processes cooperating to provide IPC. A DIF's application is called an IPC process and DIF is a DAF that does IPC. The DIF provides IPC services to application processes via a set of API primitives that are used to initiate flow and exchange data with the application's peer.
 
                 Since DIFs are conceptually DAF, their application processes can also exchange information using other DIFs. This yields a recursive structure (as seen in Figure x).
 
                 \begin{figure}[H]
                     \begin{center}
                         \includegraphics[width=0.6\textwidth]{fig/archs_rina-net.png}
-                      \caption{An example of RINA internetwork with 3 levels of DIFs}
+                      \caption{RINA's view of layering.}
                       \label{fig:rina_network}
                     \end{center}
                 \end{figure}
 
-                Hence, a DIF is essentially RINA's equivalent of an abstraction layer. However, unlike the traditional network architectures such as the seven-layer ISO/OSI, RINA has only one layer which repeats. This also requires a different kind of notation: instead of using absolute identifier such as ``Layer 2'' or ``Layer 7'', RINA's DIFs are referred to in a relative manner in relation to a specific level, e.g. (N)-DIF, (N+1)-DIF or (N-2)-DIF.
+                Hence, a DIF is essentially RINA's equivalent of an abstraction layer. However, unlike the traditional network architectures such as the seven-layer ISO/OSI, RINA has only one layer which ``repeats''. This also requires a different kind of notation: instead of using absolute identifier such as \emph{Layer 2} or \emph{Layer 7}, RINA's DIFs are referred to in a relative manner in relation to a specific level, e.g. \emph{(N)-DIF}, \emph{(N+1)-DIF} or \emph{(N-2)-DIF}.
 
-                A computing system may be a member of $<0,n>$ DIFs and has a separate IPC process with an address for each DIF. Each (N)-DIF handling the data coming from the (N+1)-DIF in the same way as from an application.
+                A computing system may be a member of $<0,n>$ DIFs and has a separate IPC process for each DIF. Each (N)-DIF handles data coming from the (N+1)-DIFs in the same way as from an application.
 
-                A bare minimum for a computer internetwork consists of 3 levels of DIFs and three types of devices: a host, an interior router and a border router. The internetwork is shown in Figure x.
+                A bare minimum for a computer internetwork consists of 3 levels of DIFs and three types of devices: a host, an interior router and a border router. The internetwork is shown in Figure \ref{fig:rina_internetwork}.
 
                 \begin{figure}[H]
                     \begin{center}
                         \includegraphics[width=0.6\textwidth]{fig/archs_rina-net.png}
-                      \caption{An example of RINA internetwork with 3 levels of DIFs}
-                      \label{fig:rina_network}
+                      \caption{An example of a RINA internetwork with 3 levels of DIFs.}
+                      \label{fig:rina_internetwork}
                     \end{center}
                 \end{figure}
 
-                As the architecture is recursively scalable, this case could be expanded: for example, other DIFs could be added on top of the stack in hosts for creating another scope of communication (e.g. for VPN-like facilities).
+                As the architecture is recursively scalable, this model could be further expanded: for example, other DIFs could be added on top of the stack in hosts for creating another scope of communication (e.g. for VPN-like facilities).
 
-                Each DIF operates in its own scope isolated from other DIFs of the same level. Hence, a DIF maintains its own distinct namespace and configuration (such as policies related to security and data transfer). When a computing system wants to communicate with another system inside a foreign DIF, it needs to go through a process of enrollment to the common DIF first.
+                Each DIF operates in its own scope isolated from other DIFs of the same level and DIF maintains its own distinct namespace and configuration (such as policies related to security and data transfer). When a computing system wants to communicate with another system inside a foreign DIF, it needs to go through a process of enrollment to the common DIF first.
 
             \subsubsection{IPC Process}
 
-                Each IPC process executes routing, transport, security/authentication and management functions. The components of an IPC process responsible for providing these functions can be categorized under three decoupled parts operating at separate timescales: IPC transfer, IPC data control and IPC management (see Figure \ref{fig:rina_ipcp}). The behaviour of each part can be configured via policies.
+                Each IPC process executes routing, transport, security/authentication and management functions. The components of an IPC process responsible for providing these functions can be categorized under three decoupled parts operating at separate timescales: \emph{IPC transfer}, \emph{IPC data control} and \emph{IPC management} (see Figure \ref{fig:rina_ipcp}). The behaviour of each part can be configured via policies.
 
                 \begin{figure}[H]
                     \begin{center}
                         \includegraphics[width=0.6\textwidth]{fig/archs_rina-ipcp.png}
-                      \caption{Parts of RINA's IPC process}
+                      \caption{Parts of RINA's IPC process.}
                       \label{fig:rina_ipcp}
                     \end{center}
                 \end{figure}
 
                 \begin{itemize}
-                    \item IPC transfer consists following modules:
+                    \item IPC transfer consists of following modules:
                     \begin{itemize}
-                        \item Delimiting. Separates of incoming (N+1)-SDUs. TODO
-                        \item Error and Flow Control Protocol (EFCP). A Delta-T \cite{deltat} based protocol that handles individual data flows. EFCPs exchange data via PDUs.
-                        \item Relaying and Multiplexing Task. A stateless function that 1) retrieves PDUs from EFCP instances and management tasks and multiplexes then onto a common (N-1)-flow, and 2) takes incoming PDUs and relays them within current IPC or passes them to outgoing port.
+                        \item \textbf{\emph{Delimiting.}} Marks boundaries on incoming (N+1)-SDUs. TODO
+                        \item \textbf{\emph{Error and Flow Control Protocol} (EFCP).} A Delta-T \cite{deltat} based protocol that handles individual data flows. EFCPs exchange data via PDUs.
+                        \item \textbf{\emph{Relaying and Multiplexing Task} (RMT).} A stateless function that 1) retrieves PDUs from EFCP instances and management tasks and multiplexes then onto a common (N-1)-flow, and 2) takes incoming PDUs and relays them within current IPC or passes them to outgoing port.
                     \end{itemize}
                     \item IPC data control is an optional mechanism handling flow control (for example, TCP-like flow control could be implemented here via appropriate policies). Its functionality is encompassed in the EFCP module.
-                    \item IPC management handles management tasks such as routing, resource allocation or access control.
+                    \item IPC management handles management tasks such as routing, resource allocation or access control. It consists of following modules:
                     \begin{itemize}
-                        \item Resource Allocator: Monitors the resource allocation and performance of the IPC Process and makes adjustments to its operation to keep it within the specified operational range.
-                        \item Resource Information Base (RIB) Daemon: The heart of DIF management. Receives/sends management messages and notifies other submodules about management changes.
+                        \item \textbf{\emph{Resource Allocator.}} Monitors the resource allocation and performance of the IPC Process and makes adjustments to its operation to keep it within the specified operational range.
+                        \item \textbf{\emph{Resource Information Base daemon} (RIB).} The heart of DIF management. Receives/sends management messages and notifies other submodules about management changes.
                     \end{itemize}
                 \end{itemize}
 
 
             \subsubsection{Addressing}
 
-                Since each DAF works with its own address scope, the architecture needs to provide means of resolving (N)-application names to addresses of (N-1)-IPC processes. This is achieved via a decentralized distributed Name Space Manager (NSM) embedded in each DIF.
+                Since each DAF operates within its own address scope, the architecture needs to provide means of resolving (N)-application names to addresses of (N-1)-IPC processes. This is achieved via a decentralized distributed \emph{Name Space Manager} (NSM) embedded in each DIF.
 
-                The NSM maintanence is one of the tasks of IPC management; each IPC process keeps track of local registered applications and some of them are specialized to maintain aggregated repository of non-local mapping to serve as forwarders (such processes are called ``Repository IPC Processes'').
+                The NSM maintanence is one of the tasks of IPC management; each IPC process keeps track of local registered applications and some of them are specialized to maintain aggregated repository of non-local mapping to serve as forwarders (such processes are called \emph{Repository IPC Processes}).
 
                 \begin{figure}[H]
                     \begin{center}
@@ -473,12 +437,14 @@
 
                 !!! TODO: fix and convert to algorithm2e
 
-                App1 requests an IPC connection to App2. This request is handled by ipcProcess1's Flow Allocator.
-                The Flow Allocator asks Directory for address of the IPC Process to which App2 is mapped. In this case, it's 2.
-                The Flow Allocator asks ipcProcess1's Resource Allocator to find a suitable (N-1)-flow to map the new flow to it. If there isn't any, RA requests an IPC connection to App2.
-                The Flow Allocator instructs RIB to send out \texttt{M\_CREATE} request to 2.
-                The 2's Flow Allocator instructs RIB to send out \texttt{M\_CREATE\_RESPONSE} request to 1.
-                2's RIB receives the \texttt{M\_CREATE\_RESPONSE}. If it's positive, the Allocate() procedure is ended sucessfully.
+                \begin{enumerate}
+                    \item App1 requests an IPC connection to App2. This request is handled by ipcProcess1's Flow Allocator.
+                    \item The Flow Allocator asks Directory for address of the IPC Process to which App2 is mapped. In this case, it's 2.
+                    \item The Flow Allocator asks ipcProcess1's Resource Allocator to find a suitable (N-1)-flow to map the new flow to it. If there isn't any, RA requests an IPC connection to App2.
+                    \item The Flow Allocator instructs RIB to send out \texttt{M\_CREATE} request to 2.
+                    \item The 2's Flow Allocator instructs RIB to send out \texttt{M\_CREATE\_RESPONSE} request to 1.
+                    \item 2's RIB receives the \texttt{M\_CREATE\_RESPONSE}. If it's positive, the Allocate() procedure is ended sucessfully.
+                \end{enumerate}
 
                 The applications then exchange data.
 
@@ -575,7 +541,7 @@
                 \item RMT scheduling policy. A scheduling algorithm (also commonly known as ``network scheduler algorithm'' or ``queuing discipline'') that determines the order on which input and output buffers are serviced. This policy should be invoked each time a PDU needs to be taken from a queue for processing and works for both input and output directions. Examples of possible algorithms could be FIFO, LIFO or fair queuing.
                 \item RMT monitoring policy. A state-keeping queue monitoring algorithm that is invoked each time a PDU enters or leaves a queue. This policy should compute variables to be used in decision process of other policies. Examples of such variables could be average queue length or queue idle time, which are often used by congestion prevention mechanisms.
                 \item RMT max queue policy. An algorithm that is invoked each time the number of PDUs waiting in a queue exceeds the queue's threshold. This policy is mostly used for implementing congestion control mechanisms (e.g. by dropping or marking the last PDU in a queue).
-                \item Forwarding policy. An algorithm used for deciding where to forward a PDU. The policy is given the PDU's PCI and in turn returns a set of (N-1)-ports to which the PDU has to be sent. This provides enough granularity to implement multiple communication schemes apart from unicast (such as multicast or load-balancing), because the decision is left to the policy. E.g. a simple forwarding policy would return a single (N-1)-port based on PDU's destination address and QoS-id, whereas in case of a load-spreading policy and multiple (N-1)-ports leading to the same destination, the policy could split traffic by PDUs' flow-ids and always return a single (N-1)-port from the set.
+                \item Forwarding policy. An algorithm used for deciding where to forward a PDU. The policy is given the PDU's Protocol Control Information (PCI) and in turn returns a set of (N-1)-ports to which the PDU has to be sent. This provides enough granularity to implement multiple communication schemes apart from unicast (such as multicast or load-balancing), because the decision is left to the policy. E.g. a simple forwarding policy would return a single (N-1)-port based on PDU's destination address and QoS-id, whereas in case of a load-spreading policy and multiple (N-1)-ports leading to the same destination, the policy could split traffic by PDUs' flow-ids and always return a single (N-1)-port from the set.
             \end{itemize}
 
 
@@ -647,11 +613,13 @@
             \end{figure}
 
         \subsection{Module Parameters}
-            The RMT module contains several user-configurable parameters that can be used to alter its behavior. These are presented in Figure \ref{fig:rmt_params}.
+            The RMT module contains several user-configurable parameters that can be used to alter its behavior. These are presented in Table \ref{fig:rmt_params}.
 
-            \begin{figure}[H]
+            \begin{table}[H]
                 \begin{center}
-                  \begin{tabular}{ r l | l }
+                  \begin{tabular}{ | r | r | l | }
+                    \hline
+                    data type & name & function \\
                     \hline
                     \texttt{string} & \texttt{schedPolicyName} & name of the desired scheduling policy \\
                     \texttt{string} & \texttt{qMonitorPolicyName} & name of the desired monitoring policy \\
@@ -665,7 +633,7 @@
                   \caption{RMT module parameters.}
                   \label{fig:rmt_params}
                 \end{center}
-            \end{figure}
+            \end{table}
 
         \subsection{Module Workflow}
 
@@ -786,9 +754,11 @@
 \chapter{Testing and Evaluation}\label{testing}
 
     I have created a set of basic network topologies to demonstrate the implementation's features. The following tests put them into use.
-
     Each test case contains a description of RMT-related events that happen during simulation. Each type of event is described only once to prevent needless repetition.
 
+    For purposes of testing, RINASim contains a ping-like application called \texttt{AEPing} that can serve as both sender and receiver of a ping-like data frame. Each of the following scenarios consists of a NED topology and two instances of AEPing on different hosts. The first instance with application name \texttt{App1} allocates a flow to the other instance with application name \texttt{App2}, pings the other instance multiple times in sucession and then deallocates the flow. The simulation times of flow allocation, ping send events and flow deallocation are configurable via the AEPing NED module.
+
+    Additionally, each channel connecting two hosts is configurable to simulate postponed message delivery based on its bandwidth or fixed delay. To keep the format of timestamps simple, channels in the following examples operate with a fixed delay in seconds.
 
     \section{Basic multiplexing}
 
@@ -796,69 +766,72 @@
 
         \subsection{Topology}
 
-            The TwoCS topology is the most basic example of a computer network. It consists of two interconnected hosts, each with a single application and two IPC processes. More on Figure \ref{fig:examples:twocs}.
+            The TwoCS topology is the most basic example of a computer network. It consists of two interconnected hosts, each with a single application and two IPC processes. More on Figure \ref{fig:examples:muxing:events:topology}.
 
             \begin{figure}[H]
                 \begin{center}
                     \includegraphics[width=0.6\textwidth]{fig/examples-twocs.png}
                   \caption{TwoCS simulation scenario}
-                  \label{fig:examples:twocs}
+                  \label{fig:examples:muxing:events:topology}
                 \end{center}
             \end{figure}
 
         \subsection{Scenario}
 
-            The simulation scenario is described in table
+            The configuration of this simulation scenario is described in Table \ref{fig:examples:muxing:events}.
 
-            \begin{figure}[H]
+            \begin{table}[H]
                 \begin{center}
-                  \begin{tabular}{ r | l }
-                    time & event \\
+                  \begin{tabular}{ | r | l | l | }
                     \hline
-                    10s & App1 begins allocation of an IPC connection to App2. \\
-                    35s & App1 begins sending 10 pings (one per second) to App2. \\
-                    200s & App1 begins deallocation of IPC connection with App2. \\
+                    module & configuration directive & value \\
+                    \hline
+                    \texttt{host1}'s \texttt{AEPing} & flow allocation & 10 s \\
+                    \texttt{host1}'s \texttt{AEPing} & first ping & 35 s \\
+                    \texttt{host1}'s \texttt{AEPing} & flow deallocation & 200 s \\
+                    \texttt{host1}'s \texttt{AEPing} & number of pings & 10 \\
+                    \texttt{host1}$\rightarrow$\texttt{host2} channel & delay & 2 s \\
                     \hline
                   \end{tabular}
-                  \caption{RMT module parameters.}
-                  \label{fig:rmt_params}
+                  \caption{Configuration of the scenario.}
+                  \label{fig:examples:muxing:events}
                 \end{center}
-            \end{figure}
+            \end{table}
 
         \subsection{Simulation}
 
             What follows is a simplified description of events related to RMT instances.
 
             \begin{itemize}
-            \item \textbf{t=0}: The RMT instances undergo their initial setup. For the bottom IPC processes in both hosts, this consists of creating a \texttt{RMTPort} instance named \texttt{``PHY''} and its queues. Since the QueueAlloc policy is set to SingleQueue, the following queues are created: \texttt{outQ\_M} (management output), \texttt{inQ\_M} (management input), \texttt{outQ\_0} (data output) and \texttt{inQ\_0} (management input).
+            \item \textbf{t=0}: The RMT instances undergo their initial setup. For the bottom IPC processes in both hosts, this consists of creating a RMTPort instance named \texttt{PHY} and its queues. Since the QueueAlloc policy is set to \texttt{SingleQueue}, the following queues are created: \texttt{outQ\_M} (management output), \texttt{inQ\_M} (management input), \texttt{outQ\_0} (data output) and \texttt{inQ\_0} (management input).
 
-            \item \textbf{t=10}: App1 invokes \texttt{Allocate(App2)}. This in turn causes IPC1's Resource Allocator to invoke \texttt{Allocate(IPC2)}.
+            \item \textbf{t=10}: \texttt{App1} invokes \emph{Allocate(\texttt{App2})}. This in turn causes \texttt{IPC11}'s Resource Allocator to invoke \emph{Allocate(\texttt{IPC2})}.
 
-                The RIB sends out an \texttt{M\_CREATE} request to RMT. RMT stores the PDU to the PHY's queue \texttt{outQ\_M}.
+                The RIB in \texttt{IPC11} sends out an \texttt{M\_CREATE} request addressed to \texttt{IPC22}. RMT stores the PDU to the \texttt{PHY}'s queue \texttt{outQ\_M}.
 
-                The arrival of PDU into the queue causes invocation of the active monitoring policy and maxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
+                The arrival of PDU into the queue causes invocation of the active monitoring policy and MaxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
 
-                The scheduling policy decides to release the PDU from \texttt{outM}. The PDU traverses through the port and gets sent to the other destination.
+                The scheduling policy decides to release the PDU from \texttt{outQ\_M}. The PDU traverses through the port and gets sent to the other host via the medium.
 
-            \item \textbf{t=12}: RMT receives the PDU on port PHY. As this is a management PDU, it's stored into the management input queue.
+            \item \textbf{t=12}: \texttt{IPC2}'s RMT receives the PDU on port \texttt{PHY}. As this is a management PDU, it's stored into the management input queue \texttt{inQ\_M}.
 
-                The arrival of PDU into the queue causes invocation of the active monitoring policy and maxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
+                The arrival of PDU into the queue causes invocation of the active monitoring policy and MaxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
 
-                The scheduling policy decides to release the PDU from \texttt{inQ\_M}. The PDU travels into the dispatcher which acts by [ref], relaying the PDU to the RIB daemon.
+                The scheduling policy decides to release the PDU from \texttt{inQ\_M}. The PDU travels into the dispatcher which relays the PDU to the RIB daemon.
 
-                The RIB daemon sends out an \texttt{M\_CREATE\_RESPONSE} frame to 0.
+                The RIB daemon sends out an \texttt{M\_CREATE\_RESPONSE} frame to \texttt{IPC1}.
 
-            \item \textbf{t=14}: The RIB daemon receives the \texttt{M\_CREATE\_RESPONSE} request and the Allocate(IPC2) procedure is sucesfully completed. The new connection is mapped to a newly instantiated RMTPort called p0 and the suspendeded Allocate(App2) procedure is triggered to carry out the same series of events, only level higher and with port p0 instead of PHY.
+            \item \textbf{t=14}: The \texttt{IPC1}'s RIB daemon receives the \texttt{M\_CREATE\_RESPONSE} request and the \emph{Allocate(\texttt{IPC2})} procedure is sucesfully completed. The new connection is mapped to a newly instantiated RMTPort called \texttt{p0} and the previously suspended \emph{Allocate(\texttt{App2})} procedure is triggered to continue and carry out the same series of events, only one level higher and using \texttt{IPC1}1's port \texttt{p0} and its data queues.
 
-            \item \textbf{t=18}: The Allocate(IPC2) procedure is sucessfully completed and App1 is now connected to App2.
+            \item \textbf{t=18}: The \emph{Allocate(\texttt{IPC2})} procedure is sucessfully completed and \texttt{App1} is now connected to \texttt{App2}.
 
-            \item \textbf{t=35}: In host1, App1 sends out the first ping. The ping traverses (N)-RMT and (N-1)-RMT and then it's sent to the medium. This is repeated nine times in the following 9 seconds.
+            \item \textbf{t=35}: In \texttt{host1}, \texttt{App1} sends out the first ping. The ping traverses RMTs in \texttt{IPC11} and \texttt{IPC1} and then it's sent to the medium. This is repeated nine times in the following 9 seconds.
 
-            \item \textbf{t=37}: In host2, IPC0's PHY receives the first ping. The ping traverses (N-1)-RMT and (N)-RMT and then it's sent to App2. This is repeated nine times in the following 9 seconds.
+            \item \textbf{t=37}: In host2, \texttt{IPC0}'s port \texttt{PHY} receives the first ping. The ping traverses RMTs in \texttt{IPC2} and \texttt{IPC22} and then it's handed to App2. This is repeated nine times in the following 9 seconds.
 
-            \item \textbf{t=200}: App1 invokes \texttt{Deallocate(App2)}.
+            \item \textbf{t=200}: App1 invokes \emph{Deallocate(\texttt{App2})}.
 
-            \item \textbf{t=202}: The connection between App1 and App2 is deallocated.
+            \item \textbf{t=202}: The connection between \texttt{App1} and \texttt{App2} is deallocated.
             \end{itemize}
 
         \subsection{Evaluation}
@@ -867,17 +840,19 @@
 
     \section{Basic Relaying}
 
-        The SimpleRelay topology is the most basic example of a computer network with a relaying device. It consists of two hosts interconnected by a router with three IPC processes. More on Figure \ref{fig:examples:simplerelay}.
+        This example presents the relaying function of RMT in a simple scenario.
 
         \subsection{Topology}
 
-        \begin{figure}[H]
-            \begin{center}
-                \includegraphics[width=0.6\textwidth]{fig/examples-simplerelay.png}
-              \caption{SimpleRelay simulation scenario}
-              \label{fig:examples:simplerelay}
-            \end{center}
-        \end{figure}
+            The SimpleRelay topology is the most basic example of a computer network with a relaying device. It consists of two hosts interconnected by a router with three IPC processes. More on Figure \ref{fig:examples:simplerelay}.
+
+            \begin{figure}[H]
+                \begin{center}
+                    \includegraphics[width=0.6\textwidth]{fig/examples-simplerelay.png}
+                  \caption{SimpleRelay network topology.}
+                  \label{fig:examples:simplerelay}
+                \end{center}
+            \end{figure}
 
         \subsection{Scenario}
 
@@ -894,7 +869,7 @@
                     \hline
                   \end{tabular}
                   \caption{RMT module parameters.}
-                  \label{fig:rmt_params}
+                  \label{fig:examples:relaying}
                 \end{center}
             \end{figure}
 
@@ -904,13 +879,13 @@
 
     \section{Basic Congestion Control}
 
-        This scenario presents an example of porting a legacy congestion control algorithm into RINA by converting it into RMT policies. The algorithm in question is Random Early Detection (RED) which is implemented as a set of a monitoring policy and a maxQ policy.
+        This scenario presents an example of porting a legacy congestion control algorithm into RINA by converting it into RMT policies. The algorithm in question is Random Early Detection (RED) which is implemented as a set of a monitoring policy and a maxQ policy. Additionaly, this scenario presents the port blocking subsystem.
 
         \begin{figure}[H]
             \begin{center}
                 \includegraphics[width=0.6\textwidth]{fig/examples-smallnetwork.png}
               \caption{SmallNetwork simulation scenario}
-              \label{fig:examples:smallnetwork}
+              \label{fig:examples:red}
             \end{center}
         \end{figure}
 
@@ -921,7 +896,7 @@
         \subsection{Evaluation}
 
 
-\chapter{Conclusion \& Future Development}\label{conclusion}
+\chapter{Conclusion}\label{conclusion}
 
     In this thesis, I have delved into the field of network architecture research.
 
