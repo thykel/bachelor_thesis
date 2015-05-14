@@ -6,7 +6,7 @@
 
 \chapter{Introduction}\label{intro}
 
-    Today's field of computer networking and its research is heavily centered around the underlying architecture of the Internet and its protocol suite, which is known as TCP/IP for its two most prominent protocols Transmission Control Protocol (TCP) and the Internet Protocol (IP). While such concepts are in use for several decades and seem to work as intended, there has been a growing trend in the research community of introducing new alternative network architectures. This thesis aims to illustrate aims of such architectures and contribute to implementation of one of them.
+    Today's field of computer networking and its research is heavily centered around the underlying architecture of the Internet and its protocol suite, which is known as TCP/IP for its two most prominent protocols Transmission Control Protocol (TCP) and Internet Protocol (IP). While such concepts are in use for several decades and seem to work as intended, there has been a growing trend in the research community of introducing new alternative network architectures. This thesis aims to illustrate aims of such architectures and contribute to implementation of one of them.
 
     Network simulation is an ideal approach for examining new network architectures since it provides a quick and efficient way of setting up test scenarios and observing all aspects of their behavior. The discrete event network simulation framework OMNeT++ has been chosen as the target implementation platform.
 
@@ -52,7 +52,7 @@
 
     As such, some of the Internet's widely recognized problems are inherent because of the base design and it's usually difficult, if not impossible, to solve them in a non-intrusive and backward-compatible way. The following sections illustrate such problems.
 
-    \section{Incomplete naming scheme}
+    \section{Incomplete naming scheme}\label{problems:naming}
 
         In 1982, Jerome Saltzer in his work ``On the Naming and Binding of Network Destinations'' \cite{rfc1498} described the entities and the relationships that make a complete naming and addressing schema in networks. According to Saltzer, there are four elements that need to be identified: applications, nodes, points of attachment to the network (PoAs) and paths. The relationships between them are illustrated in Figure \ref{fig:saltzer}. At the time, network architectures such as CYCLADES \cite{Cyclades}, XNS, DECNET and OSI conformed to this scheme \cite{internet_demo}.
 
@@ -105,13 +105,14 @@
 
         The second and third approaches require a clean-slate architectural design.
 
-    \section{Lack of security mechanisms}
+    \section{Lack of security mechanisms}\label{problems:security}
 
         The specifications of the fundamental protocols of TCP/IP stack -- IP, TCP and DHCP -- were originally finished at the beginning of 1980s. The Internet has since then turned into a massive world-wide internetwork connecting people of different types and agendas. Naturally, once the Internet began to be used for transferring sensitive data (especially by companies), cyber crime started to emerge as well and some attention was turned to security aspects of Internet protocol (or lack thereof).
 
-        TODO: lack of verification/authentication
+        As the IP protocol lacks any inherent verification mechanism, the Internet Layer is easily subjected to hijacking and spoofing. This provides opportunity for many types of exploits, most notably the Man-in-the-middle attack or IP address spoofing \cite{rfc1948}.
 
-        In addition to that, a large amount of security flaws has been discovered and continually exploited. Some examples of these are Denial-of-service attacks (ICMP flood, SYN flood, CAM flood), Man-in-the-Middle attacks, IP address spoofing, DHCP spoofing, ARP spoofing and ARP cache poisoning. The requirement of every secure network is to carefully mitigate all of them.
+        Since security isn't enforced by the architecture in any way, it's still common even for the Application Layer with its plethora of protocols to be subjected to security problems. Protocols such as TCP and are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack \cite{rfc1948} or .
+
 
     \section{Router Table Size Growth}
 
@@ -137,7 +138,7 @@
 
     This chapter gives an overview of paths that were pursued in the field of network architecture research and descriptions of several architectures.
 
-    Considering the limited scope of this thesis, only a representative subset of new network architectures will be described and evaluated more thoroughly. The subset consists of projects emerged under the Future Network Architecture (Named Data Networking [\ref{archs:ndn}], MobilityFirst [\ref{archs:mf}], XIA [\ref{archs:xia}] and NEBULA [\ref{archs:nebula}]) and the Recursive InterNetwork Architecture (\ref{archs:rina}).
+    Considering the limited scope of this thesis, only a representative subset of new network architectures will be described and evaluated more thoroughly. The subset consists of projects emerged under the Future Internet Architecture - Next Phase program \cite{fia} (Named Data Networking [\ref{archs:ndn}], MobilityFirst [\ref{archs:mf}] and eXpressive Internet Architecture [\ref{archs:xia}]) and the Recursive InterNetwork Architecture (\ref{archs:rina}).
 
     Special attention will be given to RINA.
 
@@ -151,19 +152,6 @@
         \end{itemize}
 
         Considering the scope of this thesis, the focus will be given exclusively to ``clean-slate design'' architectures.
-
-    \section{Research Initiatives}
-
-        The idea of funding research for exploring new architecture has been prevalent especially since the year 2000 and NewArch project. It's common to group such research initiatives under a common name ``Future Internet''.
-
-        TODO: mention testbeds; describe worldwide research programs or fuck it? only FIA and possibly John Day are relevant for us
-
-        % \subsection{NewArch Project}
-        % \subsection{FIRE}
-        % \subsection{FIBRE}
-        \subsection{Future Internet Architecture}
-            In 2010, National Science Foundation funded five projects as a part of this program: Named Data Networking, MobilityFirst, NEBULA, eXpressive Internet Architecture and ChoiceNet.
-
 
     \section{Named Data Networking}\label{archs:ndn}
 
@@ -190,13 +178,6 @@
                 The NDN architecture specifies:
                     \begin{itemize}
                         \item two types of packets: an interest packet (containing the name of desired data) and a data packet (containing the requested data),
-                        % \begin{figure}[H]
-                        %     \begin{center}
-                        %         \includegraphics[width=0.6\textwidth]{fig/ndn_packets1.png}
-                        %       \caption{NDN packet types}
-                        %       \label{ndn-packets}
-                        %     \end{center}
-                        % \end{figure}
                         \item two types of hosts: a consumer (data requester) and a producer (data provider), and
                         \item a router maintaining three fundamental data structures:
                         \begin{itemize}
@@ -238,23 +219,6 @@
 
                 The management of such namespace isn't defined by the architecture itself and should be a subject of further research.
 
-        % \subsection{Implications}
-        %     \subsubsection{Data Caching}
-        %         The most significant feature of NDN is its native support for caching all sorts of data inside the network itself. While this should be beneficial mostly for static data such as web pages and images, dynamic content could take advantage of this as welll in case of multicasting or packet retransmission on packet loss.
-
-        %     \subsubsection{Routing and Forwarding}
-        %         NDN routes and forwards packets on names, which eliminates four problems caused by address forwarding in the IP architecture: address space exhaustion, NAT traversal, mobility, and address management.
-        %         \begin{itemize}
-        %             \item There is no address exhaustion problem since the namespace is unbounded.
-        %             \item There is no NAT traversal problem since a host does not need to expose its address in order to offer content.
-        %             \item Mobility, which requires changing addresses in IP, no longer breaks communication since data names remain the same.
-        %             \item Finally, address assignment and management is no longer required in local networks, which is especially empowering for embedded sensor networks.
-        %         \end{itemize}
-
-        %         Since the forwarding mechanism otherwise bears a strong resemblance to the forwarding mechanism in IP networks, lot of the existing research on IP routing could be applied to NDN as well: protocols like BGP, IS-IS or OSPF can be, for the most part, reused with minor modifications (e.g. routers would announce name prefixes instead of IP prefixes).
-
-        %     \subsubsection{Security}
-        %         While TCP/IP with its end-to-end communication paradigm relies on setting up a secure channel between two hosts and transmitting data through it, NDN requires each data chunk to be signed together with its name. Thus, since security is built into the data itself, there's no need for a direct host-to-host secure channel to be created.
 
         \subsection{Current State of Implementation}
 
@@ -376,35 +340,35 @@
             \end{itemize}
 
 
-    \section{NEBULA}\label{archs:nebula}
+    % \section{NEBULA}\label{archs:nebula}
 
-        \subsection{Premise}
+    %     \subsection{Premise}
 
-            The usage trends of consumer computing tend to lean towards a cloud computing-centric vision of moving majority of communication and storage to data centers away from the end user.
+    %         The usage trends of consumer computing tend to lean towards a cloud computing-centric vision of moving majority of communication and storage to data centers away from the end user.
 
-            An important aspect of cloud computing is a network architecture, which needs to both interconnect data centers and connect users to their data. Such architecture needs to provide a high degree of reliability and data privacy. The needed properties are illustrated in the NEBULA papers on a concrete example of closed-loop control of blood glucose levels for an insulin-dependent diabetic:
+    %         An important aspect of cloud computing is a network architecture, which needs to both interconnect data centers and connect users to their data. Such architecture needs to provide a high degree of reliability and data privacy. The needed properties are illustrated in the NEBULA papers on a concrete example of closed-loop control of blood glucose levels for an insulin-dependent diabetic:
 
-            \begin{quotation}
-                ``The cloud application would determine the current glucose level, monitor what was being eaten, monitor the exercise activity level, and make an insulin infusion recommendation. This application would have strict confidentiality requirements (it is very personal healthcare data), integrity requirements (incorrect dosages can be harmful) and availability requirements (a lack of network availability might, at the limit, cause physical harm).''
-            \end{quotation}
+    %         \begin{quotation}
+    %             ``The cloud application would determine the current glucose level, monitor what was being eaten, monitor the exercise activity level, and make an insulin infusion recommendation. This application would have strict confidentiality requirements (it is very personal healthcare data), integrity requirements (incorrect dosages can be harmful) and availability requirements (a lack of network availability might, at the limit, cause physical harm).''
+    %         \end{quotation}
 
-            The current Internet isn't by nature suited for this task due to its best-effort delivery model and practically non-existent intristic security.
+    %         The current Internet isn't by nature suited for this task due to its best-effort delivery model and practically non-existent intristic security.
 
-            NEBULA is a network architecture that aims to provide a better solution for global cloud computing.
+    %         NEBULA is a network architecture that aims to provide a better solution for global cloud computing.
 
-        \subsection{Concepts}
+    %     \subsection{Concepts}
 
-            NEBULA specifies three building blocks: a reliable routing system and data center interconnect (NCore), a data plane supporting policy enforcement (NEBULA Data Plane, NDP) and a control plane (NEBULA Virtual and Extensible Networking Techniques, NVENT)
+    %         NEBULA specifies three building blocks: a reliable routing system and data center interconnect (NCore), a data plane supporting policy enforcement (NEBULA Data Plane, NDP) and a control plane (NEBULA Virtual and Extensible Networking Techniques, NVENT)
 
-            TODO: find better docs for this one first
+    %         TODO: find better docs for this one first
 
-            \subsubsection{NCore}
+    %         \subsubsection{NCore}
 
-            \subsubsection{NDP}
+    %         \subsubsection{NDP}
 
-            \subsubsection{NVENT}
+    %         \subsubsection{NVENT}
 
-        \subsection{Current State of Implementation}
+    %     \subsection{Current State of Implementation}
 
 
     \section{Recursive InterNetwork Architecture}\label{archs:rina}
@@ -503,9 +467,11 @@
                 \end{figure}
 
 
-            \subsubsection{The Communication Model}
+            \subsubsection{The Communication Model}\label{archs:rina:communication}
 
                 Every communication in RINA needs to go through the initial process of flow allocation.
+
+                !!! TODO: fix and convert to algorithm2e
 
                 App1 requests an IPC connection to App2. This request is handled by ipcProcess1's Flow Allocator.
                 The Flow Allocator asks Directory for address of the IPC Process to which App2 is mapped. In this case, it's 2.
@@ -530,6 +496,19 @@
             IRATI stack
 
             RINASim, an open-source OMNeT++ implementation of RINA, is being actively developed on FIT BUT.
+
+    \section{Evaluation}
+
+        In the previous sections, we have described 4 new network architectures. This section puts them into context of problems mentioned in chapter \ref{problems} and points out their main strengths and weaknesses.
+
+        \subsection{Named Data Networking}
+
+            The most significant advantage of NDN is its native support for caching all sorts of data inside the network itself. While this should be beneficial mostly for static data such as web pages and images, dynamic content could take advantage of this as well in case of multicasting or packet retransmission on packet loss.
+
+            With its named data paradigm, NDN renders the problems of node naming, mobility and multihoming irrelevant, because data names remain the same no matter the locaton. Same case with security as each data chunk is required to be cryptographically signed by architecture itself.
+
+            The router table size growth presents a challenge as bla bla
+
 
 
 \chapter{Forwarding In RINA}\label{forwarding}
@@ -659,24 +638,6 @@
                 \item RMTPortWrapper, a compound module encapsulating an (N-1)-port and its queues.
             \end{itemize}
 
-            % \begin{figure}[H]
-            %     \begin{center}
-            %       \begin{tabular}{ r | l | l }
-            %         \hline
-            %         \texttt{RMT} & static & the central logic of Relaying And Multiplexing task that decides what should be done with messages passing through the module. \\
-            %         \texttt{RMTModuleAllocator} & static & a control unit providing an API for adding and deleting instances of dynamic modules (RMTQueue, RMTPort). \\
-            %         \texttt{SchedulingPolicy} & static & a scheduling policy of an RMT instance. \\
-            %         \texttt{MonitorPolicy} & static & a monitoring policy of an RMT instance. \\
-            %         \texttt{MaxQPolicy} & static & a maxqueue policy of an RMT instance. \\
-            %         \texttt{RMTPort} & static & a representation of one endpoint of an (N-1)-flow. \\
-            %         \texttt{RMTQueue} & static & a representation of either input or output queue. The number of RMTQueues per RMTPort is determined by Resource Allocator policies. \\
-            %         \texttt{RMTPortWrapper} & static & a compound module encapsulating an (N-1)-port and its queues. \\
-            %       \end{tabular}
-            %       \caption{RMT module parameters.}
-            %       \label{fig:rmt_params}
-            %     \end{center}
-            % \end{figure}
-
             \begin{figure}[H]
                 \begin{center}
                   \makebox[\textwidth]{\includegraphics[width=\textwidth]{fig/impl_rmt-erd.pdf}}
@@ -705,8 +666,6 @@
                   \label{fig:rmt_params}
                 \end{center}
             \end{figure}
-
-
 
         \subsection{Module Workflow}
 
@@ -826,11 +785,14 @@
 
 \chapter{Testing and Evaluation}\label{testing}
 
-    We have created a set of basic network topologies to demonstrate the RMT implementation's features. The following tests puts them into use.
+    I have created a set of basic network topologies to demonstrate the implementation's features. The following tests put them into use.
 
-    Each test case contains a description of RMT-related events that happen during simulation. Each type of event is described only once, the omitted.
+    Each test case contains a description of RMT-related events that happen during simulation. Each type of event is described only once to prevent needless repetition.
+
 
     \section{Basic multiplexing}
+
+        This example presents the multiplexing function of RMT in a simple scenario.
 
         \subsection{Topology}
 
@@ -865,47 +827,49 @@
 
         \subsection{Simulation}
 
-            What follows is a simplified description of events happening inside RMTs.
+            What follows is a simplified description of events related to RMT instances.
 
-            \textbf{t=10}: App1 invokes Allocate(App2). This in turn causes IPC1's Resource Allocator to invoke Allocate(IPC2).
+            \begin{itemize}
+            \item \textbf{t=0}: The RMT instances undergo their initial setup. For the bottom IPC processes in both hosts, this consists of creating a \texttt{RMTPort} instance named \texttt{``PHY''} and its queues. Since the QueueAlloc policy is set to SingleQueue, the following queues are created: \texttt{outQ\_M} (management output), \texttt{inQ\_M} (management input), \texttt{outQ\_0} (data output) and \texttt{inQ\_0} (management input).
 
-                The RIB sends out an \texttt{M\_CREATE} request to RMT. RMT acts by [ref] and stores the PDU to the port PHY's output management queue outM.
+            \item \textbf{t=10}: App1 invokes \texttt{Allocate(App2)}. This in turn causes IPC1's Resource Allocator to invoke \texttt{Allocate(IPC2)}.
 
-                The arrival of PDU into the queues causes invocation of the current monitoring policy and maxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
+                The RIB sends out an \texttt{M\_CREATE} request to RMT. RMT stores the PDU to the PHY's queue \texttt{outQ\_M}.
 
-                The scheduling policy decides to release the PDU from outM. The PDU traverses through the port and gets sent to the other destination.
+                The arrival of PDU into the queue causes invocation of the active monitoring policy and maxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
 
-            \textbf{t=12}: RMT receives the PDU on port PHY. As this is a management PDU, it's stored into the management input queue.
+                The scheduling policy decides to release the PDU from \texttt{outM}. The PDU traverses through the port and gets sent to the other destination.
 
-                The arrival of PDU into the queues causes invocation of the current monitoring policy and maxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
+            \item \textbf{t=12}: RMT receives the PDU on port PHY. As this is a management PDU, it's stored into the management input queue.
 
-                The scheduling policy decides to release the PDU from inM. The PDU travels into the dispatcher which acts by [ref], relaying the PDU to the RIB daemon.
+                The arrival of PDU into the queue causes invocation of the active monitoring policy and maxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
+
+                The scheduling policy decides to release the PDU from \texttt{inQ\_M}. The PDU travels into the dispatcher which acts by [ref], relaying the PDU to the RIB daemon.
 
                 The RIB daemon sends out an \texttt{M\_CREATE\_RESPONSE} frame to 0.
 
-            \textbf{t=14}: The RIB daemon receives the \texttt{M\_CREATE\_RESPONSE} request and the Allocate(IPC2) procedure is sucesfully completed. The new connection is mapped to a newly instantiated RMTPort called p0 and the suspendeded Allocate(App2) procedure is triggered to carry out the same series of events, only level higher and with port p0 instead of PHY.
+            \item \textbf{t=14}: The RIB daemon receives the \texttt{M\_CREATE\_RESPONSE} request and the Allocate(IPC2) procedure is sucesfully completed. The new connection is mapped to a newly instantiated RMTPort called p0 and the suspendeded Allocate(App2) procedure is triggered to carry out the same series of events, only level higher and with port p0 instead of PHY.
 
-            \textbf{t=18}: The Allocate(IPC2) procedure is sucessfully completed and App1 is now connected to App2.
+            \item \textbf{t=18}: The Allocate(IPC2) procedure is sucessfully completed and App1 is now connected to App2.
 
-            \textbf{t=35}: In host1, App1 sends out the first ping. The ping traverses (N)-RMT and (N-1)-RMT and then it's sent to the medium. This is repeated nine times in the following 9 seconds.
+            \item \textbf{t=35}: In host1, App1 sends out the first ping. The ping traverses (N)-RMT and (N-1)-RMT and then it's sent to the medium. This is repeated nine times in the following 9 seconds.
 
-            \textbf{t=37}: In host2, IPC0's PHY receives the first ping. The ping traverses (N-1)-RMT and (N)-RMT and then it's sent to App2. This is repeated nine times in the following 9 seconds.
+            \item \textbf{t=37}: In host2, IPC0's PHY receives the first ping. The ping traverses (N-1)-RMT and (N)-RMT and then it's sent to App2. This is repeated nine times in the following 9 seconds.
 
-            \textbf{t=200}: App1 invokes Deallocate(App2).
+            \item \textbf{t=200}: App1 invokes \texttt{Deallocate(App2)}.
 
-            \textbf{t=202}: The connection between App1 and App2 is deallocated.
+            \item \textbf{t=202}: The connection between App1 and App2 is deallocated.
+            \end{itemize}
 
         \subsection{Evaluation}
 
+            The implementation reflects the expected behavior.
 
-    \section{TwoCSs}
+    \section{Basic Relaying}
 
-        Two interconnected hosts; host1 sends a series of ping requests to host2.
+        The SimpleRelay topology is the most basic example of a computer network with a relaying device. It consists of two hosts interconnected by a router with three IPC processes. More on Figure \ref{fig:examples:simplerelay}.
 
-
-    \section{SimpleRelay}
-
-        Two hosts interconnected by a single router; host1 sends a series of ping requests to host2.
+        \subsection{Topology}
 
         \begin{figure}[H]
             \begin{center}
@@ -915,9 +879,32 @@
             \end{center}
         \end{figure}
 
-    \section{SmallNetwork}
+        \subsection{Scenario}
 
-        Five hosts interconnected by three routers; host1 sends a series of ping requests to host5.
+            The simulation scenario is described in table
+
+            \begin{figure}[H]
+                \begin{center}
+                  \begin{tabular}{ r | l }
+                    time & event \\
+                    \hline
+                    10s & App1 begins allocation of an IPC connection to App2. \\
+                    35s & App1 begins sending 10 pings (one per second) to App2. \\
+                    200s & App1 begins deallocation of IPC connection with App2. \\
+                    \hline
+                  \end{tabular}
+                  \caption{RMT module parameters.}
+                  \label{fig:rmt_params}
+                \end{center}
+            \end{figure}
+
+        \subsection{Simulation}
+
+        \subsection{Evaluation}
+
+    \section{Basic Congestion Control}
+
+        This scenario presents an example of porting a legacy congestion control algorithm into RINA by converting it into RMT policies. The algorithm in question is Random Early Detection (RED) which is implemented as a set of a monitoring policy and a maxQ policy.
 
         \begin{figure}[H]
             \begin{center}
@@ -927,12 +914,28 @@
             \end{center}
         \end{figure}
 
-        The output of this scenario can be seen in attachment C. It consists of a simplified simulation log (C.1), graphs generated by Scave (C.2) and a PDU trace file (C.3).
+        \subsection{Topology}
+
+        \subsection{Simulation}
+
+        \subsection{Evaluation}
 
 
 \chapter{Conclusion \& Future Development}\label{conclusion}
 
-    The Relaying and Multiplexing Task has been successfuly implemented and integrated into the RINASim simulation library. The result is currently in use by multiple research groups for modelling RINA networks and experimenting with various RMT policies.
+    In this thesis, I have delved into the field of network architecture research.
 
-    The resulting implementation provides users with a policy framework that allows them to experiment with virtually unlimited number of approaches to forwarding and congestion control in RINA. Therefore, future development lies mainly in expansion of the policy set. Several examples of such new policies written by RINA researchers are already available in the source code repository at the time of writing this thesis.
+    The goal of this thesis was to contribute to prototyping attempts of one of the presented network architectures, RINA. This task has been sucessfully completed by implementing RINA's Relaying and Multiplexing Task into an existing library for simulation tool OMNeT++.
+
+    To be able to describe the principles of new network architectures and analyze their contributions, I needed to gain understanding of the driving factors behind their inception. This has been achieved by studying the Internet and its history to learn about choices that lead to its current state, as well as its problems. I have noticed that some of the drawbacks of its architectural design have been recognized right at the beginning of its inception.
+
+    To understand RINA, I had to adapt to its paradigm shift which abandons most of today's widely recognized principles of computer networking.
+
+    The implementation part of this thesis required me to learn about OMNeT++ programming framework and the RINASim library.
+
+    The resulting solution is currently in use by multiple research groups for modelling RINA networks and experimenting with various policies.
+
+    \section{Future Development}
+
+    The resulting implementation provides users with a policy framework that allows them to experiment with virtually unlimited number of approaches to forwarding and congestion control in RINA. Therefore, future development lies mainly in expansion of the policy set. Several examples of such new policies written by RINA researchers are already available in the source code repository at the time of writing this thesis. Such examples usually explore new directions in the areas of congestion control, routing and distributed resource allocation.
 
