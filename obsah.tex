@@ -52,7 +52,7 @@
 
     \section{Incomplete naming scheme}\label{problems:naming}
 
-        In 1982, Jerome Saltzer in his work ``On the Naming and Binding of Network Destinations'' \cite{rfc1498} described the entities and the relationships that make a complete naming and addressing schema in networks. According to Saltzer, there are four elements that need to be identified: \texttt{applications}, \texttt{nodes}, \texttt{points of attachment} to the network (PoAs) and \texttt{paths}. The relationships between them are illustrated in Figure \ref{fig:saltzer}. At the time, network architectures such as CYCLADES \cite{Cyclades}, XNS, DECNET and OSI conformed to this scheme \cite{internet_demo}.
+        In 1982, Jerome Saltzer in his work ``On the Naming and Binding of Network Destinations'' \cite{rfc1498} described the entities and the relationships that make a complete naming and addressing schema in networks. According to Saltzer, there are four elements that need to be identified: \emph{applications}, \emph{nodes}, \emph{points of attachment} to the network (PoAs) and \emph{paths}. The relationships between them are illustrated in Figure \ref{fig:saltzer}. At the time, network architectures such as CYCLADES \cite{Cyclades}, XNS, DECNET and OSI conformed to this scheme \cite{internet_demo}.
 
         \begin{figure}[H]
             \begin{center}
@@ -171,13 +171,13 @@
 
                 The NDN architecture specifies:
                     \begin{itemize}
-                        \item two types of packets: an \texttt{interest packet} (containing the name of desired data) and a \texttt{data packet} (containing the requested data),
-                        \item two types of hosts: a \texttt{consumer} (data requester) and a \texttt{producer} (data provider), and
-                        \item a \texttt{router} maintaining three fundamental data structures:
+                        \item two types of packets: an \emph{interest packet} (containing the name of desired data) and a \emph{data packet} (containing the requested data),
+                        \item two types of hosts: a \emph{consumer} (data requester) and a \emph{producer} (data provider), and
+                        \item a \emph{router} maintaining three fundamental data structures:
                         \begin{itemize}
-                            \item \texttt{Forwarding Information Base} (FIB) (forwarding table)
-                            \item \texttt{Pending Interest Table} (PIT) (maintaining currently active requests)
-                            \item \texttt{Content Store} (data cache)
+                            \item \emph{Forwarding Information Base} (FIB) (forwarding table)
+                            \item \emph{Pending Interest Table} (PIT) (maintaining currently active requests)
+                            \item \emph{Content Store} (data cache)
                         \end{itemize}
                         \begin{figure}[H]
                             \begin{center}
@@ -267,7 +267,7 @@
 
                 In addition to this, a principal can also be assigned an optional human-readable name which is bound to its public key via a name certificate. In this case, the certificate has to be obtained from a trusted certification authority.
 
-                The system encompassing both the name resolution service and the name certification service is called the \texttt{Global Name System} (GNS).
+                The system encompassing both the name resolution service and the name certification service is called the \emph{Global Name System} (GNS).
 
             \subsubsection{The Communication Model}
 
@@ -298,7 +298,7 @@
 
             \subsubsection{Principal Types}
 
-                An \texttt{XIA principal} is specified by the semantics of communicaton between principals, the processing that is required to forward traffic with addresses of its type and the intristic security properties. The initial XIA architecture defines four basic XIA principal types:
+                An \emph{XIA principal} is specified by the semantics of communicaton between principals, the processing that is required to forward traffic with addresses of its type and the intristic security properties. The initial XIA architecture defines four basic XIA principal types:
 
                 \begin{itemize}
                     \item \textbf{Host XID (HID).} HIDs support unicast host-based communication similar to IP where the host identifier is a hash of the host’s public key. HIDs define who you communicate with.
