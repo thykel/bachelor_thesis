@@ -18,24 +18,24 @@
 
     \section{Thesis Structure}
 
-        Chapter \ref{problems} describes the shortcomings and weak parts of current Internet technology which create the need for alternative architecture research. This overview serves in later chapters as a reference point for evaluating contributions of alternative architectures.
+        Chapter~\ref{problems} describes the shortcomings and weak parts of current Internet technology which create the need for alternative architecture research. This overview serves in later chapters as a reference point for evaluating contributions of alternative architectures.
 
-        Chapter \ref{archs} provides analysis and evaluation of several new network architectures.
+        Chapter~\ref{archs} provides analysis and evaluation of several new network architectures.
 
-        Chapter \ref{forwarding} takes a closer look at parts of RINA that are related to the implementation task of this thesis.
+        Chapter~\ref{forwarding} takes a closer look at parts of RINA that are related to the implementation task of this thesis.
 
-        Chapter \ref{implementation} describes implementation of RINA's Relaying and Multiplexing Task for OMNeT++.
+        Chapter~\ref{implementation} describes implementation of RINA's Relaying and Multiplexing Task for OMNeT++.
 
-        Chapter \ref{testing} presents evaluation of the implementation in form of sample test scenarios and their outputs.
+        Chapter~\ref{testing} presents evaluation of the implementation in form of sample test scenarios and their outputs.
 
 
 \chapter{Problems of The Current Internet}\label{problems}
 
-    The Internet could be considered one of the most important technological achievements of the 20th century. It has brought a previously unimaginable degree of interconnection and information access to the whole world and its importance keeps growing even decades after its inception. Nevertheless, the very basic core of its technology was constructed over three decades ago in the era of first small experimental networks such as ARPANET and CYCLADES \cite{Kurose}, when the the demands on internetworking capabilities were nowhere compared to now.
+    The Internet could be considered one of the most important technological achievements of the 20th century. It has brought a previously unimaginable degree of interconnection and information access to the whole world and its importance keeps growing even decades after its inception. Nevertheless, the very basic core of its technology was constructed over three decades ago in the era of first small experimental networks such as ARPANET and CYCLADES~\cite{Kurose}, when the the demands on internetworking capabilities were nowhere compared to now.
 
     During the Internet's growth, whenever there has been a problem that required a solution, it is been usually dealt with in a non-intrusive evolutionary fashion by applying a new principle on top of the underlying technology. In another words, problems have been mostly solved by adding a new protocol to the TCP/IP protocol stack.
 
-    The Internet's evolution can be presented on EvoArch \cite{EvoArch}, an abstract model for studying protocol stacks and their evolution. The model suggests that the Internet protocol stack resembles an hourglass (see Figure \ref{fig:inet_hourglass}). While the top and down layers are often expanded with new protocols, the usage of the Internet Layer's IP protocol remains constant because it acts as a common technology for all different networks interconnected by the Internet.
+    The Internet's evolution can be presented on EvoArch~\cite{EvoArch}, an abstract model for studying protocol stacks and their evolution. The model suggests that the Internet protocol stack resembles an hourglass (see Figure~\ref{fig:inet_hourglass}). While the top and down layers are often expanded with new protocols, the usage of the Internet Layer's IP protocol remains constant because it acts as a common technology for all different networks interconnected by the Internet.
 
     \begin{figure}[H]
         \begin{center}
@@ -46,13 +46,13 @@
     \end{figure}
 
 
-    The evolutionary approach to improving the Internet's base technology is convenient since each paradigm shift in foundations of the Internet (i.e. replacing the hourglass's ``thin waist'') can require a long and expensive transfer of existing network configurations to the new technology. The most notable example is the internet layer protocol IPv6 which requires explicit firmware support from active network components. The problem of IPv4 space exhaustion has been known of since the first half of 1990s \cite{rfc1631} and the first formal IPv6 specification arose in 1998 \cite{rfc2460}, but yet, as of April 2015, four years after the top-level IPv4 pool exhaustion \cite{ipv4_exhaustion}, IPv6 still represents only a miniscule fraction of the total traffic on the Internet. For example, Google IPv6 adoption statistics indicate around 6\% coverage amongst the users of its services \cite{ipv6stats}.
+    The evolutionary approach to improving the Internet's base technology is convenient since each paradigm shift in foundations of the Internet (i.e. replacing the hourglass's ``thin waist'') can require a long and expensive transfer of existing network configurations to the new technology. The most notable example is the internet layer protocol IPv6 which requires explicit firmware support from active network components. The problem of IPv4 space exhaustion has been known of since the first half of 1990s~\cite{rfc1631} and the first formal IPv6 specification arose in 1998~\cite{rfc2460}, but yet, as of April 2015, four years after the top-level IPv4 pool exhaustion~\cite{ipv4_exhaustion}, IPv6 still represents only a miniscule fraction of the total traffic on the Internet. For example, Google IPv6 adoption statistics indicate around 6\% coverage amongst the users of its services~\cite{ipv6stats}.
 
     As such, some of the Internet's widely recognized problems are inherent because of the base design and it is usually difficult, if not impossible, to solve them in a non-intrusive and backward-compatible way. The following sections illustrate such problems.
 
     \section{Incomplete naming scheme}\label{problems:naming}
 
-        In 1982, Jerome Saltzer in his work ``On the Naming and Binding of Network Destinations'' \cite{rfc1498} described the entities and the relationships that make a complete naming and addressing schema in networks. According to Saltzer, there are four elements that need to be identified: \emph{applications}, \emph{nodes}, \emph{points of attachment} to the network (PoAs) and \emph{paths}. The relationships between them are illustrated in Figure \ref{fig:saltzer}. At the time, network architectures such as CYCLADES, XNS, DECNET and OSI conformed to this scheme \cite{internet_demo}.
+        In 1982, Jerome Saltzer in his work ``On the Naming and Binding of Network Destinations''~\cite{rfc1498} described the entities and the relationships that make a complete naming and addressing schema in networks. According to Saltzer, there are four elements that need to be identified: \emph{applications}, \emph{nodes}, \emph{points of attachment} to the network (PoAs) and \emph{paths}. The relationships between them are illustrated in Figure~\ref{fig:saltzer}. At the time, network architectures such as CYCLADES, XNS, DECNET and OSI conformed to this scheme~\cite{internet_demo}.
 
         \begin{figure}[H]
             \begin{center}
@@ -62,41 +62,41 @@
             \end{center}
         \end{figure}
 
-        TCP/IP doesn't follow this proposal: the layer for node naming is completely missing. While TCP/IP does work with two distinct layers with their own address scopes -- the link layer with physical addresses and the internet layer with IP addresses -- both effectively identify the same: a host interface, i.e. a PoA address. This effectively means that the IP addressing is semantically overloaded to represent both identity and location. The need for an explicit identifier$\rightarrow$locator mapping was eventually recognized even in the era of ARPANET and this was solved by creating a globally available file \texttt{HOSTS.TXT} containing mappings of alphabetic host names to IP addresses. Later on, this method was obsoleted by the Domain Name System (DNS) \cite{rfc1034}. However, both approaches move the matter of node naming into the Application Layer, forcing applications to work with location-dependent interface PoA addresses.
+        TCP/IP doesn't follow this proposal: the layer for node naming is completely missing. While TCP/IP does work with two distinct layers with their own address scopes -- the link layer with physical addresses and the internet layer with IP addresses -- both effectively identify the same: a host interface, i.e. a PoA address. This effectively means that the IP addressing is semantically overloaded to represent both identity and location. The need for an explicit identifier$\rightarrow$locator mapping was eventually recognized even in the era of ARPANET and this was solved by creating a globally available file \texttt{HOSTS.TXT} containing mappings of alphabetic host names to IP addresses. Later on, this method was obsoleted by the Domain Name System (DNS)~\cite{rfc1034}. However, both approaches move the matter of node naming into the Application Layer, forcing applications to work with location-dependent interface PoA addresses.
 
-        The fact that the Internet forwarding is location-based instead of identity-based has a great impact on difficulty of multihoming\footnote{Multihoming refers to a computer or device connected to more than one computer network. Such computer or device generally needs a separate interface for each network.} (section \ref{problems:multihoming}) and mobility (section \ref{problems:mobility}).
+        The fact that the Internet forwarding is location-based instead of identity-based has a great impact on difficulty of multihoming\footnote{Multihoming refers to a computer or device connected to more than one computer network. Such computer or device generally needs a separate interface for each network.} (section~\ref{problems:multihoming}) and mobility (section~\ref{problems:mobility}).
 
     \section{Lack of Multihoming}\label{problems:multihoming}
 
         Since IP addresses serve as point-of-attachment addresses (i.e. an IP address identifies a network interface) and routing is done exclusively on the internet layer, there isn't any inherent mechanism for distinguishing whether multiple IP addresses identify a common node. Thus, in effect, multihoming on IP alone isn't feasible.
 
-        The insufficient base for multihoming support is one of the oldest recognized problems of the Internet: it has become apparent back in 1972, when Tinker Air Force Base joined ARPANET and voiced a request for redundant connections to a single node to ensure reliability \cite{Patterns}. In spite of this, the switch to a new protocol suite that happened 11 years later (on 1.1.1983, the ``flag day'') didn't bring any solution to this problem.
+        The insufficient base for multihoming support is one of the oldest recognized problems of the Internet: it has become apparent back in 1972, when Tinker Air Force Base joined ARPANET and voiced a request for redundant connections to a single node to ensure reliability~\cite{Patterns}. In spite of this, the switch to a new protocol suite that happened 11 years later (on 1.1.1983, the ``flag day'') didn't bring any solution to this problem.
 
         Since then, some attemps were made to implement multihoming on top of the current architecture.
 
         \begin{itemize}
             \item \textbf{SCTP.}
-            Message-oriented transport protocol Stream Control Transmission Protocol (SCTP) \cite{rfc4960} provides a partial support. Two SCTP hosts are able to provide each other with lists of alternate IP addresses that can be used as fallback points of attachment of the same application in case of failure of the primary address. During such session, each SCTP host needs to continually check other host's endpoints by heartbeat packets to make sure they are accessible via other sessions.
+            Message-oriented transport protocol Stream Control Transmission Protocol (SCTP)~\cite{rfc4960} provides a partial support. Two SCTP hosts are able to provide each other with lists of alternate IP addresses that can be used as fallback points of attachment of the same application in case of failure of the primary address. During such session, each SCTP host needs to continually check other host's endpoints by heartbeat packets to make sure they are accessible via other sessions.
             However, thus far, multiple reasons have been preventing SCTP from becoming a widely known and used solution; the biggest disadvantage lies in the fact that due to TCP/IP not having a distinct session layer on top of its transport layer (such as in ISO/OSI stack), the transport protocol has to be explicitly specified by the application using the BSD sockets Application Programming Interface (API). Therefore, SCTP adoption would require a rewrite of network-aware applications themselves. Other SCTP adoption issues include unsatisfactory operating system support (Microsoft Windows systems require a third-party kernel driver) and weak awareness of its existence outside the networking community.
 
-            \item \textbf{BGP Multihoming.} Another implementation of multihoming capabilities can be seen in Border Gateway Protocol (BGP) \cite{rfc4271}, which provides means for load-balancing and fallback over multiple links on T1 networks. To make use of such multihoming over the Internet, a public IP address range and an Autonomous System number are required. BGP Multihoming is one of the most significant causes contributing to the growth of the global Internet routing table.
+            \item \textbf{BGP Multihoming.} Another implementation of multihoming capabilities can be seen in Border Gateway Protocol (BGP)~\cite{rfc4271}, which provides means for load-balancing and fallback over multiple links on T1 networks. To make use of such multihoming over the Internet, a public IP address range and an Autonomous System number are required. BGP Multihoming is one of the most significant causes contributing to the growth of the global Internet routing table.
 
-            \item \textbf{Multipath TCP.} The most recent TCP/IP multihoming initiative is the TCP extension Multipath TCP (MPTCP) which is currently in its experimental phase, although a large scale commercial deployment has been already made by Apple for its Siri network application in mobile operating system iOS 7 \cite{Apple_MP}.
+            \item \textbf{Multipath TCP.} The most recent TCP/IP multihoming initiative is the TCP extension Multipath TCP (MPTCP) which is currently in its experimental phase, although a large scale commercial deployment has been already made by Apple for its Siri network application in mobile operating system iOS 7~\cite{Apple_MP}.
         \end{itemize}
 
     \section{Lack of Mobility}\label{problems:mobility}
 
         Since location of a node is determined by its IP address and IP addressing is location-dependent, mobility is essentialy non-existent.
 
-        There have been three distinct approaches to solving the mobility problem \cite{MobilityFirst}.
+        There have been three distinct approaches to solving the mobility problem~\cite{MobilityFirst}.
 
         \begin{itemize}
             \item \textbf{Mobility by indirection.} A fixed host is dedicated for keeping track of mobile devices and forwarding traffic to them. This leads to path inflation.
-            This approach is used by technologies such as Mobile IP \cite{rfc5944} or Locator/Identifier Separation Protocol (LISP) \cite{rfc6830}.
+            This approach is used by technologies such as Mobile IP~\cite{rfc5944} or Locator/Identifier Separation Protocol (LISP)~\cite{rfc6830}.
             \item \textbf{Global name resolution.} The endpoint identifier is resolved to its network location by looking up a logically centralized service.
-            This approach is used by technologies such as eXpressive Internet Architecture \cite{xia} (described in section \ref{archs:xia}) or MobilityFirst \cite{MobilityFirst} (described in section \ref{archs:mf}).
+            This approach is used by technologies such as eXpressive Internet Architecture~\cite{xia} (described in Section~\ref{archs:xia}) or MobilityFirst~\cite{MobilityFirst} (described in Section~\ref{archs:mf}).
             \item \textbf{Name-based routing.} The network locator isn't used at all and routing is done on names.
-            This approach is used by technologies such as Named Data Networking \cite{ndn} (described in section \ref{archs:ndn}).
+            This approach is used by technologies such as Named Data Networking~\cite{ndn} (described in Section~\ref{archs:ndn}).
         \end{itemize}
 
         The second and third approaches require a clean-slate architectural design.
@@ -105,34 +105,34 @@
 
         The specifications of the fundamental protocols of TCP/IP stack -- IP, TCP and DHCP -- were originally finished at the beginning of 1980s. The Internet has since then turned into a massive world-wide internetwork connecting people of different types and agendas. Naturally, once the Internet began to be used for transferring sensitive data (especially by companies), cyber crime started to emerge as well and some attention was turned to security aspects of Internet protocol (or lack thereof).
 
-        As the IP protocol lacks any inherent verification mechanism, the internet layer is easily subjected to hijacking and spoofing. This provides opportunity for many types of exploits, most notably the Man-in-the-middle attack or IP address spoofing \cite{rfc1948}.
+        As the IP protocol lacks any inherent verification mechanism, the internet layer is easily subjected to hijacking and spoofing. This provides opportunity for many types of exploits, most notably the Man-in-the-middle attack or IP address spoofing~\cite{rfc1948}.
 
-        Since security isn't enforced by the architecture in any way, it is still common even for the application layer with its plethora of protocols to be subjected to security problems. Protocols like TCP are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack \cite{rfc1948}. Today, application protocol security is usually achieved by wrapping protocols inside cryptographical protocols such as Transport Layer Security (TLS) or Datagram Transport Layer Security (DTLS).
+        Since security isn't enforced by the architecture in any way, it is still common even for the application layer with its plethora of protocols to be subjected to security problems. Protocols like TCP are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack~\cite{rfc1948}. Today, application protocol security is usually achieved by wrapping protocols inside cryptographical protocols such as Transport Layer Security (TLS) or Datagram Transport Layer Security (DTLS).
 
     \section{Router Table Size Growth}
 
         Default-free zone (DFZ) is the collection of all Internet autonomous systems (ASs) that do not require a default route to forward a packet to any destination. Since they comprise the root of Internet's routing infrastructure, their database must be complete.
 
-        With the increasing number of hosts connected to the Internet, the DFZ routing table sizes grow as well (see Figure \ref{fig:bgp-growth}).
+        With the increasing number of hosts connected to the Internet, the DFZ routing table sizes grow as well (see Figure~\ref{fig:bgp-growth}).
 
         \begin{figure}[H]
             \begin{center}
                 \includegraphics[width=0.6\textwidth]{fig/problems_bgp-growth.png}
-              \caption{Global Internet routing table size growth \cite{bgpgrow}.}
+              \caption{Global Internet routing table size growth~\cite{bgpgrow}.}
               \label{fig:bgp-growth}
             \end{center}
         \end{figure}
 
-        While the exponential growth observed during the 1990s was later mitigated by mass deployment of Classless Inter-Domain Routing (CIDR) and BGP route aggregation, the number of items is still increasing superlinearly and the high-end router hardware needs to keep up, especially with increasing use of BGP-based multihoming and IPv6. This can sometimes lead to scalability problems, as in August of 2014 where reaching the 512k entry limit of multiple routers caused globally observable outages \cite{512k_day}.
+        While the exponential growth observed during the 1990s was later mitigated by mass deployment of Classless Inter-Domain Routing (CIDR) and BGP route aggregation, the number of items is still increasing superlinearly and the high-end router hardware needs to keep up, especially with increasing use of BGP-based multihoming and IPv6. This can sometimes lead to scalability problems, as in August of 2014 where reaching the 512k entry limit of multiple routers caused globally observable outages~\cite{512k_day}.
 
-        As of year 2015, the Internet routing table consists of over 560k entries \cite{bgpgrow}. There are concerns about whether the technology of high-end routers will keep scaling along with Moore's law to keep route management efficient \cite{rfc4984}.
+        As of year 2015, the Internet routing table consists of over 560k entries~\cite{bgpgrow}. There are concerns about whether the technology of high-end routers will keep scaling along with Moore's law to keep route management efficient~\cite{rfc4984}.
 
 
 \chapter{Alternative Network Architectures}\label{archs}
 
     This chapter gives an overview of paths that were pursued in the field of network architecture research and descriptions of several architectures.
 
-    Considering the limited scope of this thesis, only a representative subset of new network architectures will be described and evaluated more thoroughly. The subset consists of projects funded by the Future Internet Architecture -- Next Phase program \cite{fia} (Named Data Networking [Section \ref{archs:ndn}], MobilityFirst [Section \ref{archs:mf}] and eXpressive Internet Architecture [Section \ref{archs:xia}]) and the Recursive InterNetwork Architecture (\ref{archs:rina}).
+    Considering the limited scope of this thesis, only a representative subset of new network architectures will be described and evaluated more thoroughly. The subset consists of projects funded by the Future Internet Architecture -- Next Phase program~\cite{fia} (Named Data Networking [Section~\ref{archs:ndn}], MobilityFirst [Section~\ref{archs:mf}] and eXpressive Internet Architecture [Section~\ref{archs:xia}]) and the Recursive InterNetwork Architecture (\ref{archs:rina}).
 
     Special attention will be given to Recursive InterNetwork Architecture as it is relevant to the implementation goal of this thesis.
 
@@ -141,7 +141,7 @@
         The networking research community has exhibited many attempts of moving the field forward. The undertaken research directions are often classified into one of two groups:
 
         \begin{itemize}
-            \item \textbf{Evolutionary design.} Backward-compatible solutions that are incrementally deployable on top of the current Internet (e.g. LISP \cite{rfc6830} or DiffServ \cite{rfc2474}).
+            \item \textbf{Evolutionary design.} Backward-compatible solutions that are incrementally deployable on top of the current Internet (e.g. LISP~\cite{rfc6830} or DiffServ~\cite{rfc2474}).
             \item \textbf{Clean slate design.} Completely new standalone architectures that aren't constrained by Internet technology's limitations.
         \end{itemize}
 
@@ -149,13 +149,13 @@
 
     \section{Named Data Networking}\label{archs:ndn}
 
-        Named Data Networking is one instance of a more general research direction called Information-centric networking (ICN) \cite{icn}. ICN explores the possibilities of moving the Internet infrastructure away from its host-centric communication paradigm towards the idea of named content.
+        Named Data Networking is one instance of a more general research direction called Information-centric networking (ICN)~\cite{icn}. ICN explores the possibilities of moving the Internet infrastructure away from its host-centric communication paradigm towards the idea of named content.
 
         \subsection{Premise}
 
             During its early years, ARPANET was heavily influenced by telecommunication technology as the Public switched telephone network (PSTN) was the only example a large-scale network. Due to this, technology of the Internet has been built on the paradigm of end-to-end communication based on network addresses. However, while this base paradigm has remained constant over the decades, the way we use the Internet has considerably changed: the Internet is now used primarily as a content distribution network. Since the mechanism of data retrieval over the Internet is based on creating an end-to-end communication channel and transferring data through it, the content itself is transparent to the network and this generates an enormous amount of data redundancy.
 
-            Named Data Networking proposes a solution more fitting for today's needs: instead of working with the source/destination addresses, the ``thin waist'' of the Internet should be based on working with names of data chunks (as illustrated by Figure \ref{fig:ndn_waist}).
+            Named Data Networking proposes a solution more fitting for today's needs: instead of working with the source/destination addresses, the ``thin waist'' of the Internet should be based on working with names of data chunks (as illustrated by Figure~\ref{fig:ndn_waist}).
 
             \begin{figure}[H]
                 \begin{center}
@@ -269,7 +269,7 @@
             \begin{itemize}
                 \item \texttt{msocket}, an endpoint socket library extending the BSD sockets API.
                 \item \texttt{Auspice}, a GNS implementation.
-                \item Two prototypes of the forwarding plane: one based on the Click modular router\footnote{http://www.read.cs.ucla.edu/click/click}, other based on OpenFlow \cite{openflow}.
+                \item Two prototypes of the forwarding plane: one based on the Click modular router\footnote{http://www.read.cs.ucla.edu/click/click}, other based on OpenFlow~\cite{openflow}.
             \end{itemize}
 
             There is no tool available for simulation.
@@ -321,11 +321,11 @@
 
     \section{Recursive InterNetwork Architecture}\label{archs:rina}
 
-        Recursive InterNetwork Architecture (RINA) is an architecture based on a set principles described by John Day in his book Patterns in Network Architecture \cite{Patterns}.
+        Recursive InterNetwork Architecture (RINA) is an architecture based on a set principles described by John~Day in his book Patterns in Network Architecture~\cite{Patterns}.
 
         \subsection{Premise}
 
-            RINA introduces a novel approach to the problem of computer networking, eliminating all problems described in chapter \ref{problems} in the process:
+            RINA introduces a novel approach to the problem of computer networking, eliminating all problems described in chapter~\ref{problems} in the process:
 
             \begin{quotation}
                 \centering
@@ -344,7 +344,7 @@
 
                 \emph{Distributed IPC Facility} (DIF) is a collection of two or more application processes cooperating to provide IPC. A DIF's application is called an IPC process and DIF is a DAF that does IPC. The DIF provides IPC services to application processes via a set of API primitives that are used to initiate flow and exchange data with the application's peer.
 
-                Since DIFs are conceptually DAF, their application processes can also exchange information using other DIFs. This yields a recursive structure (as seen in Figure \ref{fig:rina_layers}).
+                Since DIFs are conceptually DAF, their application processes can also exchange information using other DIFs. This yields a recursive structure (as seen in Figure~\ref{fig:rina_layers}).
 
                 \begin{figure}[H]
                     \begin{center}
@@ -358,7 +358,7 @@
 
                 A computing system may be a member of $<0,n>$ DIFs and has a separate IPC process for each DIF. Each (N)-DIF handles data coming from the (N+1)-DIFs in the same way as from an application.
 
-                A bare minimum for a computer internetwork consists of 3 levels of DIFs and three types of devices: a \emph{host}, an \emph{interior router} and a \emph{border router}. The internetwork is shown in Figure \ref{fig:rina_internetwork}.
+                A bare minimum for a computer internetwork consists of 3 levels of DIFs and three types of devices: a \emph{host}, an \emph{interior router} and a \emph{border router}. The internetwork is shown in Figure~\ref{fig:rina_internetwork}.
 
                 \begin{figure}[H]
                     \begin{center}
@@ -374,7 +374,7 @@
 
             \subsubsection{IPC Process}
 
-                Each IPC process executes routing, transport, security/authentication and management functions. The components of an IPC process responsible for providing these functions can be categorized under three decoupled parts operating at separate timescales: \emph{IPC transfer}, \emph{IPC data control} and \emph{IPC management} (see Figure \ref{fig:rina_ipcp}). The behaviour of each part can be configured via policies.
+                Each IPC process executes routing, transport, security/authentication and management functions. The components of an IPC process responsible for providing these functions can be categorized under three decoupled parts operating at separate timescales: \emph{IPC transfer}, \emph{IPC data control} and \emph{IPC management} (see Figure~\ref{fig:rina_ipcp}). The behaviour of each part can be configured via policies.
 
                 \begin{figure}[H]
                     \begin{center}
@@ -388,7 +388,7 @@
                     \item IPC transfer consists of following modules:
                     \begin{itemize}
                         \item \textbf{\emph{Delimiting.}} Marks boundaries on incoming (N+1)-SDUs.
-                        \item \textbf{\emph{Error and Flow Control Protocol} (EFCP).} A Delta-T \cite{deltat} based protocol that handles individual data flows. In general, EFCP instances exchange data with each other via PDUs.
+                        \item \textbf{\emph{Error and Flow Control Protocol} (EFCP).} A Delta-T~\cite{deltat} based protocol that handles individual data flows. In general, EFCP instances exchange data with each other via PDUs.
                         \item \textbf{\emph{Relaying and Multiplexing Task} (RMT).} A stateless function that 1) retrieves PDUs from EFCP instances and management tasks and multiplexes them onto a common (N-1)-flow, and 2) takes incoming PDUs and relays them within current IPC or passes them to outgoing port(s).
                     \end{itemize}
                     \item IPC data control is an optional mechanism handling flow control (for example, TCP-like flow control could be implemented here via appropriate policies). Its functionality is encompassed in the EFCP module.
@@ -404,7 +404,7 @@
 
                 Since each DAF operates within its own address scope, the architecture needs to provide means of resolving (N)-application names to addresses of (N-1)-IPC processes. This is achieved via a decentralized distributed \emph{Name Space Manager} (NSM) embedded in each DIF.
 
-                The NSM maintanence is one of the tasks of IPC management; each IPC process keeps track of local registered applications and some of them are specialized to maintain aggregated repository of non-local mapping to serve as forwarders (such processes are called \emph{Repository IPC Processes}). This is illustrated in Figure \ref{fig:rina_nsm}.
+                The NSM maintanence is one of the tasks of IPC management; each IPC process keeps track of local registered applications and some of them are specialized to maintain aggregated repository of non-local mapping to serve as forwarders (such processes are called \emph{Repository IPC Processes}). This is illustrated in Figure~\ref{fig:rina_nsm}.
 
                 \begin{figure}[H]
                     \begin{center}
@@ -446,7 +446,7 @@
 
     \section{Evaluation}
 
-        In the previous sections, we have described 4 new network architectures. This section puts them into context of problems mentioned in chapter \ref{problems} and points out their main strengths and weaknesses.
+        In the previous sections, we have described 4 new network architectures. This section puts them into context of problems mentioned in Chapter~\ref{problems} and points out their main strengths and weaknesses.
 
         \subsection{Named Data Networking}
 
@@ -454,7 +454,7 @@
 
             With its named data paradigm, NDN renders the problems of node naming, mobility and multihoming irrelevant, because data names remain the same no matter the locaton. Same case with security as each data chunk is required to be cryptographically signed by architecture itself.
 
-            The router table size growth presents a challenge as the NDN namespace is unbounded and addressing of named data implies that much more identifiers need to be used for global routing (in fact, about 4 orders of magnitude higher \cite{NDNvsMF}).
+            The router table size growth presents a challenge as the NDN namespace is unbounded and addressing of named data implies that much more identifiers need to be used for global routing (in fact, about 4 orders of magnitude higher~\cite{NDNvsMF}).
 
         \subsection{MobilityFirst}
 
@@ -488,7 +488,7 @@
 
         \subsection{Formal description}
 
-            RMT has, as its name suggests, two main reponsibilities: relaying and multiplexing of PDUs. The goal of multiplexing is to pass outgoing PDUs (from EFCP instances and management tasks) to the appropriate (N-1)-flows and pass incoming PDUs (from (N-1)-flows) to EFCP instances and management tasks. Relaying handles incoming PDUs from (N-1)-ports\footnote{A handle for an (N-1)-flow, not unlike the traditional BSD socket.} that aren't directed to its IPC process and forwards them to other (N-1)-ports using information provided by its forwarding policy. A conceptual model of RMT is presented in Figure \ref{fig:rina:rmt}.
+            RMT has, as its name suggests, two main reponsibilities: relaying and multiplexing of PDUs. The goal of multiplexing is to pass outgoing PDUs (from EFCP instances and management tasks) to the appropriate (N-1)-flows and pass incoming PDUs (from (N-1)-flows) to EFCP instances and management tasks. Relaying handles incoming PDUs from (N-1)-ports\footnote{A handle for an (N-1)-flow, not unlike the traditional BSD socket.} that aren't directed to its IPC process and forwards them to other (N-1)-ports using information provided by its forwarding policy. A conceptual model of RMT is presented in Figure~\ref{fig:rina:rmt}.
 
             \begin{figure}[H]
                 \begin{center}
@@ -498,7 +498,7 @@
                 \end{center}
             \end{figure}
 
-            RMT instances in hosts and bottom layers of routers usually perform only the multiplexing task (Figure \ref{fig:rina:rmt:mux}), while RMTs in top layers of interior routers (Figure \ref{fig:rina:rmt:relay}) and border routers (Figure \ref{fig:rina:rmt:agg}) do both multiplexing and relaying
+            RMT instances in hosts and bottom layers of routers usually perform only the multiplexing task (Figure~\ref{fig:rina:rmt:mux}), while RMTs in top layers of interior routers (Figure~\ref{fig:rina:rmt:relay}) and border routers (Figure~\ref{fig:rina:rmt:agg}) do both multiplexing and relaying
 
             \begin{figure}[H]
                 \begin{center}
@@ -560,7 +560,7 @@
 
     \section{Implementation Design}
 
-        In RINASim, all functionality of RMT including a policy architecture is encompassed in a single compound module named ``RelayAndMux'' which is present in every IPC process. The module serves for (de)multiplexing, relaying and aggregating PDUs of data flows traversing the IPC processes. The RINASim's compound module for an IPC process can be seen in Figure \ref{fig:rinasim:ipcp}.
+        In RINASim, all functionality of RMT including a policy architecture is encompassed in a single compound module named ``RelayAndMux'' which is present in every IPC process. The module serves for (de)multiplexing, relaying and aggregating PDUs of data flows traversing the IPC processes. The RINASim's compound module for an IPC process can be seen in Figure~\ref{fig:rinasim:ipcp}.
 
         \begin{figure}[H]
                 \begin{center}
@@ -572,7 +572,7 @@
 
         \subsection{Module Structure}
 
-            RelayAndMux consists of multiple simple modules of various types, some of which are instantiated only dynamically at runtime. Figure \ref{fig:rinasim:rmt} presents state of the RelayAndMux module when working with two allocated (N-1)-flows and their queues. Figure \ref{fig:rinasim:rmt-erd} contains a class diagram showing implementation of both static and dynamic modules.
+            RelayAndMux consists of multiple simple modules of various types, some of which are instantiated only dynamically at runtime. Figure~\ref{fig:rinasim:rmt} presents state of the RelayAndMux module when working with two allocated (N-1)-flows and their queues. Figure~\ref{fig:rinasim:rmt-erd} contains a class diagram showing implementation of both static and dynamic modules.
 
             \begin{figure}[H]
                 \begin{center}
@@ -607,7 +607,7 @@
             \end{figure}
 
         \subsection{Module Parameters}
-            The RMT module contains several user-configurable parameters that can be used to alter its behavior. These are presented in Table \ref{fig:rmt_params}.
+            The RMT module contains several user-configurable parameters that can be used to alter its behavior. These are presented in Table~\ref{fig:rmt_params}.
 
             \begin{table}[H]
                 \begin{center}
@@ -633,7 +633,7 @@
 
             The core function of RMT is driven by two algorithms: the decision algorithm and the scheduling algorithm.
 
-            The decision algorithm decides what to do with the incoming PDU and executes appropriate policies. A state diagram representation can be seen in Figure \ref{fig:rmt-fsm}. It's implemented by \texttt{handleMessage()} and methods that are subsequently called from it (\texttt{portToEFCPI()}, \texttt{portToPort()} etc.).
+            The decision algorithm decides what to do with the incoming PDU and executes appropriate policies. A state diagram representation can be seen in Figure~\ref{fig:rmt-fsm}. It's implemented by \texttt{handleMessage()} and methods that are subsequently called from it (\texttt{portToEFCPI()}, \texttt{portToPort()} etc.).
 
             \begin{figure}[H]
                 \begin{center}
@@ -643,7 +643,7 @@
                 \end{center}
             \end{figure}
 
-            The scheduling algorithm ensures continuous invocation of the scheduling policy whenever there are PDUs waiting in queues. A petri net representation can be seen in Figure \ref{fig:sched-petri}. The decision of what queue should be processed next is left to the policy. The algorithm is implemented by methods \texttt{onQueueArrival()}, \texttt{postQueueDeparture()}, \texttt{writeToPort()} and \texttt{readToPort()}.
+            The scheduling algorithm ensures continuous invocation of the scheduling policy whenever there are PDUs waiting in queues. A petri net representation can be seen in Figure~\ref{fig:sched-petri}. The decision of what queue should be processed next is left to the policy. The algorithm is implemented by methods \texttt{onQueueArrival()}, \texttt{postQueueDeparture()}, \texttt{writeToPort()} and \texttt{readToPort()}.
 
             \begin{figure}[H]
                 \begin{center}
@@ -657,7 +657,7 @@
 
             RMT's purpose in an IPC process is fairly straightforward: providing a stateless function for relaying PDUs to their predetermined destinations and multiplexing PDUs of multiple data flows onto a common predetermined medium. The entire management of the RMT is decoupled and exercised by the Resource Allocator.
 
-            As Resource Allocator lacked any more concrete specifications at the time of implementation, I have designed a set of management functions, some of which are customizable by policies.
+            As Resource Allocator lacked any more concrete specifications at the time of implementation, I~have designed a set of management functions, some of which are customizable by policies.
 
             \subsubsection{Initial RMT Mode Setup}
 
@@ -700,13 +700,13 @@
                 \item RMT queue drop count. A scalar variable providing the number of PDUs dropped by a queue.
             \end{itemize}
 
-            Multiple examples of graphs generated from the variables can be seen in chapter \ref{testing}.
+            Multiple examples of graphs generated from the variables can be seen in chapter~\ref{testing}.
 
             The RMT module also supports ns2-style tracefile generation. This can be enabled by setting the \texttt{tracing} parameter to \texttt{true}.
 
     \section{Sample policy implementations}
 
-        As Relaying And Multiplexing follows the design principle of separation of mechanism and policy, most of its complexity lies in the policies. Hence, to demonstrate the use of RMT's policy framework, I have implemented a diverse set of simple RMT policies.
+        As Relaying And Multiplexing follows the design principle of separation of mechanism and policy, most of its complexity lies in the policies. Hence, to demonstrate the use of RMT's policy framework, I~have implemented a diverse set of simple RMT policies.
 
         \begin{itemize}
             \item \textbf{Scheduling policy}
@@ -731,7 +731,7 @@
             \end{itemize}
         \end{itemize}
 
-        To demonstrate the abilities of Resource Allocator's RMT management, I have also implemented an additional set of management policies (introduced in section \ref{implementation:mgmt}).
+        To demonstrate the abilities of Resource Allocator's RMT management, I~have also implemented an additional set of management policies (introduced in Section~\ref{implementation:mgmt}).
 
         \begin{itemize}
             \item \textbf{QueueAlloc}
@@ -749,7 +749,7 @@
 
 \chapter{Testing and Evaluation}\label{testing}
 
-    I have created a set of basic network topologies to demonstrate the implementation's features. The following tests put them into use.
+    I~have created a set of basic network topologies to demonstrate the implementation's features. The following tests put them into use.
     Each test case contains a description of RMT-related events that happen during simulation. Each type of event is described only once to prevent needless repetition.
 
     For purposes of testing, RINASim contains a ping-like application called \texttt{AEPing} that can serve as both sender and receiver of a ping-like data frame. Each of the following scenarios consists of a NED topology and two instances of AEPing on different hosts. The first instance with application name \texttt{App1} allocates a flow to the other instance with application name \texttt{App2}, pings the other instance multiple times in sucession and then deallocates the flow. The simulation times of flow allocation, ping send events and flow deallocation are configurable via the AEPing NED module.
@@ -762,7 +762,7 @@
 
         \subsection{Topology}
 
-            The TwoCS topology is the most basic example of a computer network. It consists of two interconnected hosts, each with a single application and two IPC processes. More on Figure \ref{fig:examples:muxing:events:topology}.
+            The TwoCS topology is the most basic example of a computer network. It consists of two interconnected hosts, each with a single application and two IPC processes. More on Figure~\ref{fig:examples:muxing:events:topology}.
 
             \begin{figure}[H]
                 \begin{center}
@@ -774,7 +774,7 @@
 
         \subsection{Scenario}
 
-            The configuration of this simulation scenario is described in Table \ref{fig:examples:muxing:config}.
+            The configuration of this simulation scenario is described in Table~\ref{fig:examples:muxing:config}.
 
             \begin{table}[H]
                 \begin{center}
@@ -832,7 +832,7 @@
 
         \subsection{Evaluation}
 
-            The implementation reflects the behavior expected from RINA specifications. The procedures of the basic communication model described in Section \ref{archs:rina:communication} are executed properly and RMT's multiplexing functionality correctly handles traversing PDUs.
+            The implementation reflects the behavior expected from RINA specifications. The procedures of the basic communication model described in Section~\ref{archs:rina:communication} are executed properly and RMT's multiplexing functionality correctly handles traversing PDUs.
 
     \section{Basic Relaying}
 
@@ -840,7 +840,7 @@
 
         \subsection{Topology}
 
-            The SimpleRelay topology is the most basic example of a computer network with a relaying device. It consists of two hosts interconnected by a router with three IPC processes. More on Figure \ref{fig:examples:simplerelay}.
+            The SimpleRelay topology is the most basic example of a computer network with a relaying device. It consists of two hosts interconnected by a router with three IPC processes. More on Figure~\ref{fig:examples:simplerelay}.
 
             \begin{figure}[H]
                 \begin{center}
@@ -852,7 +852,7 @@
 
         \subsection{Scenario}
 
-            The configuration of this simulation scenario is described in Table \ref{fig:examples:relaying:config}.
+            The configuration of this simulation scenario is described in Table~\ref{fig:examples:relaying:config}.
 
             \begin{table}[H]
                 \begin{center}
@@ -896,7 +896,7 @@
 
             The Forwarding policy returns a single RMTPort, \texttt{p1}. The QueueIDGen policy is given the PDU as a parameter and returns \texttt{outQ\_0}.
 
-            The dispatcher directs the PDU to \texttt{p1}'s queue \texttt{outQ\_0}, where it's immediately processed by policies and sent.
+            The dispatcher directs the PDU to \texttt{p1}'s queue \texttt{outQ\_0}, where it is immediately processed by policies and sent.
 
             \item \textbf{t=39}: In \texttt{host2}, \texttt{App2} receives the ping and sends back an acknowledgment message.
 
@@ -909,7 +909,7 @@
 
         \subsection{Evaluation}
 
-            The implementation reflects the behavior expected from RINA specifications. The procedures of the basic communication model described in Section \ref{archs:rina:communication} are executed properly and RMT's relaying functionality correctly forwards PDUs.
+            The implementation reflects the behavior expected from RINA specifications. The procedures of the basic communication model described in Section~\ref{archs:rina:communication} are executed properly and RMT's relaying functionality correctly forwards PDUs.
 
 
     \section{Basic Congestion Control}
@@ -933,15 +933,15 @@
 
 \chapter{Conclusion}\label{conclusion}
 
-    In this thesis, I have taken a brief look into the field of network architecture research. I have described the motivations behind architecture research efforts and analyzed several new network architectures.
+    In this thesis, I~have taken a brief look into the field of network architecture research. I~have described the motivations behind research efforts and analyzed several new network architectures.
 
     The implementation goal of this thesis was to contribute to prototyping attempts of one of the presented network architectures, RINA. This task has been sucessfully completed by implementing RINA's Relaying and Multiplexing Task into an existing library for simulation tool OMNeT++. The resulting solution is currently in use by multiple research groups for modelling RINA networks and experimenting with various policies.
 
     \section{Own Contributions (prejmenovat?)}
 
-    To be able to describe the principles of new network architectures, I have studied research articles that have been written about them. However, to analyze their usefulness to the Internet, I needed to gain understanding of the driving factors behind their inception. This has been achieved by studying the Internet and its history to learn about choices that led to its current state, including its present problems. I have noticed that some of the problematic design choices of its architectural design have been recognized right at the early beginning of its deployment, but they were eventually chosen as foundations for other then technological reasons.
+    To be able to describe the principles of new network architectures, I~have studied research articles that have been written about them. However, to analyze their usefulness to the Internet, I needed to gain understanding of the driving factors behind their inception. This has been achieved by studying the Internet and its history to learn about choices that led to its current state, including its present problems. I~have noticed that some of the problematic design choices of its architectural design have been recognized right at the early beginning of its deployment, but they were eventually chosen as foundations for other then technological reasons.
 
-    To understand RINA, I had to learn about its design principles and adapt to its paradigm shift which abandons most of today's widely recognized principles of computer networking. This required extensive studying of John Day's book ``Patterns in Network Architecture'' \cite{Patterns} and bleeding-edge architectural specifications.
+    To understand RINA, I had to learn about its design principles and adapt to its paradigm shift which abandons most of today's widely recognized principles of computer networking. This required extensive studying of John Day's book ``Patterns in Network Architecture''~\cite{Patterns} and bleeding-edge architectural specifications.
 
     The implementation part of this thesis required me to learn about the OMNeT++ programming framework and the RINASim library. As RMT's specifications were only brief and its other implementations provided only a limited set of functionality, I needed to put some initiative into coming up with the implementation design. This usually involved discussing architectural matters with RINA researchers. In the later phase of development, several of the researchers have raised multiple functionality requests; all of them were eventually implemented.
 
