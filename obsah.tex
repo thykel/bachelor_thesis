@@ -404,7 +404,7 @@
 
                 Since each DAF operates within its own address scope, the architecture needs to provide means of resolving (N)-application names to addresses of (N-1)-IPC processes. This is achieved via a decentralized distributed \emph{Name Space Manager} (NSM) embedded in each DIF.
 
-                The NSM maintanence is one of the tasks of IPC management; each IPC process keeps track of local registered applications and some of them are specialized to maintain aggregated repository of non-local mapping to serve as forwarders (such processes are called \emph{Repository IPC Processes}).
+                The NSM maintanence is one of the tasks of IPC management; each IPC process keeps track of local registered applications and some of them are specialized to maintain aggregated repository of non-local mapping to serve as forwarders (such processes are called \emph{Repository IPC Processes}). This is illustrated in Figure \ref{fig:rina_nsm}.
 
                 \begin{figure}[H]
                     \begin{center}
@@ -560,7 +560,7 @@
 
     \section{Implementation Design}
 
-        In RINASim, all functionality of RMT including a policy architecture is encompassed in a single compound module named ``RelayAndMux'' which is present in every IPC process. The module serves for (de)multiplexing, relaying and aggregating PDUs of data flows traversing the IPC processes.
+        In RINASim, all functionality of RMT including a policy architecture is encompassed in a single compound module named ``RelayAndMux'' which is present in every IPC process. The module serves for (de)multiplexing, relaying and aggregating PDUs of data flows traversing the IPC processes. The RINASim's compound module for an IPC process can be seen in Figure \ref{fig:rinasim:ipcp}.
 
         \begin{figure}[H]
                 \begin{center}
@@ -572,7 +572,7 @@
 
         \subsection{Module Structure}
 
-            RelayAndMux consists of multiple simple modules of various types, some of which are instantiated only dynamically at runtime.
+            RelayAndMux consists of multiple simple modules of various types, some of which are instantiated only dynamically at runtime. Figure \ref{fig:rinasim:rmt} presents state of the RelayAndMux module when working with two allocated (N-1)-flows and their queues. Figure \ref{fig:rinasim:rmt-erd} contains a class diagram showing implementation of both static and dynamic modules.
 
             \begin{figure}[H]
                 \begin{center}
@@ -602,7 +602,7 @@
                 \begin{center}
                   \makebox[\textwidth]{\includegraphics[width=\textwidth]{fig/impl_rmt-erd.pdf}}
                   \caption{RMT class diagram}
-                  \label{fig:rmt-erd}
+                  \label{fig:rinasim:rmt-erd}
                 \end{center}
             \end{figure}
 
@@ -937,7 +937,7 @@
 
     The implementation goal of this thesis was to contribute to prototyping attempts of one of the presented network architectures, RINA. This task has been sucessfully completed by implementing RINA's Relaying and Multiplexing Task into an existing library for simulation tool OMNeT++. The resulting solution is currently in use by multiple research groups for modelling RINA networks and experimenting with various policies.
 
-    \section{Thesis requirements}
+    \section{Own Contributions (prejmenovat?)}
 
     To be able to describe the principles of new network architectures, I have studied research articles that have been written about them. However, to analyze their usefulness to the Internet, I needed to gain understanding of the driving factors behind their inception. This has been achieved by studying the Internet and its history to learn about choices that led to its current state, including its present problems. I have noticed that some of the problematic design choices of its architectural design have been recognized right at the early beginning of its deployment, but they were eventually chosen as foundations for other then technological reasons.
 
