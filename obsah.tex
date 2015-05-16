@@ -62,15 +62,15 @@
             \end{center}
         \end{figure}
 
-        TCP/IP doesn't follow this proposal: the layer for node naming is completely missing. While TCP/IP does work with two distinct layers with their own address scopes -- the link layer with physical addresses and the internet layer with IP addresses -- both effectively identify the same: a host interface, i.e. a PoA address. This effectively means that the IP addressing is semantically overloaded to represent both identity and location. The need for an explicit identifier$\rightarrow$locator mapping was eventually recognized even in the era of ARPANET and this was solved by creating a globally available file \texttt{HOSTS.TXT} containing mappings of alphabetic host names to IP addresses. Later on, this method was obsoleted by the Domain Name System (DNS)~\cite{rfc1034}. However, both approaches move the matter of node naming into the Application Layer, forcing applications to work with location-dependent interface PoA addresses.
+        TCP/IP does not follow this proposal: the layer for node naming is completely missing. While TCP/IP does work with two distinct layers with their own address scopes -- the link layer with physical addresses and the internet layer with IP addresses -- both effectively identify the same: a host interface, i.e. a PoA address. This effectively means that the IP addressing is semantically overloaded to represent both identity and location. The need for an explicit identifier$\rightarrow$locator mapping was eventually recognized even in the era of ARPANET and this was solved by creating a globally available file \texttt{HOSTS.TXT} containing mappings of alphabetic host names to IP addresses. Later on, this method was obsoleted by the Domain Name System (DNS)~\cite{rfc1034}. However, both approaches move the matter of node naming into the Application Layer, forcing applications to work with location-dependent interface PoA addresses.
 
         The fact that the Internet forwarding is location-based instead of identity-based has a great impact on difficulty of multihoming\footnote{Multihoming refers to a computer or device connected to more than one computer network. Such computer or device generally needs a separate interface for each network.} (section~\ref{problems:multihoming}) and mobility (section~\ref{problems:mobility}).
 
     \section{Lack of Multihoming}\label{problems:multihoming}
 
-        Since IP addresses serve as point-of-attachment addresses (i.e. an IP address identifies a network interface) and routing is done exclusively on the internet layer, there isn't any inherent mechanism for distinguishing whether multiple IP addresses identify a common node. Thus, in effect, multihoming on IP alone isn't feasible.
+        Since IP addresses serve as point-of-attachment addresses (i.e. an IP address identifies a network interface) and routing is done exclusively on the internet layer, there is not any inherent mechanism for distinguishing whether multiple IP addresses identify a common node. Thus, in effect, multihoming on IP alone is not feasible.
 
-        The insufficient base for multihoming support is one of the oldest recognized problems of the Internet: it has become apparent back in 1972, when Tinker Air Force Base joined ARPANET and voiced a request for redundant connections to a single node to ensure reliability~\cite{Patterns}. In spite of this, the switch to a new protocol suite that happened 11 years later (on 1.1.1983, the ``flag day'') didn't bring any solution to this problem.
+        The insufficient base for multihoming support is one of the oldest recognized problems of the Internet: it has become apparent back in 1972, when Tinker Air Force Base joined ARPANET and voiced a request for redundant connections to a single node to ensure reliability~\cite{Patterns}. In spite of this, the switch to a new protocol suite that happened 11 years later (on 1.1.1983, the ``flag day'') did not bring any solution to this problem.
 
         Since then, some attemps were made to implement multihoming on top of the current architecture.
 
@@ -95,7 +95,7 @@
             This approach is used by technologies such as Mobile IP~\cite{rfc5944} or Locator/Identifier Separation Protocol (LISP)~\cite{rfc6830}.
             \item \textbf{Global name resolution.} The endpoint identifier is resolved to its network location by looking up a logically centralized service.
             This approach is used by technologies such as eXpressive Internet Architecture~\cite{xia} (described in Section~\ref{archs:xia}) or MobilityFirst~\cite{MobilityFirst} (described in Section~\ref{archs:mf}).
-            \item \textbf{Name-based routing.} The network locator isn't used at all and routing is done on names.
+            \item \textbf{Name-based routing.} The network locator is not used at all and routing is done on names.
             This approach is used by technologies such as Named Data Networking~\cite{ndn} (described in Section~\ref{archs:ndn}).
         \end{itemize}
 
@@ -107,7 +107,7 @@
 
         As the IP protocol lacks any inherent verification mechanism, the internet layer is easily subjected to hijacking and spoofing. This provides opportunity for many types of exploits, most notably the Man-in-the-middle attack or IP address spoofing~\cite{rfc1948}.
 
-        Since security isn't enforced by the architecture in any way, it is still common even for the application layer with its plethora of protocols to be subjected to security problems. Protocols like TCP are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack~\cite{rfc1948}. Today, application protocol security is usually achieved by wrapping protocols inside cryptographical protocols such as Transport Layer Security (TLS) or Datagram Transport Layer Security (DTLS).
+        Since security is not enforced by the architecture in any way, it is still common even for the application layer with its plethora of protocols to be subjected to security problems. Protocols like TCP are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack~\cite{rfc1948}. Today, application protocol security is usually achieved by wrapping protocols inside cryptographical protocols such as Transport Layer Security (TLS) or Datagram Transport Layer Security (DTLS).
 
     \section{Router Table Size Growth}
 
@@ -142,7 +142,7 @@
 
         \begin{itemize}
             \item \textbf{Evolutionary design.} Backward-compatible solutions that are incrementally deployable on top of the current Internet (e.g. LISP~\cite{rfc6830} or DiffServ~\cite{rfc2474}).
-            \item \textbf{Clean slate design.} Completely new standalone architectures that aren't constrained by Internet technology's limitations.
+            \item \textbf{Clean slate design.} Completely new standalone architectures that are not constrained by Internet technology's limitations.
         \end{itemize}
 
         Considering the scope of this thesis, the focus will be given exclusively to ``clean-slate design'' architectures.
@@ -211,7 +211,7 @@
 
                 NDN assumes data chunk names to be hierarchically structured. Consumers must be able to deterministically construct the name for a desired piece of data without having previously seen the name or data. This can be achieved either by a deterministic algorithm allowing both consumer and producer to construct the same name based on data available to both.
 
-                The management of such namespace isn't defined by the architecture itself and should be a subject of further research.
+                The management of such namespace is not defined by the architecture itself and should be a subject of further research.
 
         \subsection{Current State of Implementation}
 
@@ -303,7 +303,7 @@
 
             \subsubsection{DAG Addressing}
 
-                Addressing in XIA is realized by using Directed Acyclic Graphs (DAGs). In their simplest form, address DAGs may be used only for specifying packet's destination ID as in traditional network architectures (\ref{fig:xia_dag}a). However, in addition to that, they can also contain scoping information (e.g. target network + a service located in the network [\ref{fig:xia_dag}b]) or fallback alternatives (e.g. Network XID to be used by forwarding when given SID isn't recognized [\ref{fig:xia_dag}c]).
+                Addressing in XIA is realized by using Directed Acyclic Graphs (DAGs). In their simplest form, address DAGs may be used only for specifying packet's destination ID as in traditional network architectures (\ref{fig:xia_dag}a). However, in addition to that, they can also contain scoping information (e.g. target network + a service located in the network [\ref{fig:xia_dag}b]) or fallback alternatives (e.g. Network XID to be used by forwarding when given SID is not recognized [\ref{fig:xia_dag}c]).
 
                 \begin{figure}[H]
                     \begin{center}
@@ -425,7 +425,7 @@
                     \begin{enumerate}
                         \item App1 requests an IPC connection to App2. This request is handled by ipcProcess1's Flow Allocator.
                         \item The Flow Allocator asks Directory for address of the IPC Process to which App2 is mapped. In this case, it is 2.
-                        \item The Flow Allocator asks ipcProcess1's Resource Allocator to find a suitable (N-1)-flow to map the new flow to it. If there isn't any, RA requests an IPC connection to App2.
+                        \item The Flow Allocator asks ipcProcess1's Resource Allocator to find a suitable (N-1)-flow to map the new flow to it. If there is not any, RA requests an IPC connection to App2.
                         \item The Flow Allocator instructs RIB to send out \texttt{M\_CREATE} request to 2.
                         \item The 2's Flow Allocator instructs RIB to send out \texttt{M\_CREATE\_RESPONSE} request to 1.
                         \item 2's RIB receives the \texttt{M\_CREATE\_RESPONSE}. If it is positive, the Allocate() procedure is ended sucessfully.
@@ -488,7 +488,7 @@
 
         \subsection{Formal description}
 
-            RMT has, as its name suggests, two main reponsibilities: relaying and multiplexing of PDUs. The goal of multiplexing is to pass outgoing PDUs (from EFCP instances and management tasks) to the appropriate (N-1)-flows and pass incoming PDUs (from (N-1)-flows) to EFCP instances and management tasks. Relaying handles incoming PDUs from (N-1)-ports\footnote{A handle for an (N-1)-flow, not unlike the traditional BSD socket.} that aren't directed to its IPC process and forwards them to other (N-1)-ports using information provided by its forwarding policy. A conceptual model of RMT is presented in Figure~\ref{fig:rina:rmt}.
+            RMT has, as its name suggests, two main reponsibilities: relaying and multiplexing of PDUs. The goal of multiplexing is to pass outgoing PDUs (from EFCP instances and management tasks) to the appropriate (N-1)-flows and pass incoming PDUs (from (N-1)-flows) to EFCP instances and management tasks. Relaying handles incoming PDUs from (N-1)-ports\footnote{A handle for an (N-1)-flow, not unlike the traditional BSD socket.} that are not directed to its IPC process and forwards them to other (N-1)-ports using information provided by its forwarding policy. A conceptual model of RMT is presented in Figure~\ref{fig:rina:rmt}.
 
             \begin{figure}[H]
                 \begin{center}
@@ -556,7 +556,7 @@
 
     \section{Process of development}
 
-        Since RINA is still an emerging architecture, speficications for some of its parts (e.g. Resource Allocator) are still being actively worked on and the current implementations aren't yet fit for production purposes. Hence, there wasn't much to rely on when implementing RMT: the specifications were brief, implementation design non-existent and the only existing implementations were providing only a small subset of RMT's functions. Because of this, most of the later phase of development was driven by PRISTINE researchers' feature requests and frequent mutual feedback regarding architectural or implementational issues.
+        Since RINA is still an emerging architecture, speficications for some of its parts (e.g. Resource Allocator) are still being actively worked on and the current implementations are not yet fit for production purposes. Hence, there was not much to rely on when implementing RMT: the specifications were brief, implementation design non-existent and the only existing implementations were providing only a small subset of RMT's functions. Because of this, most of the later phase of development was driven by PRISTINE researchers' feature requests and frequent mutual feedback regarding architectural or implementational issues.
 
     \section{Implementation Design}
 
@@ -661,7 +661,7 @@
 
             \subsubsection{Initial RMT Mode Setup}
 
-                When a RMT instance is located inside a bottommost IPC process that doesn't work with any further (N-1)-IPC processes, the RMT is switched to an \texttt{onWire} mode that functions over a single serializing medium instead of an IPC connection.
+                When a RMT instance is located inside a bottommost IPC process that does not work with any further (N-1)-IPC processes, the RMT is switched to an \texttt{onWire} mode that functions over a single serializing medium instead of an IPC connection.
 
                 If a RMT is located inside an IPC process that has the \texttt{relay} configuration parameter configured as \texttt{true}, the RMT's Relaying Task is enabled by calling \texttt{enableRelay()}. The default value of the \texttt{relay} parameter is \texttt{true} in top layers of routers, \texttt{false} everywhere else.
 
@@ -805,13 +805,13 @@
 
                 The RIB in \texttt{IPC1} sends out an \texttt{M\_CREATE} request addressed to \texttt{IPC2}. RMT stores the PDU to the \texttt{PHY}'s queue \texttt{outQ\_M}.
 
-                The arrival of PDU into the queue causes invocation of the active monitoring policy and MaxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
+                The arrival of PDU into the queue causes invocation of the active monitoring policy and MaxQ policy. If the MaxQ policy has not caused the PDU to be dropped, the scheduling policy is invoked.
 
                 The scheduling policy decides to release the PDU from \texttt{outQ\_M}. The PDU traverses through the port and gets sent to the other host via the medium.
 
             \item \textbf{t=12}: \texttt{IPC2}'s RMT receives the PDU on port \texttt{PHY}. As this is a management PDU, it is stored into the management input queue \texttt{inQ\_M}.
 
-                The arrival of PDU into the queue causes invocation of the active monitoring policy and MaxQ policy. If the MaxQ policy hasn't caused the PDU to be dropped, the scheduling policy is invoked.
+                The arrival of PDU into the queue causes invocation of the active monitoring policy and MaxQ policy. If the MaxQ policy has not caused the PDU to be dropped, the scheduling policy is invoked.
 
                 The scheduling policy decides to release the PDU from \texttt{inQ\_M}. The PDU travels into the dispatcher which relays the PDU to the RIB daemon.
 
@@ -880,7 +880,7 @@
 
             \item \textbf{t=14}: The \texttt{IPC1}'s RIB daemon receives the \texttt{M\_CREATE\_RESPONSE} request and the \emph{Allocate(\texttt{IPC33})} procedure is sucesfully completed. The new connection is mapped to a newly instantiated RMTPort called \texttt{p0} and the previously suspended \emph{Allocate(\texttt{App2})} procedure is triggered to continue. The \texttt{M\_CREATE} sent by\texttt{IPC11}'s RIB daemon is directed to \texttt{IPC33}'s RIB daemon.
 
-            \item \textbf{t=16}: The \texttt{IPC33}'s RIB daemon sees that the \texttt{M\_CREATE} requires acces to \texttt{App2}, which isn't a local aplication, so the request has to be forwarded to \texttt{IPC22}. It holds the request and waits for Resource Allocator to process \emph{Allocate(\texttt{IPC22})}.
+            \item \textbf{t=16}: The \texttt{IPC33}'s RIB daemon sees that the \texttt{M\_CREATE} requires acces to \texttt{App2}, which is not a local aplication, so the request has to be forwarded to \texttt{IPC22}. It holds the request and waits for Resource Allocator to process \emph{Allocate(\texttt{IPC22})}.
 
             \item \textbf{t=20}: The \texttt{IPC4}'s RIB daemon receives the \texttt{M\_CREATE\_RESPONSE} request and the \emph{Allocate(\texttt{IPC22})} procedure is sucesfully completed. The new connection is mapped to a newly instantiated RMTPort called \texttt{p1}.
 
@@ -892,7 +892,7 @@
 
             \item \textbf{t=35}: In \texttt{host1}, \texttt{App1} sends out the first ping.
 
-            \item \textbf{t=37}: In \texttt{IPC33}, the RMT dispatcher receives the ping PDU from port \texttt{p0}. It discovers the PDU's address doesn't equal \texttt{IPC33}, so it looks up the Forwarding Policy for an item with PDU's destionation (\texttt{IPC22}) and PDU's QoS-ID (\texttt{1}).
+            \item \textbf{t=37}: In \texttt{IPC33}, the RMT dispatcher receives the ping PDU from port \texttt{p0}. It discovers the PDU's address does not equal \texttt{IPC33}, so it looks up the Forwarding Policy for an item with PDU's destionation (\texttt{IPC22}) and PDU's QoS-ID (\texttt{1}).
 
             The Forwarding policy returns a single RMTPort, \texttt{p1}. The QueueIDGen policy is given the PDU as a parameter and returns \texttt{outQ\_0}.
 
