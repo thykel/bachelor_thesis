@@ -79,7 +79,7 @@
             Message-oriented transport protocol Stream Control Transmission Protocol (SCTP)~\cite{rfc4960} provides a partial support. Two SCTP hosts are able to provide each other with lists of alternate IP addresses that can be used as fallback points of attachment of the same application in case of failure of the primary address. During such session, each SCTP host needs to continually check other host's endpoints by heartbeat packets to make sure they are accessible via other sessions.
             However, thus far, multiple reasons have been preventing SCTP from becoming a widely known and used solution; the biggest disadvantage lies in the fact that due to TCP/IP not having a distinct session layer on top of its transport layer (such as in ISO/OSI stack), the transport protocol has to be explicitly specified by the application using the BSD sockets Application Programming Interface (API). Therefore, SCTP adoption would require a rewrite of network-aware applications themselves. Other SCTP adoption issues include unsatisfactory operating system support (Microsoft Windows systems require a third-party kernel driver) and weak awareness of its existence outside the networking community.
 
-            \item \textbf{BGP Multihoming.} Another implementation of multihoming capabilities can be seen in Border Gateway Protocol (BGP)~\cite{rfc4271}, which provides means for load-balancing and fallback over multiple links on T1 networks. To make use of such multihoming over the Internet, a public IP address range and an Autonomous System number are required. BGP Multihoming is one of the most significant causes contributing to the growth of the global Internet routing table.
+            \item \textbf{BGP Multihoming.} Another implementation of multihoming capabilities can be seen in Border Gateway Protocol (BGP)~\cite{rfc4271}, which provides a means for load-balancing and fallback over multiple links on T1 networks. To make use of such multihoming over the Internet, a public IP address range and an Autonomous System number are required. BGP Multihoming is one of the most significant causes contributing to the growth of the global Internet routing table.
 
             \item \textbf{Multipath TCP.} The most recent TCP/IP multihoming initiative is the TCP extension Multipath TCP (MPTCP) which is currently in its experimental phase, although a large scale commercial deployment has been already made by Apple for its Siri network application in mobile operating system iOS 7~\cite{Apple_MP}.
         \end{itemize}
@@ -107,7 +107,7 @@
 
         As the IP protocol lacks any inherent verification mechanism, the internet layer is easily subjected to hijacking and spoofing. This provides opportunity for many types of exploits, most notably the Man-in-the-middle attack or IP address spoofing~\cite{rfc1948}.
 
-        Since security is not enforced by the architecture in any way, it is still common even for the application layer with its plethora of protocols to be subjected to security problems. Protocols like TCP are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack~\cite{rfc1948}. Today, application protocol security is usually achieved by wrapping protocols inside cryptographical protocols such as Transport Layer Security (TLS) or Datagram Transport Layer Security (DTLS).
+        Since security is not enforced by the architecture in any way, it is still common even for the application layer with its plethora of protocols to be subjected to security problems. Protocols like TCP are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack~\cite{rfc1948}. Today, application protocol security is usually achieved by ``wrapping'' protocols ito other cryptographical protocols such as Transport Layer Security (TLS) or Datagram Transport Layer Security (DTLS).
 
     \section{Router Table Size Growth}
 
@@ -334,7 +334,7 @@
 
         \subsection{Concepts}
 
-            RINA specifications define a rich set of new concepts based mostly on the theory of distributed computing. They are described in the following sections.
+            RINA specifications define a rich set of new concepts based mostly on theory of distributed computing. They are described in the following sections.
 
             \subsubsection{Distributed Application Facility}
 
@@ -354,7 +354,7 @@
                     \end{center}
                 \end{figure}
 
-                Hence, a DIF is essentially RINA's equivalent of an abstraction layer. However, unlike the traditional network architectures such as the seven-layer ISO/OSI, RINA has only one layer which ``repeats''. This also requires a different kind of notation: instead of using absolute identifier such as \emph{Layer 2} or \emph{Layer 7}, RINA's DIFs are referred to in a relative manner in relation to a specific level, e.g. \emph{(N)-DIF}, \emph{(N+1)-DIF} or \emph{(N-2)-DIF}.
+                Hence, a DIF is essentially RINA's equivalent of an abstraction layer. However, unlike the traditional network architectures such as the seven-layer ISO/OSI, RINA has only one layer which ``repeats''. This also requires a different kind of notation: instead of using absolute layer identifiers such as \emph{Layer 2} or \emph{Layer 7}, RINA's DIFs are referred to in a relative manner in relation to a specific level, e.g. \emph{(N)-DIF}, \emph{(N+1)-DIF} or \emph{(N-2)-DIF}.
 
                 A computing system may be a member of $<0,n>$ DIFs and has a separate IPC process for each DIF. Each (N)-DIF handles data coming from the (N+1)-DIFs in the same way as from an application.
 
@@ -370,7 +370,7 @@
 
                 As the architecture is recursively scalable, this model could be expanded further: for example, other DIFs could be added on top of the stack in hosts for creating another scope of communication (e.g. for VPN-like facilities).
 
-                Each DIF operates in its own scope isolated from other DIFs of the same level and DIF maintains its own distinct namespace and configuration (such as policies related to security and data transfer). When a computing system wants to communicate with another system inside a foreign DIF, it needs to go through a process of enrollment to the common DIF first.
+                DIF operates in its own scope isolated from other DIFs of the same level. Therefore, DIF maintains its own distinct namespace and configuration (such as policies related to security and data transfer). When a computing system wants to communicate with another system inside a foreign DIF, it needs to go through a process of enrollment to the common DIF first.
 
             \subsubsection{IPC Process}
 
@@ -402,7 +402,7 @@
 
             \subsubsection{Addressing}
 
-                Since each DAF operates within its own address scope, the architecture needs to provide means of resolving (N)-application names to addresses of (N-1)-IPC processes. This is achieved via a decentralized distributed \emph{Name Space Manager} (NSM) embedded in each DIF.
+                Since each DAF operates within its own address scope, the architecture needs to provide a means of resolving (N)-application names to addresses of (N-1)-IPC processes. Such mappings are stored in IPC process's Directory. Directories are managed by a decentralized distributed \emph{Name Space Manager} (NSM) embedded in each DIF.
 
                 The NSM maintanence is one of the tasks of IPC management; each IPC process keeps track of local registered applications and some of them are specialized to maintain aggregated repository of non-local mapping to serve as forwarders (such processes are called \emph{Repository IPC Processes}). This is illustrated in Figure~\ref{fig:rina_nsm}.
 
@@ -417,26 +417,27 @@
 
             \subsubsection{The Communication Model}\label{archs:rina:communication}
 
-                Every communication in RINA needs to go through the initial process of flow allocation.
+                A connection between two applications in RINA needs to go through the initial process of flow allocation.
 
-                !!! TODO: fix and convert to algorithm2e
+                When an application named \texttt{App1} wants to create a flow with other application named \texttt{App2} reachable via a common DIF, the Allocate procedure proceeds as follows:
 
-                \begin{figure}[H]
-                    \begin{enumerate}
-                        \item App1 requests an IPC connection to App2. This request is handled by ipcProcess1's Flow Allocator.
-                        \item The Flow Allocator asks Directory for address of the IPC Process to which App2 is mapped. In this case, it is 2.
-                        \item The Flow Allocator asks ipcProcess1's Resource Allocator to find a suitable (N-1)-flow to map the new flow to it. If there is not any, RA requests an IPC connection to App2.
-                        \item The Flow Allocator instructs RIB to send out \texttt{M\_CREATE} request to 2.
-                        \item The 2's Flow Allocator instructs RIB to send out \texttt{M\_CREATE\_RESPONSE} request to 1.
-                        \item 2's RIB receives the \texttt{M\_CREATE\_RESPONSE}. If it is positive, the Allocate() procedure is ended sucessfully.
-                    \end{enumerate}
-                \end{figure}
+                \begin{enumerate}
+                    \item \texttt{App1} requests an IPC connection to \texttt{App2} with desired QoS requirements. This request is handled by Flow Allocator of the underlying IPC process with address \texttt{IPC1}.
+                    \item The Flow Allocator validates the request. If the request is well formed and the IPC process has enough resources to honor it, it's accepted and an EFCP instance is created. Otherwise, an error is returned.
+                    \item The Flow Allocator asks Directory for address of the IPC Process to which \texttt{App2} is mapped. In this case, it is \texttt{IPC2}.
+                    \item The Flow Allocator asks \texttt{IPC1}'s Resource Allocator to find a suitable (N-1)-flow to map the new flow to it. If there is not any, RA requests an IPC connection to \texttt{IPC2}.
+                    \item The Flow Allocator instructs RIB to send out an \texttt{M\_CREATE} request to \texttt{IPC2}.
+                    \item Upon the request receival, the \texttt{IPC2}'s Flow Allocator delivers the Allocate request to App2. If App2 submits a positive response, the Flow Allocator creates an EFCP instance.
+                    \item \texttt{IPC2}'s Flow Allocator instructs RIB to send out \texttt{M\_CREATE\_RESPONSE} request back to \texttt{IPC1}.
+                    \item \texttt{IPC1}'s RIB receives the \texttt{M\_CREATE\_RESPONSE} request. If it is positive, the Allocate() procedure is complete.
+                    \item \texttt{App1} and \texttt{App2} can now use the IPC API to send and receive data SDUs to/from each other. When the communication is over, both of them can invoke the Deallocate call to release allocated resources.
+                \end{enumerate}
 
             \subsubsection{Policy Separation}
 
                 RINA heavily relies on the design approach of separating mechanism and policy: parts related to authorization of operations and allocation of resources remain constant, while the decisions regarding how to use them are left to policies. In effect, there's only one application protocol (CDAP) and one error and flow control protocol (EFCP). A clear example of the policy separation is EFCP, which is a single mechanism configurable for both reliable and unrealiable data transfer, as opposed to TCP and UDP, which are two distinct mechanisms.
 
-                Thanks to this, RINA can serve as a platform for evaluating multiple approaches to a given problem just by replacing policies. An example can be observed in RINA's approach to routing, which is a policy by itself and provides means for implementing well-known protocols (such as those based on distance vector or link-state algorithms) as well as experimental new paradigms (such as hierarchical and topological routing).
+                Thanks to this, RINA can serve as a platform for evaluating multiple approaches to a given problem just by replacing policies. An example can be observed in RINA's approach to routing, which is a policy by itself, providing a platform for implementing well-known protocols (such as those based on distance vector or link-state algorithms) as well as experimental new paradigms (such as hierarchical and topological routing).
 
         \subsection{Current State of Implementation}
 
@@ -458,17 +459,18 @@
 
         \subsection{MobilityFirst}
 
-            MobilityFirst adds the layer of indirection which is missing in the Internet stack. This, in effect, takes care of the problems of multihoming and mobility. The security is now enforced by the architecture and its self-certifying identifiers.
+            MobilityFirst adds the layer of indirection which is missing in the Internet stack. This in effect, eliminates the problems of multihoming and mobility. The security is enforced by the architecture by its self-certifying identifiers.
 
             TODO
 
         \subsection{eXpressive Internet Architecture}
 
+
+
             TODO
 
         \subsection{Recursive InterNetwork Architecture}
 
-            TODO
 
 
 \chapter{Forwarding In RINA}\label{forwarding}
@@ -544,15 +546,15 @@
 
     \section{OMNeT++}
 
-        OMNeT++ is an open-source discrete event simulation framework used primarily in the field of network simulation. In this context, the term ``network'' refers to the more general meaning of the word, which means that apart from simulating TCP/IP (especially in conjecture with the INET library) and other computer networks, it also provides means for simulating other networked systems such as on-chip networks or queuing networks. As we're implementing a clean-slate architecture from the ground up, this is an ideal approach.
+        OMNeT++ is an open-source discrete event simulation framework used primarily in the field of network simulation. In this context, the adjective ``network'' refers to the more general meaning of the word, which means that apart from simulating TCP/IP (especially in conjecture with the INET library) and other computer networks, it also provides a means for simulating other networked systems such as on-chip networks or queuing networks. As we're implementing a clean-slate architecture from the ground up, this is an ideal approach.
 
         OMNeT++ provides a component architecture for models. Components (simple modules) are programmed in C++, then assembled into larger components (compound models) using the high-level language NED. In theory, there are no limits for networks modelled by NED and the only constraint is given by the computing platform processing power.
 
     \section{RINASim}
 
-        RINASim, developed by networking research group at Faculty of Information Technology of Brno University of technology, is an open-source OMNeT++ library developed for project PRISTINE. The purpose of the library is to provide a framework for building RINA networks and observing their behavior. In the current stage of initial development, RINASim is used primarily by other PRISTINE researchers to experiment with the architecture and efficiently evaluate their working theories.
+        RINASim, developed by a networking research group at Faculty of Information Technology of Brno University of Technology, is an open-source OMNeT++ library developed for project PRISTINE. The purpose of the library is to provide a framework for building RINA networks and observing their behavior. In the current stage of its development, RINASim is used primarily by other PRISTINE researchers to experiment with the architecture and efficiently evaluate their working theories.
 
-        The library is open-sourced with MIT licence and publicly hosted on GitHub.
+        The library is open-sourced with the MIT licence and publicly hosted on GitHub.
 
     \section{Process of development}
 
