@@ -45,7 +45,7 @@
 
     As such, some of the Internet's widely recognized problems are inherent because of the base design and it is usually difficult, if not impossible, to solve them in a non-intrusive and backward-compatible way. The following sections illustrate such problems.
 
-    \section{Incomplete naming scheme}\label{problems:naming}
+    \section{Incomplete Naming Scheme}\label{problems:naming}
 
         In 1982, Jerome Saltzer in his work ``On the Naming and Binding of Network Destinations''~\cite{rfc1498} described the entities and the relationships that make a complete naming and addressing schema in networks. According to Saltzer, there are four elements that need to be identified: \emph{applications}, \emph{nodes}, \emph{points of attachment} to the network (PoAs) and \emph{paths}. The relationships between them are illustrated in Figure~\ref{fig:saltzer}. At the time, network architectures such as CYCLADES, XNS, DECNET and OSI conformed to this scheme~\cite{internet_demo}.
 
@@ -95,7 +95,7 @@
 
         The second and third approaches require a clean-slate architectural design.
 
-    \section{Lack of security mechanisms}\label{problems:security}
+    \section{Lack of Security Mechanisms}\label{problems:security}
 
         The specifications of the fundamental protocols of TCP/IP stack -- IP, TCP and DHCP -- were originally completed at the beginning of 1980s. The Internet has since then turned into a massive world-wide internetwork connecting people of different types and agendas. Naturally, once the Internet began to be used for transferring sensitive data (especially by companies), cyber crime started to emerge as well and some attention was turned to security aspects of Internet protocol (or lack thereof).
 
@@ -103,7 +103,7 @@
 
         Since security is not enforced by the architecture in any way, it is still common even for the application layer with its plethora of protocols to be subjected to security problems. Protocols like TCP are still widely in use and remain vulnerable to attacks such as TCP sequence prediction attack~\cite{rfc1948}. Today, application protocol security is usually achieved by ``wrapping'' protocols into other cryptographical protocols such as Transport Layer Security (TLS) or Datagram Transport Layer Security (DTLS).
 
-    \section{Router Table Size Growth}
+    \section{Routing Table Size Growth}
 
         Default-free zone (DFZ) is the collection of all Internet autonomous systems (ASs) that do not require a default route to forward a packet to any destination. Since they comprise the root of Internet's routing infrastructure, their database must be complete.
 
@@ -117,18 +117,18 @@
             \end{center}
         \end{figure}
 
-        While the exponential growth observed during the 1990s was later mitigated by mass deployment of Classless Inter-Domain Routing (CIDR) and BGP route aggregation, the number of items is still increasing superlinearly and the high-end router hardware needs to keep up, especially with increasing use of BGP-based multihoming and IPv6. This can sometimes lead to scalability problems, as in August of 2014 where reaching the 512k entry limit of multiple routers caused globally observable outages~\cite{512k_day}.
+        While the exponential growth observed during the 1990s was later mitigated by mass deployment of Classless Inter-Domain Routing (CIDR) and BGP route aggregation, the number of items is still increasing superlinearly and the high-end router hardware needs to keep up, especially with the increasing use of BGP-based multihoming and IPv6. This can sometimes lead to scalability problems, as in August of 2014, when reaching the 512k entry limit of multiple routers caused globally observable outages~\cite{512k_day}.
 
         As of April 2015, the Internet routing table consists of over 560k entries~\cite{bgpgrow}. There are concerns about whether the technology of high-end routers will keep scaling along with Moore's law to keep route management efficient~\cite{rfc4984}.
 
 
 \chapter{Alternative Network Architectures}\label{archs}
 
-    This chapter gives an overview of paths that were pursued in the field of network architecture research and descriptions of several architectures.
+    This chapter provides descriptions of several new network architectures.
 
-    Considering the limited scope of this thesis, only a representative subset of new network architectures will be described and evaluated more thoroughly. The subset consists of projects funded by the Future Internet Architecture -- Next Phase program~\cite{fia} (Named Data Networking ~\cite{ndn} [Section~\ref{archs:ndn}], MobilityFirst ~\cite{MobilityFirst} [Section~\ref{archs:mf}] and eXpressive Internet Architecture ~\cite{xia} [Section~\ref{archs:xia}]) and the Recursive InterNetwork Architecture ~\cite{Patterns} (\ref{archs:rina}).
+    Due to a limited scope of this thesis, the chapter describes and evaluates only a small representative subset of new architectures. The subset consists of projects funded by the Future Internet Architecture -- Next Phase program~\cite{fia} (Named Data Networking ~\cite{ndn} [Section~\ref{archs:ndn}], MobilityFirst ~\cite{MobilityFirst} [Section~\ref{archs:mf}] and eXpressive Internet Architecture ~\cite{xia} [Section~\ref{archs:xia}]) and the Recursive InterNetwork Architecture ~\cite{Patterns} (\ref{archs:rina}).
 
-    Special attention will be given to Recursive InterNetwork Architecture as it is relevant to the implementation goal of this thesis.
+    Special attention will be given to Recursive InterNetwork Architecture as one of its components is the implementation goal of this thesis.
 
     \section{Design Approaches}
 
@@ -143,11 +143,11 @@
 
     \section{Named Data Networking}\label{archs:ndn}
 
-        Named Data Networking is one instance of a more general research direction called Information-centric networking (ICN)~\cite{icn}. ICN explores the possibilities of moving the Internet infrastructure away from its host-centric communication paradigm towards the idea of named content.
+        Named Data Networking is one instance of a more general research direction called \emph{Information-centric networking} (ICN)~\cite{icn}. ICN explores the possibilities of moving the Internet infrastructure away from its host-centric communication paradigm towards the idea of named content.
 
         \subsection{Premise}
 
-            During its early years, ARPANET was heavily influenced by telecommunication technology as the Public switched telephone network (PSTN) was the only example a large-scale network. Due to this, technology of the Internet has been built on the paradigm of end-to-end communication based on network addresses. However, while this base paradigm has remained constant over the decades, the way we use the Internet has considerably changed: the Internet is now used primarily as a content distribution network. Since the mechanism of data retrieval over the Internet is based on creating an end-to-end communication channel and transferring data through it, the content itself is transparent to the network and this generates an enormous amount of data redundancy.
+            During its early years, ARPANET was heavily influenced by telecommunication technology as the Public switched telephone network (PSTN) was the only example a large-scale network. Due to this, technology of the Internet has been built on the paradigm of end-to-end communication based on network addresses. However, while this base paradigm has remained constant over the decades, the way we use the Internet has considerably changed: the Internet is now used primarily as a content distribution network. Since the mechanism of data retrieval over the Internet is based on creating end-to-end communication channels and transferring data through them, the content itself is transparent to the network and this generates an enormous amount of data redundancy.
 
             Named Data Networking proposes a solution more fitting for today's needs: instead of working with the source/destination addresses, the ``thin waist'' of the Internet should be based on working with names of data chunks (as illustrated by Figure~\ref{fig:ndn_waist}).
 
@@ -177,7 +177,7 @@
                         \item a \emph{router} maintaining three fundamental data structures:
                         \begin{itemize}
                             \item \emph{Forwarding Information Base} (FIB) (forwarding table)
-                            \item \emph{Pending Interest Table} (PIT) (maintaining currently active requests)
+                            \item \emph{Pending Interest Table} (PIT) (data request management)
                             \item \emph{Content Store} (data cache)
                         \end{itemize}
                     \end{itemize}
@@ -202,7 +202,7 @@
 
             \subsubsection{Naming}
 
-                NDN assumes data chunk names to be hierarchically structured. Consumers must be able to deterministically construct the name for a desired piece of data without having previously seen the name or data. This can be achieved either by a deterministic algorithm allowing both consumer and producer to construct the same name based on data available to both.
+                NDN assumes data chunk names to be hierarchically structured. Consumers must be able to deterministically construct the name for a desired piece of data without having previously seen the name or data. This can be achieved by a deterministic algorithm allowing both consumer and producer to construct the same name based on data available to both.
 
                 The management of such namespace is not defined by the architecture itself and should be a subject of further research.
 
@@ -210,7 +210,7 @@
 
             NDN's implementation efforts are open-source and available as a package called \texttt{NDN Platform}\footnote{http://named-data.net/codebase/platform/}. The package contains a C++ library (\texttt{ndn-cxx}), the NDN Forwarding Daemon (\texttt{NFD}), client libraries for C++, Python, Java and JavaScript, NLSR routing protocol, NDN repository and additional networking tools (a ping-like application, a traffic generator and a traffic capture tool).
 
-            \texttt{ndnSIM}\footnote{http://ndnsim.net/2.0/}, based on \texttt{ns-3}\footnote{https://www.nsnam.org/}, is a network simulator using \texttt{ndn-cxx} and \texttt{NFD} as the architecture backend. ndnSIM extends ns-3 with a new network-layer protocol model which can be used atop of any available link-layer protocol, thus providing a flexible solution for simulating various development scenarios.
+            \texttt{ndnSIM}\footnote{http://ndnsim.net/2.0/}, based on \texttt{ns-3}\footnote{https://www.nsnam.org/}, is a network simulator using \texttt{ndn-cxx} and \texttt{NFD} as the architecture backend. \texttt{ndnSIM} extends \texttt{ns-3} with a new network-layer protocol model which can be used atop of any available link-layer protocol, thus providing a flexible solution for simulating various development scenarios.
 
 
     \section{MobilityFirst}\label{archs:mf}
@@ -227,18 +227,18 @@
 
                 MobilityFirst's ``thin waist'' consists of location-independent names and a global name service for mapping them to addresses. A name is a \emph{globally unique identifier} (GUID) that can be used to identify a variety of \emph{principals} such as an interface, a node, a service, an end-user or content. An example of a principal is a \emph{network address} (NA), a network identifier resembling Internet's autonomous system.
 
-            \subsubsection{Intristic Security}\ref{archs:mf:security}
+            \subsubsection{Intristic Security}\label{archs:mf:security}
 
                 GUIDs are self-certifying, so any principal can authenticate another principal without relying on an external authority. This is achieved through bilateral challenge-response mechanism.
 
                 e.g. Principal \texttt{X} wants to verify authenticity of principal \texttt{Y} before establishing a connection to him.
                 \begin{enumerate}
                     \item \texttt{X} sends a random nonce \texttt{n} to \texttt{Y}
-                    \item \texttt{Y} responds with \texttt{{pubkey, privkey(nonce)}}
-                    \item if $\texttt{hash(pubkey)} = \texttt{Y}$ and $\texttt{pubkey(privkey(nonce))} = \texttt{n}$, \texttt{Y} is authenticated
+                    \item \texttt{Y} responds with $\{pubkey, privkey(nonce)\}$
+                    \item if $hash(pubkey) = Y$ and $pubkey(privkey(nonce)) = \texttt{n}$, \texttt{Y} is authenticated
                 \end{enumerate}
 
-            \subsubsection{Name resolution}
+            \subsubsection{Name Resolution}
 
                 MobilityFirst defines a naming service for dynamic mapping of GUIDs to network addresses with real-time response latencies. Unlike today's DNS with its reliance on a single root authority (ICANN), the naming service is decentralized.
 
@@ -262,7 +262,7 @@
             \begin{itemize}
                 \item \texttt{msocket}, an endpoint socket library extending the BSD sockets API.
                 \item \texttt{Auspice}, a GNS implementation.
-                \item Two prototypes of the forwarding plane: one based on the Click modular router\footnote{http://www.read.cs.ucla.edu/click/click}, other based on OpenFlow~\cite{openflow}.
+                \item Two prototypes of the forwarding plane: one based on the Click modular router\footnote{http://www.read.cs.ucla.edu/click/click}, other based on OpenFlow.
             \end{itemize}
 
             There is no tool available for simulation.
@@ -271,7 +271,7 @@
 
         \subsection{Premise}
 
-            As presented in the previous sections, some of the future architecture research is centered around the idea of replacing Internet's ``thin waist'' of end-to-end communication with a different principal or a set of principals (e.g. NDN and its named content). eXpressive Internet Architecture (XIA) takes this approach one step further and builds on one basic premise: the ``thin waist'' should provide support for multiple principals and the ability to evolve by accomodating new principals over time.
+            As presented in the previous sections, some of the future architecture research is centered around the idea of replacing Internet's ``thin waist'' of end-to-end communication with a different principal or a set of principals (e.g. NDN and its named content). eXpressive Internet Architecture (XIA) takes this approach one step further and proposes a novel principle: the ``thin waist'' should provide support for multiple principals and the ability to evolve by accomodating new principals over time.
 
         \subsection{Concepts}
 
@@ -279,7 +279,7 @@
 
             \subsubsection{Principal Types}
 
-                An \emph{XIA principal} is specified by the semantics of communicaton between principals, the processing that is required to forward traffic with addresses of its type and the intristic security properties. The initial XIA architecture defines four basic XIA principal types:
+                An \emph{XIA principal} is specified by the semantics of communicaton between principals of the same type, the processing that is required to forward traffic with addresses of its type and a unique \emph{XIA identifier} (XID). The initial XIA architecture defines four basic XIA principal types:
 
                 \begin{itemize}
                     \item \textbf{Host XID (HID).} HIDs support unicast host-based communication similar to IP where the host identifier is a hash of the host’s public key. HIDs define who you communicate with.
@@ -314,11 +314,11 @@
 
     \section{Recursive InterNetwork Architecture}\label{archs:rina}
 
-        Recursive InterNetwork Architecture (RINA) is an architecture based on a set principles described by John~Day in his book Patterns in Network Architecture~\cite{Patterns}.
+        Recursive InterNetwork Architecture (RINA) is an architecture based on a set principles described by John~Day in his book \emph{Patterns in Network Architecture}~\cite{Patterns}.
 
         \subsection{Premise}
 
-            RINA introduces a novel approach to the problem of computer networking, eliminating all problems described in chapter~\ref{problems} in the process:
+            RINA introduces a new perspective on computer networking:
 
             \begin{quotation}
                 \centering
@@ -910,7 +910,7 @@
 
     To be able to describe the principles of new network architectures, I~have studied research articles that have been written about them. However, to analyze their usefulness to the Internet, I needed to gain understanding of the driving factors behind their inception. This has been achieved by studying the Internet and its history to learn about choices that led to its current state, including its present problems. I~have noticed that some of the problematic design choices of its architectural design have been recognized right at the early beginning of its deployment, but they were eventually chosen as foundations for other then technological reasons.
 
-    To understand RINA, I had to learn about its design principles and adapt to its paradigm shift which abandons most of today's widely recognized principles of computer networking. This required extensive studying of John Day's book ``Patterns in Network Architecture''~\cite{Patterns} and bleeding-edge architectural specifications.
+    To understand RINA, I had to learn about its design principles and adapt to its paradigm shift which abandons most of today's widely recognized principles of computer networking. This required extensive studying of John Day's book \emph{Patterns in Network Architecture}~\cite{Patterns} and bleeding-edge architectural specifications.
 
     The implementation part of this thesis required me to learn about the OMNeT++ programming framework and the RINASim library. As RMT's specifications were only brief and its other implementations provided only a limited set of functionality, I needed to put some initiative into coming up with the implementation design. This usually involved discussing architectural matters with RINA researchers. In the later phase of development, several of the researchers have raised multiple functionality requests; all of them were eventually implemented.
 
