@@ -217,7 +217,7 @@
 
         \subsection{Premise}
 
-            The current Internet is designed for interconnecting fixed endpoints and fails to address dramatically increasing demands of mobile devices and services. MobilityFirst, as its name would suggest, aims to provide means for better mobility, while also introducing intristic security properties and faciliating services.
+            The current Internet is designed for interconnecting fixed endpoints and fails to address dramatically increasing demands of mobile devices and services. MobilityFirst, as its name would suggest, aims to provide a means for better mobility, while also introducing intristic security properties and faciliating services.
 
         \subsection{Concepts}
 
@@ -337,9 +337,9 @@
 
                 \emph{Distributed IPC Facility} (DIF) is a collection of two or more application processes cooperating to provide IPC. A DIF's application is called an IPC process and DIF is a DAF that does IPC. The DIF provides IPC services to application processes via a set of API primitives that are used to initiate flow and exchange data with the application's peer.
 
-                Since DIFs are conceptually DAF, their application processes can also exchange information using other DIFs. This yields a recursive structure.
+                Since DIFs are conceptually DAFs as well, their application processes can also exchange information using other DIFs. This yields a recursive structure.
 
-                A DIF is essentially RINA's equivalent of an abstraction layer. However, unlike the traditional network architectures such as the seven-layer ISO/OSI, RINA has only one layer which ``repeats''. This also requires a different kind of notation: instead of using absolute layer identifiers such as \emph{Layer 2} or \emph{Layer 7}, RINA's DIFs are referred to in a relative manner in relation to a specific level, e.g. \emph{(N)-DIF}, \emph{(N+1)-DIF} or \emph{(N-2)-DIF}.
+                A DIF is essentially RINA's equivalent of an abstraction layer. However, unlike the traditional network architectures such as the seven-layer ISO/OSI, RINA has only one layer which ``vertically repeats''. This also requires a different kind of notation: instead of using absolute layer identifiers such as \emph{Layer 2} or \emph{Layer 7}, RINA's DIFs are referred to in a relative manner in relation to a specific level, e.g. \emph{(N)-DIF}, \emph{(N+1)-DIF} or \emph{(N-2)-DIF}.
 
                 A computing system may be a member of $<0,n>$ DIFs and has a separate IPC process for each DIF. Each (N)-DIF handles data coming from (N+1)-DIFs in the same way as from an application.
 
@@ -484,33 +484,19 @@
 
             \begin{figure}[H]
                 \begin{center}
-                    \includegraphics[width=0.6\textwidth]{fig/fwding_rmt-module.png}
+                    \includegraphics[width=0.6\textwidth]{fig/fwding_rmt-module.pdf}
                   \caption{Diagram of Relaying and Multiplexing Task.}
                   \label{fig:rina:rmt:model}
                 \end{center}
             \end{figure}
 
-            RMT instances in hosts and bottom layers of routers usually perform only the multiplexing task (Figure~\ref{fig:rina:rmt:mux}), while RMTs in top layers of interior routers (Figure~\ref{fig:rina:rmt:relay}) and border routers (Figure~\ref{fig:rina:rmt:agg}) do both multiplexing and relaying.
+            RMT instances in hosts and bottom layers of routers usually perform only the multiplexing task (Figure~\ref{fig:rina:rmt:devices}a), while RMTs in top layers of interior routers (Figure~\ref{fig:rina:rmt:devices}b) and border routers (Figure~\ref{fig:rina:rmt:devices}c) do both multiplexing and relaying.
 
             \begin{figure}[H]
                 \begin{center}
-                    \includegraphics[width=0.6\textwidth]{fig/fwding_rmt-mux.png}
-                  \caption{A host with multiplexing RMTs}
-                  \label{fig:rina:rmt:mux}
-                \end{center}
-            \end{figure}
-            \begin{figure}[H]
-                \begin{center}
-                    \includegraphics[width=0.6\textwidth]{fig/fwding_rmt-relay.png}
-                  \caption{An interior router with two multiplexing RMTs and one relaying RMT}
-                  \label{fig:rina:rmt:relay}
-                \end{center}
-            \end{figure}
-            \begin{figure}[H]
-                \begin{center}
-                    \includegraphics[width=0.6\textwidth]{fig/fwding_rmt-agg.png}
-                  \caption{A border router with an aggregating RMT}
-                  \label{fig:rina:rmt:agg}
+                    \includegraphics[width=\textwidth]{fig/fwding_rmt-devices.pdf}
+                  \caption{A simplified view of data flow direction in different types of devices.}
+                  \label{fig:rina:rmt:devices}
                 \end{center}
             \end{figure}
 
@@ -675,7 +661,7 @@
 
         \subsection{Statistics Collection}
 
-            OMNeT++ modules provide means for declaring scalar or vector NED variables used for statistics collection. Processing of such statistical data (e.g. generating summaries and graphs) is decoupled from the act of data collection itself, so it is up to the user to pick out which data he wants to work with.
+            OMNeT++ modules provide a means for declaring scalar or vector NED variables used for statistics collection. Processing of such statistical data (e.g. generating summaries and graphs) is decoupled from the act of data collection itself, so it is up to the user to pick out which data he wants to work with.
 
             Since the Relaying and Multiplexing Task is the shared point of data flow traversal in the IPC process, it is well-suited for monitoring data flow performance. Several statistical variables have been defined for this very purpose:
 
