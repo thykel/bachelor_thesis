@@ -1,7 +1,8 @@
-Modelování nových síťových architektur v OMNeT++
-===============
+###MODELLING NEW NETWORK ARCHITECTURES IN OMNET++
 
-1. Analyzujte nové síťové architektury jako Recursive InterNetwork Architecture (RINA) a Named Data Networking.  
-2. Popište současný stav nasazení těchto architektur v reálném provozu i v prostředí OMNeT++. Popište jejich výhody/nevýhody.
-3. Implementujte modul Relaying and Multiplexing Task z RINA v prostředí OMNeT++ podle požadavků vedoucího.  
-4. Vytvořte sadu příkladů pro demonstraci Vaší implementace. Zhodnoťte Vaše výsledky.
+
+This thesis describes principles and state of implementation of selected new network archi-
+tectures. It also documents implementation of the Relaying and Multiplexing Task module
+of one of the presented architectures, Recursive InterNetwork Architecture (RINA), for the
+OMNeT++ simulation framework. The main goal of this thesis is to extend functionality of
+an existing simulation library to provide a full-fledged means for modelling RINA networks.
